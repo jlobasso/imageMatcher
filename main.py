@@ -2,8 +2,8 @@ import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 
-img1 = cv2.imread('opencv-feature-matching-template.jpg',0)
-img2 = cv2.imread('opencv-feature-matching-image.jpg',0)
+img1 = cv2.imread('35-years-of-nike-air-force-1-sneakers-magazine.jpg',0)
+img2 = cv2.imread('nike-air-force-1-dominican-republic-de-lo-mio-release-date-2.jpg',0)
 
 orb = cv2.ORB_create()
 
@@ -17,6 +17,6 @@ matches = sorted(matches, key = lambda x:x.distance)
 
 print(len(matches))
 
-img3 = cv2.drawMatches(img1,kp1,img2,kp2,matches[:235],None, flags=2)
+img3 = cv2.drawMatches(img1,kp1,img2,kp2,matches[:200],None, flags=2)
 plt.imshow(img3)
 plt.show()
