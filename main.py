@@ -13,7 +13,6 @@ img2 = cv.imread('nike-air-force-1-dominican-republic-de-lo-mio-release-date-2.j
 
 
 # Initiate SIFT detector
-# sift = cv.SIFT()
 sift = cv.SIFT()
 
 # sift = cv.xfeatures2d.SIFT_create()
