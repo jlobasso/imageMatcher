@@ -169,7 +169,7 @@ $ cd ~/opencv
 $ mkdir build
 $ cd build
 
-cmake -D CMAKE_BUILD_TYPE=RELEASE -D BUILD_PYTHON_SUPPORT=ON -D INSTALL_PYTHON_EXAMPLES=ON -D WITH_XINE=ON -D WITH_OPENGL=ON -D INSTALL_C_EXAMPLES=OFF -D WITH_TBB=ON -D BUILD_EXAMPLES=ON -D BUILD_NEW_PYTHON_SUPPORT=ON -D OPENCV_ENABLE_NONFREE=ON -D WITH_V4L=ON -D CMAKE_INSTALL_PREFIX=/usr/local -D OPENCV_EXTRA_MODULES_PATH= /home/mich/workspace/opencv3.4/opencv_contrib/ -D PYTHON_EXECUTABLE=~/.virtualenvs/cv/bin/python -D ENABLE_PRECOMPILED_HEADERS=OFF  ..
+cmake -D CMAKE_BUILD_TYPE=RELEASE -D BUILD_PYTHON_SUPPORT=ON -D INSTALL_PYTHON_EXAMPLES=ON -D WITH_XINE=ON -D WITH_OPENGL=ON -D INSTALL_C_EXAMPLES=OFF -D WITH_TBB=ON -D BUILD_EXAMPLES=ON -D BUILD_NEW_PYTHON_SUPPORT=ON -D OPENCV_ENABLE_NONFREE=ON -D WITH_V4L=ON -D CMAKE_INSTALL_PREFIX=/usr/local -D OPENCV_EXTRA_MODULES_PATH= /home/mich/workspace/opencv3.4/opencv_contrib/modules -D PYTHON_EXECUTABLE=~/.virtualenvs/cv/bin/python -D ENABLE_PRECOMPILED_HEADERS=OFF  ..
 
 make -j4
 
@@ -205,7 +205,7 @@ $ sudo mv cv2.cpython-36m-x86_64-linux-gnu.so cv2.so
 ### Our last sub-step is to sym-link our OpenCV cv2.so  bindings into our cv  virtual environment:
 
 $ cd ~/.virtualenvs/cv/lib/python3.6/site-packages/
-$ ln -s /usr/local/python/cv2/python-3.6/cv2.so cv2.so
+$   
 
 ### Verifica la instalación de opencv entrando a la terminal con
 $ cd ~
@@ -216,7 +216,7 @@ Python 3.6.5 (default, Apr 1 2018, 05:46:30)
 Type "help", "copyright", "credits" or "license" for more information.
 import cv2
 cv2.__version__
-'3.4.4'
+'3.4.4' __### tengo la '4.0.0'__
 quit()
 
 ### Install matplotlib. We use pip (while the cv  Python virtual environment is active):
