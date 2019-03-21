@@ -1,43 +1,66 @@
+import numpy as np
 import cv2
+from matplotlib import pyplot as plt
 
-# https://http2.mlstatic.com/mochila-nike-elemental-negra-importada-original-ba5405010-D_NQ_NP_753682-MLA28367807721_102018-O.webp
+MIN_MATCH_COUNT = 10
 
- 
-#Cargamos las dos imagenes para hacer las diferencias
+img1 = cv2.imread('images/Z2mirror.jpeg',0) # queryImage
+img2 = cv2.imread('images/Z2Tiny.jpeg',0) # trainImage
+# img1 = cv2.imread('images/Nike-Air-Force-1-Low-Moto-W-1100x553.png',0) # queryImage
+# img2 = cv2.imread('images/nike-air-force-1-dominican-republic-de-lo-mio-release-date-2.jpg',0) # trainImage
 
-diff1 = cv2.imread('images/Z2bis.jpeg') # trainImage
-diff2 = cv2.imread('images/Z2.jpeg') # queryImage
-# diff1 = cv2.imread('images/mochila-nike-elemental-negra-importada-original-ba5405010-D_NQ_NP_753682-MLA28367807721_102018-O.webp')
-# diff2 = cv2.imread('images/mochila-nike-elemental-negra-importada-original-ba5405010-D_NQ_NP_753682-MLA28367807721_102018-O.webp')
- 
-#Calculamos la diferencia absoluta de la dos imagenes
-diff_total = cv2.absdiff(diff1, diff2)
-diff = cv2.subtract(diff1, diff2)
 
-imgray = cv2.cvtColor(diff1,cv2.COLOR_BGR2GRAY)
-ret,thresh = cv2.threshold(imgray,127,255,0)
-contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+# Initiate SIFT detector
+# sift = cv2._SIFT()
+sift = cv2.xfeatures2d.SIFT_create()
 
-cv2.drawContours(diff2, contours, -1, (0,255,0), 1)
+# find the keypoints and descriptors with SIFT
+kp1, des1 = sift.detectAndCompute(img1,None)
+kp2, des2 = sift.detectAndCompute(img2,None)
 
-cv2.imwrite("/home/mich/workspace/imageMatcher/images/Fotodif.jpg", diff1)
- 
-#Buscamos los contornos
-imagen_gris = cv2.cvtColor(diff_total, cv2.COLOR_BGR2GRAY)
-contours,_ = cv2.findContours(imagen_gris,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
- 
-#Miramos cada uno de los contornos y, si no es ruido, dibujamos su Bounding Box sobre la imagen original
-for c in contours:
-    if cv2.contourArea(c) >= 20:
-        posicion_x,posicion_y,ancho,alto = cv2.boundingRect(c) #Guardamos las dimensiones de la Bounding Box
-        cv2.rectangle(diff1,(posicion_x,posicion_y),(posicion_x+ancho,posicion_y+alto),(0,0,255),2) #Dibujamos la bounding box sobre diff1
- 
-while(1):
-    cv2.imshow('Imagen1', diff1)
-    cv2.imshow('Imagen2', diff2)
-    tecla = cv2.waitKey(5) & 0xFF
-    if tecla == 27:
-        break
- 
+FLANN_INDEX_KDTREE = 0
+index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
+search_params = dict(checks = 50)
+
+flann = cv2.FlannBasedMatcher(index_params, search_params)
+
+matches = flann.knnMatch(des1,des2,k=2)
+
+# store all the good matches as per Lowe's ratio test.
+good = []
+for m,n in matches:
+    if m.distance < 0.7*n.distance:
+        good.append(m)
+
+if len(good)>MIN_MATCH_COUNT:
+    src_pts = np.float32([ kp1[m.queryIdx].pt for m in good ]).reshape(-1,1,2)
+    dst_pts = np.float32([ kp2[m.trainIdx].pt for m in good ]).reshape(-1,1,2)
+
+    M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC,5.0)
+    matchesMask = mask.ravel().tolist()
+
+    h,w = img1.shape
+    pts = np.float32([ [0,0],[0,h-1],[w-1,h-1],[w-1,0] ]).reshape(-1,1,2)
+    dst = cv2.perspectiveTransform(pts,M)
+
+    img2 = cv2.polylines(img2,[np.int32(dst)],True,255,3, cv2.LINE_AA)
+
+else:
+    
+    matchesMask = None
+
+print  (len(good),MIN_MATCH_COUNT)
+print  (len(good)/MIN_MATCH_COUNT) 
+    
+
+draw_params = dict(matchColor = (0,255,0), # draw matches in green color
+                   singlePointColor = None,
+                   matchesMask = matchesMask, # draw only inliers
+                   flags = 2)
+
+img3 = cv2.drawMatches(img1,kp1,img2,kp2,good,None,**draw_params)
+
+plt.imshow(img3, 'gray'),plt.show()
+
+
 cv2.destroyAllWindows()
-

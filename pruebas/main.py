@@ -1,60 +1,66 @@
 import numpy as np
-import cv2 as cv
-# /home/mich/workspace/opencv/opencv/modules/python/src2
-import matplotlib.pyplot as plt
+import cv2
+from matplotlib import pyplot as plt
 
-img1 = cv.imread('Nike-Air-Force-1-Low-Moto-W-1100x553.png',0) # queryImage
-img2 = cv.imread('nike-air-force-1-dominican-republic-de-lo-mio-release-date-2.jpg',0) # trainImage
+MIN_MATCH_COUNT = 10
 
-# # Initiate ORB detector
-# orb = cv.ORB_create()
-# # find the keypoints and descriptors with ORB
-# kp1, des1 = orb.detectAndCompute(img1,None)
-# kp2, des2 = orb.detectAndCompute(img2,None)
+img1 = cv2.imread('images/Z2mirror.jpeg',0) # queryImage
+img2 = cv2.imread('images/Z2Tiny.jpeg',0) # trainImage
+# img1 = cv2.imread('images/Nike-Air-Force-1-Low-Moto-W-1100x553.png',0) # queryImage
+# img2 = cv2.imread('images/nike-air-force-1-dominican-republic-de-lo-mio-release-date-2.jpg',0) # trainImage
 
 
 # Initiate SIFT detector
-sift = cv.SIFT()
+# sift = cv2._SIFT()
+sift = cv2.xfeatures2d.SIFT_create()
 
-# sift = cv.xfeatures2d.SIFT_create()
-# sift = cv.SIFT_create()
 # find the keypoints and descriptors with SIFT
 kp1, des1 = sift.detectAndCompute(img1,None)
 kp2, des2 = sift.detectAndCompute(img2,None)
 
+FLANN_INDEX_KDTREE = 0
+index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
+search_params = dict(checks = 50)
 
-# # create BFMatcher object
-# # NORM_L1
-# # NORM_L2
-# # NORM_HAMMING
-# # NORM_HAMMING2
-# bf = cv.BFMatcher(cv.NORM_HAMMING, crossCheck=True)
+flann = cv2.FlannBasedMatcher(index_params, search_params)
 
-# BFMatcher with default params
-bf = cv.BFMatcher()
-matches = bf.knnMatch(des1,des2, k=2)
+matches = flann.knnMatch(des1,des2,k=2)
 
-# # Match descriptors.
-# # matches = bf.knnMatch(des1,des2, k=2)
-# matches = bf.match(des1,des2)
-# # matches = sorted(matches, key = lambda x:x.distance)
-
-# # Sort them in the order of their distance.
-# matches = sorted(matches, key = lambda x:x.distance)
-# # print(len(matches))
-
-# # Draw first 10 matches.
-# img3 = cv.drawMatches(img1,kp1,img2,kp2,matches[:10],None, flags=2)
-# plt.imshow(img3),plt.show()
-
-# BFMatcher with default params
-bf = cv.BFMatcher()
-matches = bf.knnMatch(des1,des2, k=2)
-# Apply ratio test
+# store all the good matches as per Lowe's ratio test.
 good = []
 for m,n in matches:
-    if m.distance < 0.75*n.distance:
-        good.append([m])
-# cv.drawMatchesKnn expects list of lists as matches.
-img3 = cv.drawMatchesKnn(img1,kp1,img2,kp2,good,flags=2)
-plt.imshow(img3),plt.show()
+    if m.distance < 0.7*n.distance:
+        good.append(m)
+
+if len(good)>MIN_MATCH_COUNT:
+    src_pts = np.float32([ kp1[m.queryIdx].pt for m in good ]).reshape(-1,1,2)
+    dst_pts = np.float32([ kp2[m.trainIdx].pt for m in good ]).reshape(-1,1,2)
+
+    M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC,5.0)
+    matchesMask = mask.ravel().tolist()
+
+    h,w = img1.shape
+    pts = np.float32([ [0,0],[0,h-1],[w-1,h-1],[w-1,0] ]).reshape(-1,1,2)
+    dst = cv2.perspectiveTransform(pts,M)
+
+    img2 = cv2.polylines(img2,[np.int32(dst)],True,255,3, cv2.LINE_AA)
+
+else:
+    
+    matchesMask = None
+
+print  (len(good),MIN_MATCH_COUNT)
+print  (len(good)/MIN_MATCH_COUNT) 
+    
+
+draw_params = dict(matchColor = (0,255,0), # draw matches in green color
+                   singlePointColor = None,
+                   matchesMask = matchesMask, # draw only inliers
+                   flags = 2)
+
+img3 = cv2.drawMatches(img1,kp1,img2,kp2,good,None,**draw_params)
+
+plt.imshow(img3, 'gray'),plt.show()
+
+
+cv2.destroyAllWindows()

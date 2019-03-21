@@ -1,8 +1,8 @@
 import cv2
  
 #Cargamos las dos imagenes para hacer las diferencias
-diff1 = cv2.imread('Z2.jpeg')
-diff2 = cv2.imread('Z4.jpeg')
+diff1 = cv2.imread('../images/Z2.jpeg')
+diff2 = cv2.imread('../images/Z2.jpeg')
  
 #Calculamos la diferencia absoluta de las dos imagenes
 diff_total = cv2.absdiff(diff1, diff2)
@@ -21,7 +21,7 @@ while(1):
     #Mostramos las imagenes. ESC para salir.
     cv2.imshow('Imagen1', diff1)
     cv2.imshow('Imagen2', diff2)
-    cv2.imshow('Diferencias detectadas', diff_total)
+#     cv2.imshow('Diferencias detectadas', diff_total)
     tecla = cv2.waitKey(5) & 0xFF
     if tecla == 27:
         break
