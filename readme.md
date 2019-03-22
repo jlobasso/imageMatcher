@@ -1,7 +1,5 @@
 documentacion:
-sudo apt install python-opencv
-sudo apt install python-pip
-sudo apt-get install python-tk
+sudo apt install python-opencv python-pip install python-tk
 
 ##############################
 ### INSTALAR OPENCV 3 EN PYTHON CON UBUNTU
@@ -15,12 +13,7 @@ $ sudo apt-get upgrade
 
 ### installing developer tools:
 	
-$ sudo apt-get install build-essential cmake unzip pkg-config
-$ sudo apt-get install libjpeg-dev libpng-dev libtiff-dev
-$ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
-$ sudo apt-get install libxvidcore-dev libx264-dev
-$ sudo apt-get install libgtk-3-dev
-$ sudo apt-get install libatlas-base-dev gfortran
+$ sudo apt-get install build-essential cmake unzip pkg-config libjpeg-dev libpng-dev libtiff-dev libavcodec-dev libavformat-dev libswscale-dev libv4l-dev libxvidcore-dev libx264-dev libgtk-3-dev libatlas-base-dev gfortran
 
 ### And finally, our last requirement is to install Python 3 headers and libraries:
 $ sudo apt-get install python3-dev

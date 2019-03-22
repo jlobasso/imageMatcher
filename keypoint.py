@@ -4,12 +4,12 @@ from matplotlib import pyplot as plt
 
 MIN_MATCH_COUNT = 80
 
-img1 = cv2.imread('images/n0p2.jpeg',0) # queryImage
+img1 = cv2.imread('images/n0p1.jpeg',0) # queryImage
 # img1 = cv2.imread('images/Nike-Air-Force-1-Low-Moto-W-1100x553.png',0) # queryImage
 # img2 = cv2.imread('images/nike-air-force-1-dominican-republic-de-lo-mio-release-date-2.jpg',0) # trainImage
 
 
-for x in range(1, 28):
+for x in range(10, 12):
 
     img2 = cv2.imread('images/n'+str(x)+'.jpeg',0) # trainImage
 
@@ -52,10 +52,10 @@ for x in range(1, 28):
         
         matchesMask = None
 
-    print  (len(good),MIN_MATCH_COUNT)
-    print  (len(good)/MIN_MATCH_COUNT) 
-    print  (str(x)) 
-        
+    print  ('Imagen comparada: ' + str(x)) 
+    print  ('Cantidad de puntos matcheados: ' + str(len(good)) + ' de ' + str(MIN_MATCH_COUNT))
+    print  ('Porcentaje de macheo: ' + str(len(good)/MIN_MATCH_COUNT*100) + '%')
+    print  ('')    
 
     draw_params = dict(matchColor = (0,255,0), # draw matches in green color
                     singlePointColor = None,
@@ -66,5 +66,10 @@ for x in range(1, 28):
 
     plt.imshow(img3, 'gray'),plt.show()
 
+# #Salir con ESC
+# while(1):
+#     tecla = cv2.waitKey(5) & 0xFF
+#     if tecla == 27:
+#         break
 
-    cv2.destroyAllWindows()
+cv2.destroyAllWindows()

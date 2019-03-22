@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
  
-imagen = cv2.imread('Nike-Air-Force-1-Low-Moto-W-1100x553.png')
+imagen = cv2.imread('../images/n0p8.jpeg')
 hsv = cv2.cvtColor(imagen, cv2.COLOR_BGR2HSV)
 
 

@@ -4,8 +4,9 @@ from matplotlib import pyplot as plt
 
 MIN_MATCH_COUNT = 80
 
-img1 = cv2.imread('images/n0p6.jpeg',0) # queryImage
-img2 = cv2.imread('images/n30.jpeg',0) # trainImage
+img1 = cv2.resize(cv2.imread('images/n0p8.jpeg',0), (200, 200)) 
+
+img2 = cv2.resize(cv2.imread('images/n39.jpeg',0) , (200, 200)) 
 
 # Initiate SIFT detector
 sift = cv2.xfeatures2d.SIFT_create()
@@ -50,9 +51,9 @@ print  (len(good)/MIN_MATCH_COUNT)
     
 
 draw_params = dict(matchColor = (0,255,0), # draw matches in green color
-                   singlePointColor = None,
+                #    singlePointColor = None,
                    matchesMask = matchesMask, # draw only inliers
-                   flags = 2)
+                   flags = 4)
 
 img3 = cv2.drawMatches(img1,kp1,img2,kp2,good,None,**draw_params)
 
