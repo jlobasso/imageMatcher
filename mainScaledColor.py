@@ -4,9 +4,9 @@ from matplotlib import pyplot as plt
 
 MIN_MATCH_COUNT = 80
 
-img1 = cv2.resize(cv2.imread('images/n0p5.jpeg',0), (200, 200)) 
+img1 = cv2.resize(cv2.imread('images/n0p1.jpeg',0), (200, 200)) 
 
-img2 = cv2.resize(cv2.imread('images/n48.jpeg',0) , (200, 200)) 
+img2 = cv2.resize(cv2.imread('images/n49.jpeg',0) , (200, 200)) 
 
 # Initiate SIFT detector
 sift = cv2.xfeatures2d.SIFT_create()
@@ -46,8 +46,8 @@ else:
     
     matchesMask = None
 
-print  (len(good),MIN_MATCH_COUNT)
-print  (len(good)/MIN_MATCH_COUNT) 
+# print  (len(good),MIN_MATCH_COUNT)
+# print  (len(good)/MIN_MATCH_COUNT) 
     
 
 draw_params = dict(matchColor = (0,255,0), # draw matches in green color
@@ -57,10 +57,55 @@ draw_params = dict(matchColor = (0,255,0), # draw matches in green color
 
 img3 = cv2.drawMatches(img1,kp1,img2,kp2,good,None,**draw_params)
 plt.axis("off")
-plt.title(str(round(float(len(good)/MIN_MATCH_COUNT*100), 2))+'%', size = 'xx-large', color = 'g')
-plt.text(80,25, 'coincidencias: ' + str(len(good)) + ' de ' + str(MIN_MATCH_COUNT),  size = 'x-large', color = 'b')
+plt.title(str(round(float(len(good)/MIN_MATCH_COUNT), 2))+'%', size = 'small', color = 'g')
+plt.text(0,0, 'n' + str(img2) + '.jpeg ', size = 'small', color = 'b')
         
-plt.imshow(img3, 'gray'),plt.show()
+
+
+
+hsv = cv2.cvtColor(img3, cv2.COLOR_BGR2HSV)
+
+
+#Rango de colores detectados:
+#Verdes:
+verde_bajos = np.array([49,50,50])
+verde_altos = np.array([107, 255, 255])
+
+#Azules:
+azul_bajos = np.array([100,65,75], dtype=np.uint8)
+azul_altos = np.array([130, 255, 255], dtype=np.uint8)
+
+
+#Rojos:
+rojo_bajos1 = np.array([0,65,75], dtype=np.uint8)
+rojo_altos1 = np.array([12, 255, 255], dtype=np.uint8)
+rojo_bajos2 = np.array([240,65,75], dtype=np.uint8)
+rojo_altos2 = np.array([256, 255, 255], dtype=np.uint8)
+
+#Crear las mascaras
+mascara_verde = cv2.inRange(hsv, verde_bajos, verde_altos)
+mascara_rojo1 = cv2.inRange(hsv, rojo_bajos1, rojo_altos1)
+mascara_rojo2 = cv2.inRange(hsv, rojo_bajos2, rojo_altos2)
+mascara_azul = cv2.inRange(hsv, azul_bajos, azul_altos)
+
+#Juntar todas las mascaras
+mask = cv2.add(mascara_rojo1, mascara_rojo2)
+mask = cv2.add(mask, mascara_verde)
+mask = cv2.add(mask, mascara_azul)
+
+#Mostrar la mascara final y la imagen
+cv2.imshow('Finale', mask)
+cv2.imshow('Imagen', img3)
+
+ #Salir con ESC
+while(1):
+    tecla = cv2.waitKey(5) & 0xFF
+    if tecla == 27:
+        break
+ 
+cv2.destroyAllWindows()
+
+# plt.imshow(img3, 'gray'),plt.show()
 
 
 cv2.destroyAllWindows()

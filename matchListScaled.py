@@ -5,12 +5,12 @@ import matplotlib.image as mpimg
 
 MIN_MATCH_COUNT = 80
 
-img1 = cv2.imread('images/n0p10.jpeg',0) 
+img1 = cv2.imread('images/n0p5.jpeg',0) 
 img1 = cv2.resize(img1, (200, 200)) 
 
 bestMatches = []
 
-for x in range(1, 51):
+for x in range(1, 62):
 
     img2 = cv2.imread('images/n'+str(x)+'.jpeg',0)
     
@@ -45,15 +45,17 @@ def extract(json):
 bestMatches.sort(key=extract, reverse=True)
 
 fig=plt.figure(figsize=(8, 8))
-columns = 5
+columns = 4
 rows = 10
-for x in range(1, 50):
-    imgMatch = cv2.imread('images/n'+str(bestMatches[x-1]['image'])+'.jpeg',0) 
-    fig.add_subplot(rows, columns, x)
-    plt.axis("off")
-    plt.title(str(round(float(bestMatches[x-1]['percentage']), 2))+'%')
-    plt.text(50,10, 'n' + bestMatches[x-1]['image'] + '.jpeg')
-     
-    plt.imshow(imgMatch, 'gray')
+for x in range(1, 62):
+    if float(bestMatches[x-1]['percentage']) > float(0):
+        imgMatch = cv2.imread('images/n'+str(bestMatches[x-1]['image'])+'.jpeg',0) 
+        fig.add_subplot(rows, columns, x)
+        plt.axis("off")
+        # plt.title(str(round(float(bestMatches[x-1]['percentage']), 2))+'%', size = 'small', color = 'g')
+        plt.text(0,0, 'n' + bestMatches[x-1]['image'] + ' - ' + str(round(float(bestMatches[x-1]['percentage']), 2))+'%',  size = 'small', color = 'b')
+        
+        plt.imshow(imgMatch, 'gray')
+
 plt.show()
 cv2.destroyAllWindows()
