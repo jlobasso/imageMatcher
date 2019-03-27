@@ -1,0 +1,17 @@
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.1"> </script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@1.0.0"> </script>
+
+<img id="img" src="/images/n0p1.jpeg" />
+<div id="prediction"></div>
+
+<script>
+
+  const img = document.getElementById('img');
+
+const prediction = document.getElementById('prediction');
+  mobilenet.load().then(model => {
+    model.classify(img).then(predictions => {
+      prediction.innerHTML = JSON.stringify(predictions);
+    });
+  });
+</script>
