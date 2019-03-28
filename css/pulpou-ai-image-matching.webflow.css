@@ -1,0 +1,122 @@
+.wrapper {
+  margin-top: 100px;
+  margin-bottom: 100px;
+  padding: 52px;
+  border-style: solid;
+  border-width: 4px;
+  border-color: #000;
+  background-color: #fff;
+}
+
+.body {
+  background-color: #d4d4d4;
+}
+
+.image {
+  text-align: center;
+}
+
+.heading {
+  font-size: 20px;
+}
+
+.div-block {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  background-color: hsla(339.6296296296296, 77.14%, 58.82%, 1.00);
+}
+
+.text-block {
+  padding: 24px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.div-block-2 {
+  position: relative;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  padding: 20px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #b5b5b5;
+  border-radius: 0px;
+  background-color: #fff;
+  box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, .15), 0 0 10px 3px hsla(0, 0%, 74%, .16);
+}
+
+.title {
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.mlid {
+  margin-top: 6px;
+  font-size: 11px;
+}
+
+.bold-text {
+  font-size: 11px;
+}
+
+.image-2 {
+  width: 200px;
+  margin-top: 24px;
+  padding: 12px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #8f8f8f;
+}
+
+.text-field {
+  width: 80px;
+}
+
+.submit-button {
+  margin-top: 16px;
+  margin-bottom: 54px;
+}
+
+.textarea {
+  height: 490px;
+}
+
+.div-block-3 {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 130px;
+  height: 30px;
+  padding-right: 0px;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  background-color: #a6dda6;
+  color: #429a66;
+  font-weight: 700;
+}
+
+.text-block-2 {
+  color: #ababab;
+  font-size: 9px;
+}
