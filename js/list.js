@@ -19,10 +19,6 @@ submit.addEventListener("click", async function () {
                 if ('url' in img) {
                     imagenes.push({ id: a.id, title: a.title, image: img.url, position: i, })
                 }
-                
-
-                
-                
             })
         }
     });
@@ -31,15 +27,15 @@ submit.addEventListener("click", async function () {
     xhr.open("POST", 'http://localhost:5002/process', true);
 
     //Send the proper header information along with the request
-    // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.setRequestHeader("Content-Type", "application/json");
 
     xhr.onreadystatechange = function () { // Call a function when the state changes.
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            alert(this.response)
+            console.log(this.response)
         }
     }
-    xhr.send(JSON.stringify(imagenes));
+    xhr.send(imagenes);
 
 
-    console.log(imagenes)
+    // console.log(imagenes)
 })

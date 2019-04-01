@@ -11,7 +11,13 @@ CORS(app)
 
 class Process(Resource):
     def post(self):
-        return {'employees': 'puto'}
+        print("----------------------------------------")
+        # print(request.get_json())
+        print("----------------------------------------")
+        return 'PUTO', 200, {'Content-Type':'text/plain'}
+
+
+        # return self.post.__init__
 
 api.add_resource(Process, '/process') # Route_1
 
