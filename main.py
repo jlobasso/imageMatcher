@@ -12,8 +12,12 @@ def url_to_image(url):
 	return image
 
 
-img1 = cv2.resize(url_to_image('http://mlb-s1-p.mlstatic.com/879936-MLB27713120667_072018-O.jpg'), (200, 200))
-img2 = cv2.resize(cv2.imread('joico/Shampoo/Recortadas/Shampoo-20.JPG', 0), (200, 200))
+img1 = cv2.resize(url_to_image(
+    'http://mlb-s1-p.mlstatic.com/520611-MLB20588873630_022016-O.jpg'
+    ), (200, 200))
+img2 = cv2.resize(cv2.imread(
+    'joico/Shampoo/Recortadas/Portifolio_Joico_Grande_0001-0040-276.jpg'
+    , 0), (200, 200))
 
 
 # Initiate SIFT detector
