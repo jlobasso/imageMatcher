@@ -29,7 +29,7 @@ submit.addEventListener("click", async function () {
     });
     
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", 'http://localhost:5002/process', true);
+    xhr.open("POST", 'http://localhost:5000/process', true);
 
     //Send the proper header information along with the request
     // xhr.setRequestHeader("Content-Type", "application/json");

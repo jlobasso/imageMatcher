@@ -18,42 +18,7 @@ RUN apt-get update && \
         libavformat-dev \
         libpq-dev
 
-RUN pip install numpy flask flask_restful
-
-WORKDIR /
-ENV OPENCV_VERSION="4.0.1"
-RUN wget https://github.com/opencv/opencv_contrib/archive/${OPENCV_VERSION}.zip \
-&& unzip ${OPENCV_VERSION}.zip \
-&& rm ${OPENCV_VERSION}.zip
-RUN wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip \
-&& unzip ${OPENCV_VERSION}.zip \
-&& mkdir /opencv-${OPENCV_VERSION}/cmake_binary \
-&& cd /opencv-${OPENCV_VERSION}/cmake_binary \
-&& cmake -DBUILD_TIFF=ON \
-  -DBUILD_opencv_java=OFF \
-  -DOPENCV_EXTRA_MODULES_PATH=/opencv_contrib-${OPENCV_VERSION}/modules \
-  -FROM python:3.7
-MAINTAINER Josip Janzic <josip@jjanzic.com>
-
-RUN apt-get update && \
-        apt-get install -y \
-        build-essential \
-        cmake \
-        git \
-        wget \
-        unzip \
-        yasm \
-        pkg-config \
-        libswscale-dev \
-        libtbb2 \
-        libtbb-dev \
-        libjpeg-dev \
-        libpng-dev \
-        libtiff-dev \
-        libavformat-dev \
-        libpq-dev
-
-RUN pip install numpy
+RUN pip install numpy flask flask_restful flask_cors matplotlib
 
 WORKDIR /
 ENV OPENCV_VERSION="4.0.1"
@@ -89,7 +54,9 @@ RUN wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip \
 && rm /${OPENCV_VERSION}.zip \
 && rm -r /opencv-${OPENCV_VERSION}
 
-ADD . /app
+ADD . /
 
-EXPOSE 5002/tcp
-EXPOSE 8080/tcp
+# EXPOSE 5002
+# EXPOSE 8080
+# CMD ["python", "serverFrontend.py"]
+CMD ["python", "serverBakend.py"]
