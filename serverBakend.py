@@ -16,6 +16,10 @@ scale = 200
 sensibility = 0.6
 min_percent_match = 40
 
+class Health(Resource):
+    def get(self):
+        return "Tranki, anda ;)", 200, {'Content-Type':'application/json'}
+
 class Process(Resource):
     def post(self):
 
@@ -37,8 +41,10 @@ class Process(Resource):
         return result, 200, {'Content-Type':'application/json'}
 
 api.add_resource(Process, '/process') 
+api.add_resource(Health, '/health')
 
 if __name__ == '__main__':
-    app.run(port='5002', debug=True)
+    # app.run(port='5000', debug=True)
+    app.run(debug=True, host='0.0.0.0')
   
   
