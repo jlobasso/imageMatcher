@@ -14,7 +14,7 @@ CORS(app)
 min_match_count = 80
 scale = 200
 sensibility = 0.6
-min_percent_match = 40
+min_percent_match = 10
 
 class Health(Resource):
     def get(self):
