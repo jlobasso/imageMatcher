@@ -1,11 +1,24 @@
 import numpy as np
 import cv2
 from matplotlib import pyplot as plt
+import urllib.request
 
 MIN_MATCH_COUNT = 80
 
-img1 = cv2.imread('images/n0p6.jpeg',0) # queryImage
-img2 = cv2.imread('images/n30.jpeg',0) # trainImage
+def url_to_image(url):
+	resp = urllib.request.urlopen(url)
+	image = np.asarray(bytearray(resp.read()), dtype="uint8")
+	image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+	return image
+
+
+img1 = cv2.resize(url_to_image(
+    'http://mlb-s1-p.mlstatic.com/520611-MLB20588873630_022016-O.jpg'
+    ), (200, 200))
+img2 = cv2.resize(cv2.imread(
+    'joico/Shampoo/Recortadas/Portifolio_Joico_Grande_0001-0040-276.jpg'
+    , 0), (200, 200))
+
 
 # Initiate SIFT detector
 sift = cv2.xfeatures2d.SIFT_create()

@@ -18,13 +18,15 @@ RUN apt-get update && \
         libavformat-dev \
         libpq-dev
 
-RUN pip install numpy flask flask_restful flask-cors
+RUN pip install numpy flask flask_restful flask_cors matplotlib
 
 WORKDIR /
 ENV OPENCV_VERSION="4.0.1"
+
 RUN wget https://github.com/opencv/opencv_contrib/archive/${OPENCV_VERSION}.zip \
 && unzip ${OPENCV_VERSION}.zip \
 && rm ${OPENCV_VERSION}.zip
+	
 RUN wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip \
 && unzip ${OPENCV_VERSION}.zip \
 && mkdir /opencv-${OPENCV_VERSION}/cmake_binary \
@@ -52,7 +54,9 @@ RUN wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip \
 && rm /${OPENCV_VERSION}.zip \
 && rm -r /opencv-${OPENCV_VERSION}
 
-ADD . /app
+ADD . /
 
-EXPOSE 5002/tcp
-EXPOSE 8080/tcp
+# EXPOSE 5002
+# EXPOSE 8080
+# CMD ["python", "serverFrontend.py"]
+CMD ["python", "serverBakend.py"]
