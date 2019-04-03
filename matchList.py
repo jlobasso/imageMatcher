@@ -53,6 +53,8 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch):
 
                     })
 
+            imagenRecorridas = +1
+
             def extract(json):
                 try:
                     return float(json['percentage'])
@@ -64,5 +66,5 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch):
         if len(bestMatches) > 0:
             globalMatches.append(bestMatches)
 
-    return globalMatches
+    return {'matches': globalMatches, 'imagenes1': len(images), 'imagenes2': len2}
 

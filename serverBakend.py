@@ -30,6 +30,8 @@ class Process(Resource):
         
         print("----------------------------------------")
         print("Segundos:", ahora.second)  # Muestra segundo
+        print(result['imagenes1'])
+        print(result['imagenes2'])
         print("----------------------------------------")
 
         return result, 200, {'Content-Type':'application/json'}

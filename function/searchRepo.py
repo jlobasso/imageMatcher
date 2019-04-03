@@ -3,5 +3,5 @@ from glob import glob
 
 
 def getImages():
-    img = glob("joico/Shampoo/Recortadas/*")
+    img = glob("joico/Hidratante/Recortadas/*")
     return img
