@@ -1,3 +1,42 @@
+###############################
+######## USANDO DOCKER ########
+###############################
+
+* !!!Todo se hace dentro de la carpeta del proyecto!!!
+
+* Instalar Docker
+
+ --- SERVIDOR DE BACKEND --- 
+
+
+* docker build -t imgmatch .  (NO OLVIDAR EL .  AL FINAL)
+
+* docker run -d -p 5000:5000 imgmatch (http://localhost:5000/health para ver si funciona)
+
+ --- SERVIDOR DE FRONTEND ---
+
+!!!Cualquier servidor de archivos estáticos va a funcionar. Algunos ejémplos!!!
+
+---> Usando nodejs: 
+
+* npm install http-server -g
+
+* http-server (Abre automáticamente los archivos estáticos en http://localhost:8080)
+
+---> Usando Python:
+
+* instalar pip y python
+
+* pip install flask
+
+* python serverFrontend
+
+
+
+
+
+
+
 documentacion:
 sudo apt install python-opencv python-pip install python-tk
 
