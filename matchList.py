@@ -24,8 +24,6 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch):
 
     #Recorre imagenes de livesearch
     for x in range(0, len(images)):
-
-        print(x)
         bestMatches = []
         try:
             img1 = cv2.resize(url_to_image(images[x]['image']), (scale, scale))

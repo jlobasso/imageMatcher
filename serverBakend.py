@@ -10,11 +10,12 @@ from datetime import datetime, date, time, timedelta
 app = Flask(__name__)
 api = Api(app)
 CORS(app)
+# cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-min_match_count = 80
-scale = 200
-sensibility = 0.6
-min_percent_match = 10
+# min_match_count = 80
+# scale = 200
+# sensibility = 0.6
+# min_percent_match = 10
 
 class Health(Resource):
     def get(self):
@@ -28,9 +29,14 @@ class Process(Resource):
         print("----------------------------------------")
         print("Fecha y Hora:", tiempo1)  # Muestra fecha y hora
         print("----------------------------------------")
+        
+        # data = json.loads(request.data)
+
+
 
         data = json.loads(request.data)
-        result = match(data, min_match_count, scale, sensibility, min_percent_match)
+        # print(data)
+        result = match(data['imagenes'], data['min_match_count'], data['scale'], data['sensibility'], data['min_percent_match'])
         
         # tiempo2 = datetime.now()
 
