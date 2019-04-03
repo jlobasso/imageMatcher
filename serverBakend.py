@@ -14,7 +14,7 @@ CORS(app)
 min_match_count = 80
 scale = 200
 sensibility = 0.6
-min_percent_match = 40
+min_percent_match = 20
 
 class Health(Resource):
     def get(self):
@@ -23,20 +23,22 @@ class Health(Resource):
 class Process(Resource):
     def post(self):
 
-        ahora = datetime.now()
+        tiempo1 = datetime.now()
         
         print("----------------------------------------")
-        print("Fecha y Hora:", ahora)  # Muestra fecha y hora
+        print("Fecha y Hora:", tiempo1)  # Muestra fecha y hora
         print("----------------------------------------")
 
         data = json.loads(request.data)
         result = match(data, min_match_count, scale, sensibility, min_percent_match)
         
-        print("----------------------------------------")
-        print("Segundos:", ahora.second)  # Muestra segundo
-        print(result['imagenes1'])
-        print(result['imagenes2'])
-        print("----------------------------------------")
+        # tiempo2 = datetime.now()
+
+        # print("----------------------------------------")
+        # print("Segundos:", tiempo2-tiempo1)  # Muestra segundo
+        # print(result['imagenes1'])
+        # print(result['imagenes2'])
+        # print("----------------------------------------")
 
         return result, 200, {'Content-Type':'application/json'}
 

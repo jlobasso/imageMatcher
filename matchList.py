@@ -4,6 +4,9 @@ from matplotlib import pyplot as plt
 import matplotlib.image as mpimg
 import urllib.request
 from function.searchRepo import * 
+from json import dumps
+import json
+
 
 def url_to_image(url):
     resp = urllib.request.urlopen(url)
@@ -16,13 +19,42 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch):
     len2 = len(images2)
     globalMatches = []
 
+    kInageComputed = 0
+
+
     #Recorre imagenes de livesearch
     for x in range(0, len(images)):
+
+        print(x)
         bestMatches = []
-        img1 = cv2.resize(url_to_image(images[x]['image']), (scale, scale))
+        try:
+            img1 = cv2.resize(url_to_image(images[x]['image']), (scale, scale))
+        except Exception as e :
+            print ("Exception: ",e," at ",images[x]['image'])
 
         # recorre las imagenes originales del repo local
         for y in range(0, len2):
+
+            kInageComputed = kInageComputed + 1
+            
+            print("recorriendo "+str(x+1)+" de "+str(len(images))+ " comparando con "+str(y+1)+" de "+str(len2))
+
+            F = open("status.json","w+")
+
+            status = {
+                        "absoluteComputed": str(kInageComputed),
+                        "running":{
+                                    "current":str(x+1), 
+                                    "of":str(len(images))
+                                    },
+                        "comparing":{
+                                    "current":str(y+1), 
+                                    "of":str(len2)
+                                    }                     
+                    }            
+            F.write(json.dumps(status))
+            F.close()
+
             img2 = cv2.resize(cv2.imread(images2[y], 0), (scale, scale))
 
             sift = cv2.xfeatures2d.SIFT_create()
@@ -64,6 +96,7 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch):
             bestMatches.sort(key=extract, reverse=True)
             
         if len(bestMatches) > 0:
+            # print(bestMatches)
             globalMatches.append(bestMatches)
 
     return {'matches': globalMatches, 'imagenes1': len(images), 'imagenes2': len2}
