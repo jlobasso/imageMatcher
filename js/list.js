@@ -126,6 +126,7 @@ submit.addEventListener("click", async function () {
             row.appendChild(col1)
 
             var title2 = title;
+            title2.innerHTML = "aaaaaaaaaaaaaacccccccccccccccccaaaaaaaaaaaaaaa"
             col2.appendChild(title2)
             col2.appendChild(image)
             row.appendChild(col2)
