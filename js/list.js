@@ -87,8 +87,8 @@ submit.addEventListener("click", async () => {
 
             time.finish = new Date();
 
-            time.total = time.finish - time.start;
-            console.log(time);
+            time.total = ((time.finish - time.start)/1000/60).toFixed(2);
+            // console.log(time);
         }
     }
 
@@ -106,8 +106,6 @@ submit.addEventListener("click", async () => {
         'min_percent_match': minPercentMatch,
         "compare_category": compareCategory
     };
-
-    console.log(data)
 
     xhr.send(JSON.stringify(data));
 
@@ -219,7 +217,8 @@ drawResults = (data) => {
 
     resumenResultado.innerHTML = `2. ${totalQuantity} Resultados encontrados sobre 
     un total de ${cantImagesToCompare} publicaciones analizadas.
-    total comparaciones: ${totalQuantity * cantImagesToCompare}`;
+    total comparaciones: ${totalQuantity * cantImagesToCompare} 
+    Tiempo de Proceso ${time.total}`;
 
     resumenResultado.style.display = "block";
 
