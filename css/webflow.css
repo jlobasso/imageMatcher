@@ -58,6 +58,7 @@ img {
   max-width: 100%;
   vertical-align: middle;
   display: inline-block;
+  max-height: 258px;
 }
 html.w-mod-touch * {
   background-attachment: scroll !important;
@@ -576,6 +577,7 @@ textarea.w-select {
 }
 .w-col-6 {
   width: 50%;
+  text-align: center;
 }
 .w-col-7 {
   width: 58.33333333%;
@@ -1800,4 +1802,39 @@ textarea.w-select {
 }
 .w-condition-invisible {
   display: none !important;
+}
+
+.percentage{
+  background-color: #82b182;
+  position: absolute;
+  width: 131px;
+  height: 46px;
+  right: 0px;
+  font-size: 28px;
+  top: 0px;
+  line-height: 47px;
+  text-align: center;
+}
+
+.input-wraper{
+  float: left;
+  min-width: 200px;
+  padding: 6px;
+  text-align: center;
+}
+
+.input-wraper input{
+  min-width: 100%;
+}
+
+.w-form-fail{
+  display: none;
+}
+
+.heading{
+  display: none;
+}
+
+#status-container{
+  display: none;
 }
