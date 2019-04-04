@@ -43,6 +43,14 @@ submit.addEventListener("click", async () => {
     // const textarea = document.getElementById("Json")
     // const json = textarea.value;
 
+    var previousResults = document.getElementsByClassName('div-block-2');
+    while (previousResults[0]) {
+        previousResults[0].parentNode.removeChild(previousResults[0]);
+    }
+
+    var resumenResultado = document.getElementById("resumen-resultado");
+    resumenResultado.style.display = "none";
+
     const statusContainer = document.getElementById("status-container")
     statusContainer.style.display = "block"
 
@@ -73,7 +81,7 @@ submit.addEventListener("click", async () => {
     });
 
     /** OJO QUE ESTOY RECORTANDO EL ARRAY!!!! */
-    // imagenes = imagenes.slice(0, 2);
+    imagenes = imagenes.slice(0, 2);
 
     cantImagesToCompare = imagenes.length;
 
@@ -98,13 +106,15 @@ submit.addEventListener("click", async () => {
     let scale = +document.getElementById("scale").value;
     let sensibility = +document.getElementById("sensibility").value / 100;
     let minPercentMatch = +document.getElementById("min-percent-match").value;
+    let compareCategory = document.getElementById("compare-category").value
 
     data = {
         'imagenes': imagenes,
         'min_match_count': minMatchCount,
         'scale': scale,
         'sensibility': sensibility,
-        'min_percent_match': minPercentMatch
+        'min_percent_match': minPercentMatch,
+        "compare_category": compareCategory
     };
 
     console.log(data)
@@ -138,89 +148,92 @@ drawResults = (data) => {
 
     images = images.sort((a, b) => {
 
-        if (a.percentage < b.percentage) {
+        if (parseFloat(a.percentage) < parseFloat(b.percentage)) {
             return 1;
         }
-        if (a.percentage > b.percentage) {
+        if (parseFloat(a.percentage) > parseFloat(b.percentage)) {
             return -1;
         }
 
         return 0;
     })
 
-        images.forEach(imgMatch => {
+    images.forEach(imgMatch => {
 
-            totalQuantity++;
+        totalQuantity++;       
 
-            var container = document.createElement("div");
-            container.classList.add("div-block-2");
+        var container = document.createElement("div");
+        container.classList.add("div-block-2");
 
-            var title = document.createElement("div");
-            title.classList.add("title");
+        var title = document.createElement("div");
+        title.classList.add("title");
 
-            var article = document.createElement("div");
-            article.classList.add("mlid");
+        var article = document.createElement("div");
+        article.classList.add("mlid");
 
-            var row = document.createElement("div");
-            row.classList.add("w-row");
+        var row = document.createElement("div");
+        row.classList.add("w-row");
 
-            var text = document.createElement("div");
-            text.classList.add("text-block-2")
+        var text = document.createElement("div");
+        text.classList.add("text-block-2")
 
-            var img1 = document.createElement("img");
+        var img1 = document.createElement("img");
 
-            var img2 = document.createElement("img");
+        var img2 = document.createElement("img");
 
-            title.innerHTML = "Este es el titulo"
-            article.innerHTML = "Este es como otro titulo"
-
-
-            container.appendChild(title)
-            container.appendChild(article)
-
-            var col1 = document.createElement("div");
-            col1.classList.add("w-col");
-            col1.classList.add("w-col-6");
-
-            var col2 = document.createElement("div");
-            col2.classList.add("w-col");
-            col2.classList.add("w-col-6");
-
-            var title1 = document.createElement("div");
-            var title2 = document.createElement("div");
-
-            title1.innerHTML = "imagen original";
-
-            col1.appendChild(title1)
-            img1.src = imgMatch.image_url
-            col1.appendChild(img1)
-            row.appendChild(col1)
-
-            title2.innerHTML = "Imagen catálogo marca";
-
-            col2.appendChild(title2)
-            img2.src = imgMatch.image_repo
-            col2.appendChild(img2)
-            row.appendChild(col2)
+        title.innerHTML = "Este es el titulo"
+        article.innerHTML = "Este es como otro titulo"
 
 
-            var percentage = document.createElement("div");
-            percentage.innerHTML = imgMatch.percentage + "%";
-            percentage.classList.add("percentage");
+        container.appendChild(title)
+        container.appendChild(article)
+
+        var col1 = document.createElement("div");
+        col1.classList.add("w-col");
+        col1.classList.add("w-col-6");
+
+        var col2 = document.createElement("div");
+        col2.classList.add("w-col");
+        col2.classList.add("w-col-6");
+
+        var title1 = document.createElement("div");
+        var title2 = document.createElement("div");
+
+        title1.innerHTML = "imagen original";
+
+        col1.appendChild(title1)
+        img1.src = imgMatch.image_url
+        col1.appendChild(img1)
+        row.appendChild(col1)
+
+        title2.innerHTML = "Imagen catálogo marca";
+
+        col2.appendChild(title2)
+        img2.src = imgMatch.image_repo
+        col2.appendChild(img2)
+        row.appendChild(col2)
 
 
-            row.appendChild(percentage);
+        var percentage = document.createElement("div");
+        percentage.innerHTML = parseFloat(imgMatch.percentage).toFixed(2); + "%";
+        percentage.classList.add("percentage");
 
-            container.appendChild(row)
+
+        row.appendChild(percentage);
+
+        container.appendChild(row)
 
 
-            mainContainer.appendChild(container);
-        })
+        mainContainer.appendChild(container);
+    })
 
 
     var resumenResultado = document.getElementById("resumen-resultado");
+
     resumenResultado.innerHTML = `2. ${totalQuantity} Resultados encontrados sobre 
-    un total de ${cantImagesToCompare} publicaciones analizadas`;
+    un total de ${cantImagesToCompare} publicaciones analizadas.
+    total comparaciones: ${totalQuantity * cantImagesToCompare}`;
+
     resumenResultado.style.display = "block";
 
 
