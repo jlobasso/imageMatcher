@@ -1,5 +1,5 @@
 FROM ubuntu:18.04
-FROM python:3.7
+FROM python:3.6.7
 
 RUN apt-get update && \
         apt-get install -y \
@@ -19,41 +19,10 @@ RUN apt-get update && \
         libavformat-dev \
         libpq-dev
 
+RUN pip install opencv-python==3.3.0.10 opencv-contrib-python==3.3.0.10
 RUN pip install numpy flask flask_restful flask_cors matplotlib
 
 WORKDIR /
-ENV OPENCV_VERSION="4.0.1"
-
-RUN wget https://github.com/opencv/opencv_contrib/archive/${OPENCV_VERSION}.zip \
-&& unzip ${OPENCV_VERSION}.zip \
-&& rm ${OPENCV_VERSION}.zip
-	
-RUN wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip \
-&& unzip ${OPENCV_VERSION}.zip \
-&& mkdir /opencv-${OPENCV_VERSION}/cmake_binary \
-&& cd /opencv-${OPENCV_VERSION}/cmake_binary \
-&& cmake -DBUILD_TIFF=ON \
-  -DBUILD_opencv_java=OFF \
-  -DOPENCV_EXTRA_MODULES_PATH=/opencv_contrib-${OPENCV_VERSION}/modules \
-  -DOPENCV_ENABLE_NONFREE=1 \
-  -DWITH_CUDA=OFF \
-  -DWITH_OPENGL=ON \
-  -DWITH_OPENCL=ON \
-  -DWITH_IPP=ON \
-  -DWITH_TBB=ON \
-  -DWITH_EIGEN=ON \
-  -DWITH_V4L=ON \
-  -DBUILD_TESTS=OFF \
-  -DBUILD_PERF_TESTS=OFF \
-  -DCMAKE_BUILD_TYPE=RELEASE \
-  -DCMAKE_INSTALL_PREFIX=$(python3.7 -c "import sys; print(sys.prefix)") \
-  -DPYTHON_EXECUTABLE=$(which python3.7) \
-  -DPYTHON_INCLUDE_DIR=$(python3.7 -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())") \
-  -DPYTHON_PACKAGES_PATH=$(python3.7 -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())") \
-  .. \
-&& make install \
-&& rm /${OPENCV_VERSION}.zip \
-&& rm -r /opencv-${OPENCV_VERSION}
 
 ADD . /
 

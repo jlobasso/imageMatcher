@@ -11,7 +11,16 @@
 
 * docker build -t imgmatch .  (NO OLVIDAR EL .  AL FINAL)
 
+(PUEDE TIRAR ERROR DE TIMEOUT AL INSTALAR OPENCV Y OCV CONTRIB, EN DICHO CASO TIRARLO DE NUEVO)
+
+
 * docker run -d -p 5000:5000 imgmatch (http://localhost:5000/health para ver si funciona)
+
+* docker ps para ver que esta corriendo
+* docker stop [el monbre que aparece en ps] para detener el container
+
+
+
 
  --- SERVIDOR DE FRONTEND ---
 
@@ -37,13 +46,13 @@
 
 
 
-documentacion:
-sudo apt install python-opencv python-pip install python-tk
-
 ##############################
 ### INSTALAR OPENCV 3 EN PYTHON CON UBUNTU
 ### https://www.pyimagesearch.com/2018/05/28/ubuntu-18-04-how-to-install-opencv/
 ##############################
+
+documentacion:
+sudo apt install python-opencv python-pip install python-tk
 
 $ python3 --version
 
