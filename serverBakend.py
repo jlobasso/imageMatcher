@@ -1,3 +1,4 @@
+import sys
 from flask import Flask, request
 from flask_restful import Resource, Api
 from flask_cors import CORS
@@ -52,7 +53,9 @@ api.add_resource(Process, '/process')
 api.add_resource(Health, '/health')
 
 if __name__ == '__main__':
-    app.run(port='5000', debug=True)
-    # app.run(debug=True, host='0.0.0.0')
+    if len(sys.argv) > 1 && sys.argv[1] == 'docker'
+        app.run(debug=True, host='0.0.0.0')
+    else:    
+        app.run(port='5000', debug=True)
   
   
