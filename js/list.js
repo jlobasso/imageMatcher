@@ -3,23 +3,6 @@ const statusInfo = document.getElementById("status");
 const mainContainer = document.getElementById("main-container")
 const statusContainer = document.getElementById("status-container")
 var cantImagesToCompare = 0;
-{/* <div class="div-block-2">
-        <div class="title">Joico Moisture Recovery Condicionador 300ml<br></div>
-        <div class="mlid">ML ID: <strong class="bold-text">MLB1002251313</strong></div>
-        <div class="w-row">
-          <div class="w-col w-col-6"><img src="images/634434-MLB27004768567_032018-O.jpg" alt="" class="image-2">
-            <div>Imagen del anuncio</div>
-            <div class="text-block-2">https://mlb-s1-p.mlstatic.com/634434-MLB27004768567_032018-O.jpg</div>
-          </div>
-          <div class="w-col w-col-6"><img src="images/634434-MLB27004768567_032018-O.jpg" alt="" class="image-2">
-            <div>Imagen catálogo marca</div>
-            <div class="text-block-2">https://mlb-s1-p.mlstatic.com/634434-MLB27004768567_032018-O.jpg</div>
-          </div>
-        </div>
-        <div class="div-block-3">
-          <div>Match 8/10</div>
-        </div>
-      </div> */}
 
 var getStatus = () => {
 
@@ -38,10 +21,18 @@ var getStatus = () => {
 
 }
 
+var time = {start: null, finish: null, total: null}
 
 submit.addEventListener("click", async () => {
+
+    time.start = new Date();
+
     // const textarea = document.getElementById("Json")
     // const json = textarea.value;
+    const json = await fetch('./js/livesearchShort.json')
+        .then(function (response) {
+            return response.json();
+        })
 
     var previousResults = document.getElementsByClassName('div-block-2');
     while (previousResults[0]) {
@@ -57,11 +48,7 @@ submit.addEventListener("click", async () => {
     var statusInterval = setInterval(() => {
         getStatus()
     }, 1000);
-
-    const json = await fetch('./js/livesearchShort.json')
-        .then(function (response) {
-            return response.json();
-        })
+    
 
     let id = 0;
     var imagenes = [];
@@ -95,31 +82,13 @@ submit.addEventListener("click", async () => {
     xhr.onreadystatechange = function () { // Call a function when the state changes.
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             clearInterval(statusInterval)
-
-            // // // // // // // container.appendChild(title)
-            // // // // // // // container.appendChild(article)
-            
-            // // // // // // // var title1 = title;
-            // // // // // // // title1.innerHTML = "aaaaaaaaaaaaaacccccccccccccccccaaaaaaaaaaaaaaa"
-            // // // // // // // col1.appendChild(title1)
-            // // // // // // // col1.appendChild(image)
-            // // // // // // // row.appendChild(col1)
-
-            // // // // // // // var title2 = title;
-            // // // // // // // title2.innerHTML = "aaaaaaaaaaaaaacccccccccccccccccaaaaaaaaaaaaaaa"
-            // // // // // // // col2.appendChild(title2)
-            // // // // // // // col2.appendChild(image)
-            // // // // // // // row.appendChild(col2)
-            
-            // // // // // // // container.appendChild(row)
-
-
-            // // // // // // // mainContainer.appendChild(container);
-            
-            console.log(this.response)
-            // console.log(this.response)
-
+        
             drawResults(this.response)
+
+            time.finish = new Date();
+
+            time.total = time.finish - time.start;
+            console.log(time);
         }
     }
 
@@ -141,13 +110,10 @@ submit.addEventListener("click", async () => {
     console.log(data)
 
     xhr.send(JSON.stringify(data));
-    // xhr.send(imagenes);
 
     function encode_utf8(s) {
         return unescape(encodeURIComponent(s));
     } ('\u4e0a\u6d77')
-
-    // console.log(imagenes)
 })
 
 
