@@ -29,4 +29,4 @@ ADD . /
 # EXPOSE 5002
 # EXPOSE 8080
 # CMD ["python", "serverFrontend.py"]
-CMD ["python", "serverBakend.py"]
+CMD ["python", "serverBakend.py docker"]
