@@ -36,7 +36,7 @@ class Process(Resource):
 
         data = json.loads(request.data)
         # print(data)
-        result = match(data['imagenes'], data['min_match_count'], data['scale'], data['sensibility'], data['min_percent_match'])
+        result = match(data['imagenes'], data['min_match_count'], data['scale'], data['sensibility'], data['min_percent_match'], data['compare_category'])
         
         # tiempo2 = datetime.now()
 
