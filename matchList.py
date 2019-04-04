@@ -14,8 +14,8 @@ def url_to_image(url):
     image = cv2.imdecode(image, cv2.IMREAD_COLOR)
     return image
 
-def match(images, minMatchCount, scale, sensibility, minPercentMatch):
-    images2 = getImages()
+def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCategory):
+    images2 = getImages(compareCategory)
     len2 = len(images2)
     globalMatches = []
 
@@ -25,10 +25,12 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch):
     #Recorre imagenes de livesearch
     for x in range(0, len(images)):
         bestMatches = []
-        try:
+        
+
+        if int(scale) == 0:
+            img1 = url_to_image(images[x]['image'])
+        else:
             img1 = cv2.resize(url_to_image(images[x]['image']), (scale, scale))
-        except Exception as e :
-            print ("Exception: ",e," at ",images[x]['image'])
 
         # recorre las imagenes originales del repo local
         for y in range(0, len2):
@@ -53,7 +55,13 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch):
             F.write(json.dumps(status))
             F.close()
 
-            img2 = cv2.resize(cv2.imread(images2[y], 0), (scale, scale))
+
+            if int(scale) == 0:
+                img2 = cv2.imread(images2[y], 0)
+            else:
+                img2 = cv2.resize(cv2.imread(images2[y], 0), (scale, scale))
+
+            
 
             sift = cv2.xfeatures2d.SIFT_create()
 

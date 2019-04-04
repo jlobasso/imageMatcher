@@ -2,6 +2,6 @@
 from glob import glob
 
 
-def getImages():
-    img = glob("joico/Shampoo/Recortadas/*")
+def getImages(path):
+    img = glob("joico/"+path+"/*")
     return img

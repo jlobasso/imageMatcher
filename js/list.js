@@ -81,7 +81,7 @@ submit.addEventListener("click", async () => {
     });
 
     /** OJO QUE ESTOY RECORTANDO EL ARRAY!!!! */
-    imagenes = imagenes.slice(0, 2);
+    // imagenes = imagenes.slice(0, 2);
 
     cantImagesToCompare = imagenes.length;
 
@@ -96,6 +96,27 @@ submit.addEventListener("click", async () => {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             clearInterval(statusInterval)
 
+            // // // // // // // container.appendChild(title)
+            // // // // // // // container.appendChild(article)
+            
+            // // // // // // // var title1 = title;
+            // // // // // // // title1.innerHTML = "aaaaaaaaaaaaaacccccccccccccccccaaaaaaaaaaaaaaa"
+            // // // // // // // col1.appendChild(title1)
+            // // // // // // // col1.appendChild(image)
+            // // // // // // // row.appendChild(col1)
+
+            // // // // // // // var title2 = title;
+            // // // // // // // title2.innerHTML = "aaaaaaaaaaaaaacccccccccccccccccaaaaaaaaaaaaaaa"
+            // // // // // // // col2.appendChild(title2)
+            // // // // // // // col2.appendChild(image)
+            // // // // // // // row.appendChild(col2)
+            
+            // // // // // // // container.appendChild(row)
+
+
+            // // // // // // // mainContainer.appendChild(container);
+            
+            console.log(this.response)
             // console.log(this.response)
 
             drawResults(this.response)
@@ -199,14 +220,14 @@ drawResults = (data) => {
         var title1 = document.createElement("div");
         var title2 = document.createElement("div");
 
-        title1.innerHTML = "imagen original";
+        title1.innerHTML = "Imagen catálogo marca";
 
         col1.appendChild(title1)
         img1.src = imgMatch.image_url
         col1.appendChild(img1)
         row.appendChild(col1)
 
-        title2.innerHTML = "Imagen catálogo marca";
+        title2.innerHTML = "imagen original";
 
         col2.appendChild(title2)
         img2.src = imgMatch.image_repo
