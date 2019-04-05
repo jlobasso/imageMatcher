@@ -23,16 +23,18 @@ var getStatus = () => {
 
 var time = {start: null, finish: null, total: null}
 
+var dataArticle = {}
+
 submit.addEventListener("click", async () => {
 
     time.start = new Date();
 
-    // const textarea = document.getElementById("Json")
-    // const json = textarea.value;
-    const json = await fetch('./js/livesearchShort.json')
-        .then(function (response) {
-            return response.json();
-        })
+    const textarea = document.getElementById("Json")
+    const json = JSON.parse(textarea.value);
+    // const json = await fetch('./js/livesearchShort.json')
+    //     .then(function (response) {
+    //         return response.json();
+    //     })
 
     var previousResults = document.getElementsByClassName('div-block-2');
     while (previousResults[0]) {
@@ -62,6 +64,7 @@ submit.addEventListener("click", async () => {
                         image: img.url,
                         position: i,
                     })
+                dataArticle[a.id] = a.title
                 }
             })
         }
@@ -118,7 +121,7 @@ submit.addEventListener("click", async () => {
 
 drawResults = (data) => {
 
-    console.log(data);
+    // console.log(data);
 
     data = JSON.parse(data);
 
@@ -167,8 +170,9 @@ drawResults = (data) => {
 
         var img2 = document.createElement("img");
 
-        title.innerHTML = "Este es el titulo"
-        article.innerHTML = "Este es como otro titulo"
+
+        title.innerHTML = dataArticle[imgMatch.article_id]
+        article.innerHTML = "ML ID: "+imgMatch.article_id;
 
 
         container.appendChild(title)
@@ -186,7 +190,7 @@ drawResults = (data) => {
         var title2 = document.createElement("div");
 
         let imageNameURL = imgMatch.image_url.split('/')
-        title1.innerHTML = "Imagen catálogo marca: <br>"+imageNameURL[imageNameURL.length -1];
+        title1.innerHTML = "Imagen del anuncio: <br>"+imageNameURL[imageNameURL.length -1];
 
         img1.src = imgMatch.image_url
         col1.appendChild(img1)
@@ -194,7 +198,7 @@ drawResults = (data) => {
         row.appendChild(col1)
 
         let imageNameRepo = imgMatch.image_repo.split('/')
-        title2.innerHTML = "imagen original: <br>"+imageNameRepo[imageNameRepo.length -1];
+        title2.innerHTML = "Imagen catálogo marca: <br>"+imageNameRepo[imageNameRepo.length -1];
 
         img2.src = imgMatch.image_repo
         col2.appendChild(img2)
