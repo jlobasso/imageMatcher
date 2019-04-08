@@ -85,6 +85,7 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
             if float(len(good)/minMatchCount*100) > float(minPercentMatch):
                 bestMatches.append(
                     {
+                        'article_id': str(images[x]['id']),
                         'image_url': str(images[x]['image']), 
                         'percentage': str(len(good)/minMatchCount*100),
                         'image_repo': str(images2[y]), 

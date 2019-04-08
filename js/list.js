@@ -23,16 +23,18 @@ var getStatus = () => {
 
 var time = {start: null, finish: null, total: null}
 
+var dataArticle = {}
+
 submit.addEventListener("click", async () => {
 
     time.start = new Date();
 
-    // const textarea = document.getElementById("Json")
-    // const json = textarea.value;
-    const json = await fetch('./js/livesearchShort.json')
-        .then(function (response) {
-            return response.json();
-        })
+    const textarea = document.getElementById("Json")
+    const json = JSON.parse(textarea.value);
+    // const json = await fetch('./js/livesearchShort.json')
+    //     .then(function (response) {
+    //         return response.json();
+    //     })
 
     var previousResults = document.getElementsByClassName('div-block-2');
     while (previousResults[0]) {
@@ -62,13 +64,14 @@ submit.addEventListener("click", async () => {
                         image: img.url,
                         position: i,
                     })
+                dataArticle[a.id] = a.title
                 }
             })
         }
     });
 
-    /** OJO QUE ESTOY RECORTANDO EL ARRAY!!!! */
-    // imagenes = imagenes.slice(0, 2);
+    // /** OJO QUE ESTOY RECORTANDO EL ARRAY!!!! */
+    // imagenes = imagenes.slice(0, 6);
 
     cantImagesToCompare = imagenes.length;
 
@@ -82,20 +85,21 @@ submit.addEventListener("click", async () => {
     xhr.onreadystatechange = function () { // Call a function when the state changes.
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             clearInterval(statusInterval)
-        
-            drawResults(this.response)
-
+                    
             time.finish = new Date();
+            time.total = ((time.finish - time.start)/1000/60).toFixed(2) + " min";
+            
+            // console.log(time)
 
-            time.total = ((time.finish - time.start)/1000/60).toFixed(2);
-            // console.log(time);
+
+            drawResults(this.response)
         }
     }
 
     let minMatchCount = +document.getElementById("min-match-count").value;
     let scale = +document.getElementById("scale").value;
     let sensibility = +document.getElementById("sensibility").value / 100;
-    let minPercentMatch = +document.getElementById("min-percent-match").value;
+    var minPercentMatch = +document.getElementById("min-percent-match").value;
     let compareCategory = document.getElementById("compare-category").value
 
     data = {
@@ -117,7 +121,7 @@ submit.addEventListener("click", async () => {
 
 drawResults = (data) => {
 
-    console.log(data);
+    // console.log(data);
 
     data = JSON.parse(data);
 
@@ -166,8 +170,9 @@ drawResults = (data) => {
 
         var img2 = document.createElement("img");
 
-        title.innerHTML = "Este es el titulo"
-        article.innerHTML = "Este es como otro titulo"
+
+        title.innerHTML = dataArticle[imgMatch.article_id]
+        article.innerHTML = "ML ID: "+imgMatch.article_id;
 
 
         container.appendChild(title)
@@ -184,27 +189,29 @@ drawResults = (data) => {
         var title1 = document.createElement("div");
         var title2 = document.createElement("div");
 
-        title1.innerHTML = "Imagen catálogo marca";
+        let imageNameURL = imgMatch.image_url.split('/')
+        title1.innerHTML = "Imagen del anuncio: <br>"+imageNameURL[imageNameURL.length -1];
 
-        col1.appendChild(title1)
         img1.src = imgMatch.image_url
         col1.appendChild(img1)
+        col1.appendChild(title1)
         row.appendChild(col1)
 
-        title2.innerHTML = "imagen original";
+        let imageNameRepo = imgMatch.image_repo.split('/')
+        title2.innerHTML = "Imagen catálogo marca: <br>"+imageNameRepo[imageNameRepo.length -1];
 
-        col2.appendChild(title2)
         img2.src = imgMatch.image_repo
         col2.appendChild(img2)
+        col2.appendChild(title2)
         row.appendChild(col2)
 
 
         var percentage = document.createElement("div");
-        percentage.innerHTML = parseFloat(imgMatch.percentage).toFixed(2); + "%";
+        percentage.innerHTML = parseFloat(imgMatch.percentage).toFixed(2) + "%";
         percentage.classList.add("percentage");
 
 
-        row.appendChild(percentage);
+        row.appendChild(percentage); 
 
         container.appendChild(row)
 
@@ -215,10 +222,17 @@ drawResults = (data) => {
 
     var resumenResultado = document.getElementById("resumen-resultado");
 
-    resumenResultado.innerHTML = `2. ${totalQuantity} Resultados encontrados sobre 
-    un total de ${cantImagesToCompare} publicaciones analizadas.
-    total comparaciones: ${totalQuantity * cantImagesToCompare} 
-    Tiempo de Proceso ${time.total}`;
+    var minPercentMatch = +document.getElementById("min-percent-match").value;
+
+    const statusInfo = document.getElementById("status");
+
+    resumenResultado.innerHTML = `
+    Resultados con macheos mayores al ${minPercentMatch}%: ${totalQuantity} <br>
+    Cantidad de imagenes analizadas: ${cantImagesToCompare}<br>
+    Tiempo de Proceso: ${time.total}`;
+    
+    // Cantidad de publicaciones analizadas: ${cantImagesToCompare}<br>
+    // Repositorio donde Macheo la imagen: ${imgMatch.image_repo} <br>
 
     resumenResultado.style.display = "block";
 
