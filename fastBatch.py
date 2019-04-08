@@ -16,6 +16,7 @@ def url_to_image(url):
 
 def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCategory):
     images2 = getImages(compareCategory)
+    images = getImages('imgAnuncio')
     len2 = len(images2)
     globalMatches = []
 
@@ -28,7 +29,8 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
     for x in range(0, len(images)):
         bestMatches = []
         
-        img1 = url_to_image(images[x]['image'])
+        # img1 = url_to_image(images[x]['image'])
+        img1 = cv2.imread(images[x], 0)
 
         kp1 = orb.detect(img1,None)
         kp1, des1 = orb.compute(img1, kp1)
@@ -77,8 +79,9 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
             if float(len(good)/minMatchCount*100) > float(minPercentMatch):
                 bestMatches.append(
                     {
-                        'article_id': str(images[x]['id']),
-                        'image_url': str(images[x]['image']), 
+                        # 'article_id': str(images[x]['id']),
+                        # 'image_url': str(images[x]['image']),  
+                        'image_url': str(images[x]), 
                         'percentage': str(len(good)/minMatchCount*100),
                         'image_repo': str(images2[y]), 
 
