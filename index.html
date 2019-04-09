@@ -21,6 +21,7 @@
   <div class="mainwrapper">
     <div id="main-container" class="wrapper w-container"><img src="images/favicon-256.png" width="100" alt="" class="image">
       <h1 class="heading">1. Datos por analizar</h1>
+        
       <div class="w-form">
         <form id="email-form" name="email-form" data-name="Email Form"><label for="Json">Copiar JSON con datos de
             Livesearch</label>
@@ -552,50 +553,55 @@
   }
 ]
           </textarea>
-
-          <div class="input-wraper">
-            <label for="name-2">Min match count</label>
-            <input id="min-match-count" type="number" class="text-field w-input" maxlength="256" name="Threshold" data-name="Threshold" id="Threshold"
-              required="" value=600>
-          </div>
-
-          <div class="input-wraper">
-            <label for="name-3">Scale</label>
-            <input  id="scale" type="number" class="text-field w-input" maxlength="256" name="Threshold" data-name="Threshold" id="Threshold"
-              required="" value=0>
-          </div>
-
-          <div class="input-wraper">
-            <label for="name-4">Sensibility</label>
-            <input  id="sensibility" type="number" class="text-field w-input" maxlength="256" name="Threshold" data-name="Threshold" id="Threshold"
-              required="" value=20>
-          </div>
-
-          <div class="input-wraper">
-            <label for="name-5">Min percent match</label>
-            <input  id="min-percent-match" type="number" class="text-field w-input" maxlength="256" name="Threshold" data-name="Threshold" id="Threshold"
-              required="" value=10>
-          </div>
           <hr />
           <div class="input-wraper" style="width: 100%">
               <label for="name-5">Categoria para comparar</label>
-            <select id="compare-category">
-              <option value="Test">Carpeta de testeo</option>
-              <option value="Tratamento/Recortadas">Tratamento Imagenes Recortadas</option> 
-              <option value="Tratamento/Original">Tratamento Imagenes Originales</option>   
-              <option value="Shampoo/Recortadas">Shampoo Imagenes Recortadas</option>     
-              <option value="Shampoo/Original">Shampoo Imagenes Originales</option>              
-              <option value="Condicionador/Recortadas">Condicionador Imagenes Recortadas</option> 
-              <option value="Condicionador/Original">Condicionador Imagenes Originales</option>   
-              <option value="Finalizador/Recortadas">Finalizador Imagenes Recortadas</option> 
-              <option value="Finalizador/Original">Finalizador Imagenes Originales</option>   
-              <option value="Hidratante/Recortadas">Hidratante Imagenes Recortadas</option> 
-              <option value="Hidratante/Original">Hidratante Imagenes Originales</option>   
-            </select>
+              <select id="compare-category">
+                <option value="Test">Carpeta de testeo</option>
+                <option value="Tratamento/Recortadas">Tratamento Imagenes Recortadas</option> 
+                <option value="Tratamento/Original">Tratamento Imagenes Originales</option>   
+                <option value="Shampoo/Recortadas">Shampoo Imagenes Recortadas</option>     
+                <option value="Shampoo/Original">Shampoo Imagenes Originales</option>              
+                <option value="Condicionador/Recortadas">Condicionador Imagenes Recortadas</option> 
+                <option value="Condicionador/Original">Condicionador Imagenes Originales</option>   
+                <option value="Finalizador/Recortadas">Finalizador Imagenes Recortadas</option> 
+                <option value="Finalizador/Original">Finalizador Imagenes Originales</option>   
+                <option value="Hidratante/Recortadas">Hidratante Imagenes Recortadas</option> 
+                <option value="Hidratante/Original">Hidratante Imagenes Originales</option>   
+              </select>
           </div>
           <br />
-          <input id="submit" type="submit" value="ENVIAR" data-wait="Aguarde..." class="submit-button w-button"></form>
-          <input id="download" type="submit" value="DOWNLOAD" data-wait="Download..." class="submit-button w-button"></form>
+
+
+          <div class="input-wraper">
+              <label for="name-2">Min match count</label>
+              <input id="min-match-count" type="number" class="text-field w-input" maxlength="256" required="" value=100>
+            </div>
+  
+            <div class="input-wraper">
+              <label for="name-3">Scale</label>
+              <input  id="scale" type="number" class="text-field w-input" maxlength="256" required="" value=0>
+            </div>
+  
+            <div class="input-wraper">
+              <label for="name-4">Sensibility</label>
+              <input  id="sensibility" type="number" class="text-field w-input" maxlength="256" required="" value=20>
+            </div>
+  
+            <div class="input-wraper">
+              <label for="name-5">Min percent match</label>
+              <input  id="min-percent-match" type="number" class="text-field w-input" maxlength="256" required="" value=10>
+            </div>
+  
+            <br />
+            <div class="input-wraper">
+                <input id="submit" type="submit" value="ENVIAR" data-wait="Aguarde..." class="submit-button w-button"></form>
+            </div>
+            <div class="input-wraper"></div>
+            <div class="input-wraper"></div>
+           <div class="input-wraper">
+              <input id="download" type="submit" value="DOWNLOAD" data-wait="Download..." class="download-button w-buttonDownload"></form>
+          </div>
         </div>
       <div id="status-container" class="div-block">
         <div id="status" class="text-block">Procesando imágenes, aguarde por favor.</div>

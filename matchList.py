@@ -16,7 +16,7 @@ def url_to_image(url):
 
 def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCategory):
     images2 = getImages(compareCategory)
-    images = getImages('imgAnuncio')
+    images = getImages('download')
     len2 = len(images2)
     globalMatches = []
 
@@ -32,8 +32,8 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
         if int(scale) == 0:
             img1 = cv2.imread(images[x], 0)
             # img1 = url_to_image(images[x]['image'])
-        else:
-            img1 = cv2.resize(url_to_image(images[x]['image']), (scale, scale))
+        # else:
+        #     img1 = cv2.resize(url_to_image(images[x]['image']), (scale, scale))
 
 
         kp1, des1 = sift.detectAndCompute(img1, None)
@@ -87,6 +87,7 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
                 bestMatches.append(
                     {
                         # 'article_id': str(images[x]['id']),
+                        'article_id': str(images[x]),
                         # 'image_url': str(images[x]['image']), 
                         'image_url': str(images[x]), 
                         'percentage': str(len(good)/minMatchCount*100),

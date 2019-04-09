@@ -17,7 +17,7 @@ def downloadImage(images):
 
         print(str(x)+'_'+img)
 
-        ficheroGuardar = open('joico/imgAnuncio/'+str(x)+'_'+img,"wb")
+        ficheroGuardar = open('joico/download/'+str(x)+'_'+img,"wb")
         ficheroGuardar.write(archivoDescargar.read())
         ficheroGuardar.close()    
 

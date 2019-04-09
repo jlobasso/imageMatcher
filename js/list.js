@@ -73,8 +73,6 @@ submit.addEventListener("click", async () => {
     // /** OJO QUE ESTOY RECORTANDO EL ARRAY!!!! */
     // imagenes = imagenes.slice(0, 6);
 
-    cantImagesToCompare = imagenes.length;
-
     var xhr = new XMLHttpRequest();
     xhr.open("POST", 'http://localhost:5000/process', true);
 
@@ -219,6 +217,8 @@ drawResults = (data) => {
         mainContainer.appendChild(container);
     })
 
+
+    cantImagesToCompare = status.running.of.length;
 
     var resumenResultado = document.getElementById("resumen-resultado");
 

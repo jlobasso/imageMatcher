@@ -88,8 +88,13 @@
   margin-bottom: 54px;
 }
 
+.download-button {
+  margin-top: 16px;
+  margin-bottom: 54px;
+}
+
 .textarea {
-  height: 490px;
+  height: 200px;
 }
 
 .div-block-3 {
