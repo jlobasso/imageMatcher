@@ -14,7 +14,7 @@ def getImages(path):
 model = ResNet50(weights='imagenet')
 
 
-images = getImages('Condicionador/Original')
+images = getImages('download')
 
 differentCategories = []
 
@@ -29,9 +29,13 @@ for x in range(0, len(images)):
     preds = model.predict(x)
     # decode the results into a list of tuples (class, description, probability)
     # (one such list for each sample in the batch)
-    # print('Predicted:', decode_predictions(preds, top=3)[0][0][1])
+    # print('Predicted:', decode_predictions(preds, top=3)[0][0])
     # Predicted: [(u'n02504013', u'
-    if item not in differentCategories:
-        differentCategories.append(decode_predictions(preds, top=3)[0][0][1])
+    it = decode_predictions(preds, top=3)
+    item = it[0][0][1]
+    per = it[0][0][2]
+
+    if item not in differentCategories and per > 0.5:
+        differentCategories.append(item)
 
 print(differentCategories)
