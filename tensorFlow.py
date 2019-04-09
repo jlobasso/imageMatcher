@@ -29,5 +29,9 @@ for x in range(0, len(images)):
     preds = model.predict(x)
     # decode the results into a list of tuples (class, description, probability)
     # (one such list for each sample in the batch)
-    print('Predicted:', decode_predictions(preds, top=3)[0][0][1])
+    # print('Predicted:', decode_predictions(preds, top=3)[0][0][1])
     # Predicted: [(u'n02504013', u'
+    if item not in differentCategories:
+        differentCategories.append(decode_predictions(preds, top=3)[0][0][1])
+
+print(differentCategories)
