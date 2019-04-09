@@ -16,11 +16,13 @@ def url_to_image(url):
 
 def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCategory):
     images2 = getImages(compareCategory)
+    images = getImages('download')
     len2 = len(images2)
     globalMatches = []
 
     kInageComputed = 0
 
+    sift = cv2.xfeatures2d.SIFT_create()
 
     #Recorre imagenes de livesearch
     for x in range(0, len(images)):
@@ -28,9 +30,13 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
         
 
         if int(scale) == 0:
-            img1 = url_to_image(images[x]['image'])
-        else:
-            img1 = cv2.resize(url_to_image(images[x]['image']), (scale, scale))
+            img1 = cv2.imread(images[x], 0)
+            # img1 = url_to_image(images[x]['image'])
+        # else:
+        #     img1 = cv2.resize(url_to_image(images[x]['image']), (scale, scale))
+
+
+        kp1, des1 = sift.detectAndCompute(img1, None)
 
         # recorre las imagenes originales del repo local
         for y in range(0, len2):
@@ -60,12 +66,7 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
                 img2 = cv2.imread(images2[y], 0)
             else:
                 img2 = cv2.resize(cv2.imread(images2[y], 0), (scale, scale))
-
-            
-
-            sift = cv2.xfeatures2d.SIFT_create()
-
-            kp1, des1 = sift.detectAndCompute(img1, None)
+                        
             kp2, des2 = sift.detectAndCompute(img2, None)
 
             FLANN_INDEX_KDTREE = 0
@@ -85,8 +86,10 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
             if float(len(good)/minMatchCount*100) > float(minPercentMatch):
                 bestMatches.append(
                     {
-                        'article_id': str(images[x]['id']),
-                        'image_url': str(images[x]['image']), 
+                        # 'article_id': str(images[x]['id']),
+                        'article_id': str(images[x]),
+                        # 'image_url': str(images[x]['image']), 
+                        'image_url': str(images[x]), 
                         'percentage': str(len(good)/minMatchCount*100),
                         'image_repo': str(images2[y]), 
 
