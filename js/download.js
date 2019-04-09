@@ -1,10 +1,12 @@
 const download = document.getElementById("download")
 
 download.addEventListener("click", async () => {
-    const json = await fetch('./js/livesearch.json')
-        .then(function (response) {
-                return response.json();
-            })
+    // const json = await fetch('./js/livesearch.json')
+    //     .then(function (response) {
+    //             return response.json();
+    //         })
+    const textarea = document.getElementById("Json")
+    const json = JSON.parse(textarea.value);
         
             
             var imagenes = [];

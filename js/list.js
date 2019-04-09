@@ -3,7 +3,7 @@ const statusInfo = document.getElementById("status");
 const mainContainer = document.getElementById("main-container")
 const statusContainer = document.getElementById("status-container")
 var cantImagesToCompare = 0;
-
+var cantAnalizadas = 0;
 var getStatus = () => {
 
     fetch('status.json?' + Math.random() + '=' + Math.random())
@@ -14,8 +14,8 @@ var getStatus = () => {
                                     de ${status.running.of} 
                                     comparando con ${status.comparing.current} 
                                     de ${status.comparing.of}`
+                                    cantAnalizadas = status.comparing.of * status.running.of
         }
-
 
         )
 
@@ -73,6 +73,8 @@ submit.addEventListener("click", async () => {
     // /** OJO QUE ESTOY RECORTANDO EL ARRAY!!!! */
     // imagenes = imagenes.slice(0, 6);
 
+    cantImagesToCompare = imagenes.length;
+
     var xhr = new XMLHttpRequest();
     xhr.open("POST", 'http://localhost:5000/process', true);
 
@@ -82,15 +84,16 @@ submit.addEventListener("click", async () => {
 
     xhr.onreadystatechange = function () { // Call a function when the state changes.
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            clearInterval(statusInterval)
-                    
+            
             time.finish = new Date();
             time.total = ((time.finish - time.start)/1000/60).toFixed(2) + " min";
             
             // console.log(time)
-
-
+            
+            
             drawResults(this.response)
+            setTimeout(()=>{clearInterval(statusInterval)},2000)
+            
         }
     }
 
@@ -218,8 +221,6 @@ drawResults = (data) => {
     })
 
 
-    cantImagesToCompare = status.running.of.length;
-
     var resumenResultado = document.getElementById("resumen-resultado");
 
     var minPercentMatch = +document.getElementById("min-percent-match").value;
@@ -228,7 +229,7 @@ drawResults = (data) => {
 
     resumenResultado.innerHTML = `
     Resultados con macheos mayores al ${minPercentMatch}%: ${totalQuantity} <br>
-    Cantidad de imagenes analizadas: ${cantImagesToCompare}<br>
+    Cantidad Macheos analizadas: ${cantAnalizadas}<br>
     Tiempo de Proceso: ${time.total}`;
     
     // Cantidad de publicaciones analizadas: ${cantImagesToCompare}<br>
