@@ -71,7 +71,7 @@ submit.addEventListener("click", async () => {
     });
 
     // /** OJO QUE ESTOY RECORTANDO EL ARRAY!!!! */
-    // imagenes = imagenes.slice(0, 6);
+    imagenes = imagenes.slice(0, imagenes.length);
 
     cantImagesToCompare = imagenes.length;
 

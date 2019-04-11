@@ -5,12 +5,12 @@ import time
 import json
 
 def downloadImage(images):
-    print(len(images))
 
+    print ('cantidad de imagenes a descargar: ',len(images))
+    now = time.time()         
     for x in range(0, len(images)):
 
         archivoDescargar = urllib.request.urlopen(images[x]['image'])
-        # now = time.time()         
         
         img = str(images[x]['image'])[8:]
         img = img.replace("/", "_")
@@ -21,5 +21,5 @@ def downloadImage(images):
         ficheroGuardar.write(archivoDescargar.read())
         ficheroGuardar.close()    
 
-        # elapsed = time.time() - now        
-# print ('Descargado el archivo: ' + archivoDescargar,elapsed)
+    elapsed = time.time() - now        
+    print ('tiempo de descarga total de archivos: ',elapsed)
