@@ -1,9 +1,16 @@
-from glob import glob
+from pymongo import MongoClient
 
-def getImages(path):
-    img = glob("joico/"+path+"/*")
-    return img
+conn = MongoClient()
 
-images = getImages('download')
+db = conn.imageMatcher
 
-print(len(images))
+collection = db.suspectedImages
+
+a = {"hola":"chau"}  
+
+rec_id1 = collection.insert_one(a)
+
+cursor = collection.find() 
+for record in cursor: 
+    print(record) 
+
