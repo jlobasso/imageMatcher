@@ -19,7 +19,7 @@
 * docker ps para ver que esta corriendo
 * docker stop [el monbre que aparece en ps] para detener el container
 
-
+!!AGREGAR pip install pymongo 
 
 
  --- SERVIDOR DE FRONTEND ---

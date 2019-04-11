@@ -27,7 +27,7 @@ model = MobileNetV2(weights='imagenet')
 predictions = []
 predictionsWeight = {}
 
-test_imgs_paths = getImages('download')
+test_imgs_paths = getImages('download1300')
 totalAmountToAnalize = len(test_imgs_paths)
 
 print("Cantidad de Imagenes a analizar: ", totalAmountToAnalize)
@@ -35,18 +35,12 @@ print("Cantidad de Imagenes a analizar: ", totalAmountToAnalize)
 for test_img_path in test_imgs_paths:
 
     pImg = process_image(test_img_path)
-    pImg2 = process_image(test_img_path, 299)
 
     features = model.predict(pImg)
 
     decoded = decode_predictions(features, top=1)
-    # prediction = str(round(decoded[0][0][2]*100, 2))
-    # print('Predicted MobileNet:', decoded)
-
 
     img=mpimg.imread(test_img_path)
-
-    # text = "MobileNet: " +str(decoded[0][0][1]) + ": " + prediction+"% \n"
 
     if str(decoded[0][0][1]) not in predictions:
         predictions.append(str(decoded[0][0][1]))
