@@ -4,14 +4,14 @@ from matplotlib import pyplot as plt
 
 MIN_MATCH_COUNT = 80
 
-img1 = cv2.imread('../images/n0p2.jpeg',0) # queryImage
-# img1 = cv2.imread('images/Nike-Air-Force-1-Low-Moto-W-1100x553.png',0) # queryImage
-# img2 = cv2.imread('images/nike-air-force-1-dominican-republic-de-lo-mio-release-date-2.jpg',0) # trainImage
+img1 = cv2.imread('../repo/prueban0p2.jpeg',0) # queryImage
+# img1 = cv2.imread('repo/pruebaNike-Air-Force-1-Low-Moto-W-1100x553.png',0) # queryImage
+# img2 = cv2.imread('repo/pruebanike-air-force-1-dominican-republic-de-lo-mio-release-date-2.jpg',0) # trainImage
 
 
 for x in range(1, 28):
 
-    img2 = cv2.imread('../images/n'+str(x)+'.jpeg',0) # trainImage
+    img2 = cv2.imread('../repo/prueban'+str(x)+'.jpeg',0) # trainImage
 
     # Initiate SIFT detector
     # sift = cv2._SIFT()

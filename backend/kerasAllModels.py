@@ -29,7 +29,7 @@ predictions = []
 predictionsWeight = {}
 
 def getImages(path):
-    img = glob("joico/"+path+"/*")
+    img = glob("repo/joico/"+path+"/*")
     return img
 
 test_imgs_paths = getImages('download')

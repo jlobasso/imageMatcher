@@ -1,24 +1,20 @@
 import numpy as np
 import cv2
 from matplotlib import pyplot as plt
-import urllib.request
 
 MIN_MATCH_COUNT = 80
 
-def url_to_image(url):
-	resp = urllib.request.urlopen(url)
-	image = np.asarray(bytearray(resp.read()), dtype="uint8")
-	image = cv2.imdecode(image, cv2.IMREAD_COLOR)
-	return image
+img1 = cv2.imread('repo/prueban0p1.jpeg',0) # queryImage
+# img1 = cv2.imread('repo/pruebaNike-Air-Force-1-Low-Moto-W-1100x553.png',0) # queryImage
+# img2 = cv2.imread('repo/pruebanike-air-force-1-dominican-republic-de-lo-mio-release-date-2.jpg',0) # trainImage
 
-def uniqueMatch(params):
 
-    # img1 = cv2.resize(url_to_image('http://mlb-'), (200, 200))
-    img1 = cv2.imread(params.get('url1'), 0)
-    img2 = cv2.imread(params.get('url2'), 0)
+for x in range(10, 12):
 
+    img2 = cv2.imread('repo/prueban'+str(x)+'.jpeg',0) # trainImage
 
     # Initiate SIFT detector
+    # sift = cv2._SIFT()
     sift = cv2.xfeatures2d.SIFT_create()
 
     # find the keypoints and descriptors with SIFT
@@ -36,10 +32,10 @@ def uniqueMatch(params):
     # store all the good matches as per Lowe's ratio test.
     good = []
     for m,n in matches:
-        if m.distance < float(params.get('sensibility'))*n.distance:
+        if m.distance < 0.7*n.distance:
             good.append(m)
 
-    if len(good)>int(params.get('min_match_count')):
+    if len(good)>MIN_MATCH_COUNT:
         src_pts = np.float32([ kp1[m.queryIdx].pt for m in good ]).reshape(-1,1,2)
         dst_pts = np.float32([ kp2[m.trainIdx].pt for m in good ]).reshape(-1,1,2)
 
@@ -56,9 +52,10 @@ def uniqueMatch(params):
         
         matchesMask = None
 
-    # print  (len(good),MIN_MATCH_COUNT)
-    # print  (len(good)/MIN_MATCH_COUNT) 
-        
+    print  ('Imagen comparada: ' + str(x)) 
+    print  ('Cantidad de puntos matcheados: ' + str(len(good)) + ' de ' + str(MIN_MATCH_COUNT))
+    print  ('Porcentaje de macheo: ' + str(len(good)/MIN_MATCH_COUNT*100) + '%')
+    print  ('')    
 
     draw_params = dict(matchColor = (0,255,0), # draw matches in green color
                     singlePointColor = None,
@@ -67,10 +64,12 @@ def uniqueMatch(params):
 
     img3 = cv2.drawMatches(img1,kp1,img2,kp2,good,None,**draw_params)
 
-    plt.imshow(img3)
+    plt.imshow(img3, 'gray'),plt.show()
 
-    plt.savefig('joico/unique_match/match.png')
+# #Salir con ESC
+# while(1):
+#     tecla = cv2.waitKey(5) & 0xFF
+#     if tecla == 27:
+#         break
 
-    return 'joico/unique_match/match.png'
-
-    # cv2.destroyAllWindows()
+cv2.destroyAllWindows()

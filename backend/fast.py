@@ -2,8 +2,8 @@ import numpy as np
 import cv2
 from matplotlib import pyplot as plt
 
-img1 = cv2.imread('joico/Tratamento/Original/Joi-0079.jpg',0)
-img2 = cv2.imread('joico/Tratamento/Original/CE_TreatmentMasque_500ml_Joi-0210.jpg', 0)
+img1 = cv2.imread('repo/joico/Tratamento/Original/Joi-0079.jpg',0)
+img2 = cv2.imread('repo/joico/Tratamento/Original/CE_TreatmentMasque_500ml_Joi-0210.jpg', 0)
 
 # Initiate STAR detector
 orb = cv2.ORB_create()

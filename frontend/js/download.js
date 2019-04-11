@@ -1,7 +1,7 @@
 const download = document.getElementById("download")
 
 download.addEventListener("click", async () => {
-    const json = await fetch('./js/livesearch.json')
+    const json = await fetch('./livesearch.json')
         .then(function (response) {
                 return response.json();
             })

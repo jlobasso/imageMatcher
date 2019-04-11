@@ -4,8 +4,8 @@ from matplotlib import pyplot as plt
 
 MIN_MATCH_COUNT = 10
 
-img1 = cv.imread('joico/Tratamento/Original/Portifolio_Pequeno_Joico_V1_BAIXA-0061.jpg')
-img2 = cv.imread('joico/Tratamento/Original/SC_Leave-In_Rescue_Treatment_100ml_Joi-0226.jpg')
+img1 = cv.imread('repo/joico/Tratamento/Original/Portifolio_Pequeno_Joico_V1_BAIXA-0061.jpg')
+img2 = cv.imread('repo/joico/Tratamento/Original/SC_Leave-In_Rescue_Treatment_100ml_Joi-0226.jpg')
 
 
 surf = cv.xfeatures2d.SURF_create(400)

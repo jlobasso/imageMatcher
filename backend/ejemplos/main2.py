@@ -5,15 +5,15 @@ import matplotlib.image as mpimg
 
 MIN_MATCH_COUNT = 80
 
-img1 = cv2.imread('images/n0p2.jpeg',0) # queryImage
-# img1 = cv2.imread('images/Nike-Air-Force-1-Low-Moto-W-1100x553.png',0) # queryImage
-# img2 = cv2.imread('images/nike-air-force-1-dominican-republic-de-lo-mio-release-date-2.jpg',0) # trainImage
+img1 = cv2.imread('repo/prueban0p2.jpeg',0) # queryImage
+# img1 = cv2.imread('repo/pruebaNike-Air-Force-1-Low-Moto-W-1100x553.png',0) # queryImage
+# img2 = cv2.imread('repo/pruebanike-air-force-1-dominican-republic-de-lo-mio-release-date-2.jpg',0) # trainImage
 
 bestMatches = []
 
 for x in range(1, 28):
 
-    img2 = cv2.imread('images/n'+str(x)+'.jpeg',0) # trainImage
+    img2 = cv2.imread('repo/prueban'+str(x)+'.jpeg',0) # trainImage
 
     # Initiate SIFT detector
     # sift = cv2._SIFT()
@@ -74,7 +74,7 @@ bestMatches.sort(key=extract, reverse=True)
 
 # for x in range(0, 27):
 #     # print (bestMatches[x]['image'])
-#     imgMatch = cv2.imread('images/n'+str(bestMatches[x]['image'])+'.jpeg',0) 
+#     imgMatch = cv2.imread('repo/prueban'+str(bestMatches[x]['image'])+'.jpeg',0) 
 #     plt.imshow(imgMatch, 'gray')
 
 # plt.show()
@@ -87,7 +87,7 @@ rows = 4
 # for i in range(1, columns*rows +1):
 for x in range(1, 28):
     # img = np.random.randint(10, size=(h,w))
-    imgMatch = cv2.imread('images/n'+str(bestMatches[x-1]['image'])+'.jpeg',0) 
+    imgMatch = cv2.imread('repo/prueban'+str(bestMatches[x-1]['image'])+'.jpeg',0) 
     fig.add_subplot(rows, columns, x)
     plt.axis("off")
     # image = mpimg.imread(imgMatch)

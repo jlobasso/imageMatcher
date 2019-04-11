@@ -31,7 +31,7 @@ submit.addEventListener("click", async () => {
 
     const textarea = document.getElementById("Json")
     const json = JSON.parse(textarea.value);
-    // // const json = await fetch('./js/livesearchShort.json')
+    // // const json = await fetch('./livesearchShort.json')
     // //     .then(function (response) {
     // //         return response.json();
     // //     })
