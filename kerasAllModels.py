@@ -8,6 +8,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from glob import glob
+import time
+start = time.time()
 
 # process an image to be mobilenet friendly
 def process_image(img_path,size = 224):
@@ -20,7 +22,7 @@ def process_image(img_path,size = 224):
 # model1 = VGG16(weights='imagenet')
 # model2 = InceptionV3(weights='imagenet') #size 299 299
 # model3 = ResNet50(weights='imagenet')
-model4 = MobileNet(weights='imagenet')
+model4 = MobileNetV2(weights='imagenet')
 # model5 = MobileNetV2(weights='imagenet')
 
 predictions = []
@@ -92,3 +94,5 @@ for test_img_path in test_imgs_paths:
 
 
 print(predictionsWeight)        
+end = time.time()
+print(end - start)
