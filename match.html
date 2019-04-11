@@ -1,0 +1,92 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>The HTML5 Herald</title>
+  <meta name="description" content="The HTML5 Herald">
+  <meta name="author" content="SitePoint">
+  <link href="css/normalize.css" rel="stylesheet" type="text/css">
+  <link href="css/webflow.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body onload="firstTimeMatch()">
+    <div class="input-wraper" style="width: 100%">
+        <label for="name-2">URL 1</label>
+        <input 
+          id="url1" 
+          type="text" 
+          class="text-field w-input" 
+          maxlength="256" 
+          required="" 
+          value=
+        >
+        <label for="name-2">URL 2</label>
+        <input 
+          id="url2" 
+          type="text" 
+          class="text-field w-input" 
+          maxlength="256" 
+          required="" 
+          value=
+        >
+    </div>
+    <br />
+    <div>
+      <div class="input-wraper">
+          <label for="name-2">Min match count</label>
+          <input 
+            id="min-match-count" 
+            type="number" 
+            class="text-field w-input" 
+            maxlength="256" 
+            required="" 
+            value=0
+          >
+        </div>  
+        <div class="input-wraper">
+          <label for="name-3">Scale</label>
+          <input  
+            id="scale" 
+            type="number" 
+            class="text-field w-input" 
+            maxlength="256" 
+            required="" 
+            value=0
+          >
+        </div>  
+        <div class="input-wraper">
+          <label for="name-4">Sensibility</label>
+          <input  
+            id="sensibility" 
+            type="number" 
+            class="text-field w-input" 
+            maxlength="256" 
+            required="" 
+            value=0
+          >
+        </div>  
+        <div class="input-wraper">
+          <label for="name-5">Min percent match</label>
+          <input  
+            id="min-percent-match" 
+            type="number" 
+            class="text-field w-input" 
+            maxlength="256" 
+            required="" 
+            value=0
+          >
+        </div>
+      </div>  
+      <br />
+    <div class="submitWrapper">
+        <input id="submit" type="submit" value="ENVIAR" data-wait="Aguarde..." class="submit-button w-button"></form>
+    </div>
+    <div class="imageWraper">
+      <img id="img-match" src="" />
+    </div>
+  <script src="js/match.js"></script>
+</body>
+</html>

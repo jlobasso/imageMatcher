@@ -8,6 +8,7 @@ import json
 # from matchList import *
 from fastBatch import *
 from download import *
+from match import *
 from datetime import datetime, date, time, timedelta
 
 app = Flask(__name__)
@@ -43,9 +44,18 @@ class Download(Resource):
         data = json.loads(request.data)
         downloadImage(data)
 
+class Match(Resource):
+    def get(self):
+
+        # url1 = request.args.get('url1')
+        
+        return uniqueMatch(request.args)
+
+
 
 api.add_resource(Process, '/process') 
-api.add_resource(Download, '/download') 
+api.add_resource(Download, '/download')
+api.add_resource(Match, '/match') 
 api.add_resource(Health, '/health')
 
 if __name__ == '__main__':

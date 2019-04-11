@@ -1850,3 +1850,17 @@ textarea.w-select {
 #status-container{
   display: none;
 }
+
+.imageWraper{
+  clear: both;
+  text-align: center;
+}
+
+.imageWraper #img-match{ 
+  max-height: 100%;
+}
+
+.submitWrapper{
+  clear: both;
+  text-align: center;
+}
