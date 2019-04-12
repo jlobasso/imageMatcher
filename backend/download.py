@@ -28,8 +28,8 @@ def downloadImage():
             r = Timer(600.0, downloadImage)
             r.start()
         
-        
-        db.local_live_search.update_one({ "imageId" : images[x]['imageId']  },{ "$set": { "downloaded" : True } })
+        img = cv2.imread('../frontend/repo/joico/download/'+images[x]['imageId'], 0)
+        db.local_live_search.update_one({ "imageId" : images[x]['imageId']  },{ "$set": { "downloaded" : True, "arrImg":img } })
         print(db.local_live_search.find({"downloaded":True}).count())
 
     elapsed = time.time() - now        
