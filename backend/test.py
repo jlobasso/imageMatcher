@@ -1,16 +1,13 @@
-from pymongo import MongoClient
 
-conn = MongoClient()
+import urllib.request
+from threading import Timer
 
-db = conn.imageMatcher
+def func2():
+    try:
+        archivoDescargar = urllib.request.urlopen("http://mlb-s1-p.mlstatic.com/989292-MLB28693135589_112018-O.jpg", timeout=1)
+    except urllib.request.URLError:
+        r = Timer(1.0, func2)
+        r.start()
+        print("Hubo un error")
 
-collection = db.suspectedImages
-
-a = {"hola":[1,4,5]}
-
-rec_id1 = collection.insert_one(a)
-
-cursor = collection.find() 
-for record in cursor: 
-    print(record) 
-
+func2()

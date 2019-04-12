@@ -10,6 +10,7 @@ from download import *
 from match import *
 from fastBatch import *
 from datetime import datetime, date, time, timedelta
+import urllib
 
 app = Flask(__name__)
 api = Api(app)
@@ -42,7 +43,8 @@ class Download(Resource):
         print("----------------------------------------")
         
         data = json.loads(request.data)
-        downloadImage(data)
+        insertImage(data)
+        # downloadImage()
 
 class Match(Resource):
     def get(self):
