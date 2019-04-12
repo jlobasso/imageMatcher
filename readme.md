@@ -19,7 +19,10 @@
 * docker ps para ver que esta corriendo
 * docker stop [el monbre que aparece en ps] para detener el container
 
-!!AGREGAR pip install pymongo 
+!!AGREGAR 
+pip install pymongo 
+pip install tensorflow==2.0.0-alpha0 
+pip install Keras-Applications
 
 
  --- SERVIDOR DE FRONTEND ---
@@ -39,6 +42,58 @@
 * pip install flask
 
 * python serverFrontend
+
+
+#####################
+####REQUERIMIENTOS###
+#####################
+
+
+apt-get update && \
+        apt-get install -y \
+        build-essential \
+        cmake \
+        git \
+        wget \
+        unzip \
+        yasm \
+        pkg-config \
+        libswscale-dev \
+        libtbb2 \
+        libtbb-dev \
+        libjpeg-dev \
+        libpng-dev \
+        libtiff-dev \
+        libavformat-dev \
+        libpq-dev
+
+sudo apt-get install python3-dev    
+
+pip install virtualenv virtualenvwrapper
+sudo rm -rf ~/get-pip.py ~/.cache/pip
+
+export WORKON_HOME=$HOME/.virtualenvs
+export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+source /usr/local/bin/virtualenvwrapper.sh
+
+#creamos el virtualenv cv
+mkvirtualenv cv -p python3
+#nos metemos en el virtualenc cv
+workon cv
+
+##Esto va dentro del virtualenv cv
+
+pip install opencv-python==3.3.0.10
+pip install opencv-contrib-python==3.3.0.10
+pip install numpy 
+pip install flask 
+pip install flask_restful 
+pip install flask_cors 
+pip install matplotlib 
+pip install pymongo 
+pip install tensorflow==2.0.0-alpha0 
+pip install Keras-Applications
+
 
 
 

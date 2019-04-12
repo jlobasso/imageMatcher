@@ -20,7 +20,7 @@ RUN apt-get update && \
         libpq-dev
 
 RUN pip install opencv-python==3.3.0.10 opencv-contrib-python==3.3.0.10
-RUN pip install numpy flask flask_restful flask_cors matplotlib
+RUN pip install numpy flask flask_restful flask_cors matplotlib pymongo tensorflow==2.0.0-alpha0 Keras-Applications
 
 WORKDIR /
 
