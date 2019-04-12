@@ -10,6 +10,12 @@ conn = MongoClient()
 
 db = conn.imageMatcher
 
+class NumpyEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return json.JSONEncoder.default(self, obj)
+
 def downloadImage():
 
     now = time.time()  
@@ -29,8 +35,8 @@ def downloadImage():
             r.start()
         
         img = cv2.imread('../frontend/repo/joico/download/'+images[x]['imageId'], 0)
-        img = json.dumps(img)
-        db.local_live_search.update_one({ "imageId" : images[x]['imageId']  },{ "$set": { "downloaded" : True, "arrImg":img } })
+        # img = json.dumps(img, cls=NumpyEncoder)
+        db.local_live_search.update_one({ "imageId" : images[x]['imageId']  },{ "$set": { "downloaded" : True } })
         print(db.local_live_search.find({"downloaded":True}).count())
 
     elapsed = time.time() - now        
