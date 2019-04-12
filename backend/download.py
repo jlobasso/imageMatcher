@@ -17,7 +17,7 @@ def downloadImage(images):
 
         print(str(x)+'_'+img)
 
-        ficheroGuardar = open('repo/joico/download/'+str(x)+'_'+img,"wb")
+        ficheroGuardar = open('../frontend/repo/joico/download/'+str(x)+'_'+img,"wb")
         ficheroGuardar.write(archivoDescargar.read())
         ficheroGuardar.close()    
 

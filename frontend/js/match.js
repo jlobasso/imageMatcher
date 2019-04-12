@@ -39,7 +39,8 @@ submit.addEventListener("click", async () => {
     fetch('http://localhost:5000/match?' + Math.random() + '=' + Math.random() + "&" + urlMmatch)
         .then((response) => response.json())
         .then((result) => {
-            imgMatch.src = 'http://localhost:5000/'+result+'?' + Math.random() + '=' + Math.random();
+            result = result.replace(/\.\.\/frontend/g,"")
+            imgMatch.src = 'http://localhost:8080'+result+'?' + Math.random() + '=' + Math.random();
         }
 
         )

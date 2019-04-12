@@ -19,7 +19,7 @@ def process_image(img_path,size = 224):
   return pImg
 
 def getImages(path):
-    img = glob("repo/joico/"+path+"/*")
+    img = glob("../frontend/repo/joico/"+path+"/*")
     return img
 
 model = MobileNetV2(weights='imagenet')

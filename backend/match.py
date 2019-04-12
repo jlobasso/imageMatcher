@@ -69,8 +69,8 @@ def uniqueMatch(params):
 
     plt.imshow(img3)
 
-    plt.savefig('repo/joico/unique_match/match.png')
+    plt.savefig('../frontend/repo/joico/unique_match/match.png')
 
-    return 'repo/joico/unique_match/match.png'
+    return '../frontend/repo/joico/unique_match/match.png'
 
     # cv2.destroyAllWindows()

@@ -1,7 +1,7 @@
 import cv2
  
 #Cargamos las dos imagenes para hacer las diferencias
-diff1 = cv2.imread('../repo/pruebaZ2.jpeg')
+diff1 = cv2.imread('../../frontend/repo/pruebaZ2.jpeg')
 diff2 = cv2.imread('Z4.jpeg')
  
 #Calculamos la diferencia absoluta de las dos imagenes

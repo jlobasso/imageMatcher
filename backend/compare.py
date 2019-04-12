@@ -1,11 +1,11 @@
 import cv2
 
-img = cv2.imread('repo/prueban1.jpeg')
+img = cv2.imread('../frontend/repo/prueban1.jpeg')
 hist = cv2.calcHist([img],[0],None,[256],[0,256])
 
 
 for x in range(1, 14):
-    img2 = cv2.imread('repo/prueban'+str(x)+'.jpeg')
+    img2 = cv2.imread('../frontend/repo/prueban'+str(x)+'.jpeg')
     hist2 = cv2.calcHist([img2],[0],None,[256],[0,256])
     a = cv2.compareHist(hist,hist2,cv2.HISTCMP_CORREL)
     # b = cv2.compareHist(hist,hist2,cv2.HISTCMP_CHISQR/ cv2.HISTCMP_CHISQR_ALT)

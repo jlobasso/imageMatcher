@@ -6,7 +6,7 @@ db = conn.imageMatcher
 
 collection = db.suspectedImages
 
-a = {"hola":"chau"}  
+a = {"hola":[1,4,5]}
 
 rec_id1 = collection.insert_one(a)
 

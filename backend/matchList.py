@@ -29,7 +29,7 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
         bestMatches = []
         
 
-        if int(scale) == 0:
+        # if int(scale) == 0:
             img1 = cv2.imread(images[x], 0)
             # img1 = url_to_image(images[x]['image'])
         # else:
@@ -62,10 +62,10 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
             F.close()
 
 
-            if int(scale) == 0:
+            # if int(scale) == 0:
                 img2 = cv2.imread(images2[y], 0)
-            else:
-                img2 = cv2.resize(cv2.imread(images2[y], 0), (scale, scale))
+            # else:
+            #     img2 = cv2.resize(cv2.imread(images2[y], 0), (scale, scale))
                         
             kp2, des2 = sift.detectAndCompute(img2, None)
 
@@ -86,8 +86,7 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
             if float(len(good)/minMatchCount*100) > float(minPercentMatch):
                 bestMatches.append(
                     {
-                        # 'article_id': str(images[x]['id']),
-                        'article_id': str(images[x]),
+                        'article_id': str(images[x]['id']),
                         # 'image_url': str(images[x]['image']), 
                         'image_url': str(images[x]), 
                         'percentage': str(len(good)/minMatchCount*100),
