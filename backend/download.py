@@ -16,7 +16,7 @@ def downloadImage():
 
     images = db.local_live_search.find({"downloaded":False})
 
-    for x in range(lowerRange, images.count()):
+    for x in range(0, images.count()):
 
         try:
             archivoDescargar = urllib.request.urlopen(images[x]['url'], timeout=5)
