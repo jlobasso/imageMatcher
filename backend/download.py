@@ -25,14 +25,15 @@ def downloadImage():
     for x in range(0, images.count()):
 
         try:
-            archivoDescargar = urllib.request.urlopen(images[x]['url'], timeout=5)
-            ficheroGuardar = open('../frontend/repo/joico/download/'+images[x]['imageId'],"wb")
+            archivoDescargar = urllib.request.urlopen(images[x]['url'], timeout=10)
+            ficheroGuardar = open('../frontend/repo/joico/download/'+images[x]['imageId']+".jpg","wb")
             ficheroGuardar.write(archivoDescargar.read())
             ficheroGuardar.close()
         except urllib.request.URLError:
-            print("Waiting...")
-            r = Timer(600.0, downloadImage)
-            r.start()
+            print("Salteamos la imagen y continuamos")
+            continue
+            # r = Timer(600.0, downloadImage)
+            # r.start()
         
         img = cv2.imread('../frontend/repo/joico/download/'+images[x]['imageId'], 0)
         # img = json.dumps(img, cls=NumpyEncoder)
