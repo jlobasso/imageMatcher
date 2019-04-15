@@ -21,6 +21,10 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
     globalMatches = []
 
     kInageComputed = 0
+    FLANN_INDEX_KDTREE = 0
+    index_params = dict(algorithm=FLANN_INDEX_KDTREE, trees=5)
+    search_params = dict(checks=50)
+    flann = cv2.FlannBasedMatcher(index_params, search_params)
 
     sift = cv2.xfeatures2d.SIFT_create()
 
@@ -28,13 +32,7 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
     for x in range(0, len(images)):
         bestMatches = []
         
-
-        # if int(scale) == 0:
-            img1 = cv2.imread(images[x], 0)
-            # img1 = url_to_image(images[x]['image'])
-        # else:
-        #     img1 = cv2.resize(url_to_image(images[x]['image']), (scale, scale))
-
+        img1 = cv2.imread(images[x], 0)
 
         kp1, des1 = sift.detectAndCompute(img1, None)
 
@@ -62,18 +60,9 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
             F.close()
 
 
-            # if int(scale) == 0:
-                img2 = cv2.imread(images2[y], 0)
-            # else:
-            #     img2 = cv2.resize(cv2.imread(images2[y], 0), (scale, scale))
+            img2 = cv2.imread(images2[y], 0)
                         
             kp2, des2 = sift.detectAndCompute(img2, None)
-
-            FLANN_INDEX_KDTREE = 0
-            index_params = dict(algorithm=FLANN_INDEX_KDTREE, trees=5)
-            search_params = dict(checks=50)
-
-            flann = cv2.FlannBasedMatcher(index_params, search_params)
 
             matches = flann.knnMatch(des1, des2, k=2)
 
@@ -81,7 +70,6 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
             for m, n in matches:
                 if m.distance < sensibility*n.distance:
                     good.append(m)
-
 
             if float(len(good)/minMatchCount*100) > float(minPercentMatch):
                 bestMatches.append(
@@ -105,7 +93,6 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
             bestMatches.sort(key=extract, reverse=True)
             
         if len(bestMatches) > 0:
-            # print(bestMatches)
             globalMatches.append(bestMatches)
 
     return {'matches': globalMatches, 'imagenes1': len(images), 'imagenes2': len2}
