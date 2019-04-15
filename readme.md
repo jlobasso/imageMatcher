@@ -23,6 +23,7 @@
 pip install pymongo 
 pip install tensorflow==2.0.0-alpha0 
 pip install Keras-Applications
+pip install wheel
 
 
  --- SERVIDOR DE FRONTEND ---

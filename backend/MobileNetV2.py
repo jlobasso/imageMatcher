@@ -27,7 +27,7 @@ model = MobileNetV2(weights='imagenet')
 predictions = []
 predictionsWeight = {}
 
-test_imgs_paths = getImages('download1300')
+test_imgs_paths = getImages('download')
 totalAmountToAnalize = len(test_imgs_paths)
 
 print("Cantidad de Imagenes a analizar: ", totalAmountToAnalize)
