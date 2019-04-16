@@ -4,6 +4,7 @@ const mainContainer = document.getElementById("main-container")
 const statusContainer = document.getElementById("status-container")
 var cantImagesToCompare = 0;
 var cantAnalizadas = 0;
+
 var getStatus = () => {
 
     fetch('status.json?' + Math.random() + '=' + Math.random())
@@ -76,7 +77,7 @@ submit.addEventListener("click", async () => {
     cantImagesToCompare = imagenes.length;
 
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", 'http://localhost:5000/process', true);
+    xhr.open("POST", conf.urlBackend+'process', true);
 
     //Send the proper header information along with the request
     // xhr.setRequestHeader("Content-Type", "application/json");
