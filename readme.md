@@ -95,6 +95,7 @@ pip install pymongo
 pip install tensorflow==2.0.0-alpha0 
 pip install Keras-Applications
 pip install pillow
+pip install uwsgi
 
 
 
@@ -148,6 +149,7 @@ $ sudo rm -rf ~/get-pip.py ~/.cache/pip
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+ó bien: export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 source /usr/local/bin/virtualenvwrapper.sh
 
 ### Alternatively, you can append the lines directly via bash commands:
