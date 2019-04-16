@@ -20,13 +20,13 @@ def downloadImage():
 
     now = time.time()  
 
-    images = db.local_live_search.find({"downloaded":False})
+    images = db.download_live_search.find({"downloaded":False})
 
     for x in range(0, images.count()):
 
         try:
             archivoDescargar = urllib.request.urlopen(images[x]['url'], timeout=10)
-            ficheroGuardar = open('../frontend/repo/joico/download/'+images[x]['imageId']+".jpg","wb")
+            ficheroGuardar = open('../frontend/repo/joico/download/'+images[x]['imageId']+'.jpg',"wb")
             ficheroGuardar.write(archivoDescargar.read())
             ficheroGuardar.close()
         except urllib.request.URLError:
@@ -37,8 +37,8 @@ def downloadImage():
         
         img = cv2.imread('../frontend/repo/joico/download/'+images[x]['imageId'], 0)
         # img = json.dumps(img, cls=NumpyEncoder)
-        db.local_live_search.update_one({ "imageId" : images[x]['imageId']  },{ "$set": { "downloaded" : True } })
-        print(db.local_live_search.find({"downloaded":True}).count())
+        db.download_live_search.update_one({ "imageId" : images[x]['imageId']  },{ "$set": { "downloaded" : True } })
+        print(db.download_live_search.find({"downloaded":True}).count())
 
     elapsed = time.time() - now        
     print ('tiempo de descarga total de archivos: ',elapsed)
@@ -48,15 +48,15 @@ def downloadImage():
 
 def insertImage(data):   
 
-    collection = db.local_live_search
-    images = db.local_live_search.find({},{"imageId": 1})
+    collection = db.download_live_search
+    images = db.download_live_search.find({},{"imageId": 1})
 
     for x in range(0, len(data)):      
 
 
         for y in range(0, len(data[x]['images'])):
 
-            exist = db.local_live_search.find({"imageId":data[x]['images'][y]['imageId'], "sellerId":data[x]['sellerId']}).count()
+            exist = db.download_live_search.find({"imageId":data[x]['images'][y]['imageId'], "sellerId":data[x]['sellerId']}).count()
             
             if not exist:
 

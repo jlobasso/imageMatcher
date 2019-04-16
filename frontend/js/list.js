@@ -196,6 +196,8 @@ drawResults = (data) => {
         imgMatch.image_repo = imgMatch.image_repo.replace(/\.\.\/frontend/g,"")
 
         // title.innerHTML = dataArticle[imgMatch.article_id]
+        title.innerHTML = imgMatch.title;
+
         article.innerHTML = "ML ID: " + imgMatch.article_id;
 
 
