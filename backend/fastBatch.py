@@ -46,7 +46,7 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
             
             print("recorriendo "+str(x+1)+" de "+str(len(images))+ " comparando con "+str(y+1)+" de "+str(len2))
 
-            F = open("../frontend/status.json","w+")
+            F = open("../frontend/status/status.json","w+")
 
             status = {
                         "absoluteComputed": str(kInageComputed),
