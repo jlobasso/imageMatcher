@@ -191,7 +191,7 @@ drawResults = (data) => {
         urlMmatch += `&min_percent_match=${minPercentMatch}`
 
         var matchLink = document.createElement("a")
-        matchLink.innerHTML = dataArticle[imgMatch.article_id]
+        matchLink.innerHTML = "CHECK"
         matchLink.href = "match.html?" + urlMmatch
         matchLink.target = "_blank"
         match.appendChild(matchLink)
