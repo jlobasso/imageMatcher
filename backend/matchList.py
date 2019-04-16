@@ -6,7 +6,11 @@ import urllib.request
 from function.searchRepo import * 
 from json import dumps
 import json
+from pymongo import MongoClient
 
+conn = MongoClient()
+
+db = conn.imageMatcher
 
 def url_to_image(url):
     resp = urllib.request.urlopen(url)
@@ -74,7 +78,9 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
             if float(len(good)/minMatchCount*100) > float(minPercentMatch):
                 bestMatches.append(
                     {
-                        'article_id': str(images[x]['id']),
+                        'article_id': str(db.download_live_search.find({'imageId':images[x], 'downloaded': False},{'articleId':1}),
+                        'title': str(db.download_live_search.find({'imageId':images[x], 'downloaded': False},{'title':1}),
+                        # 'article_id': str(images[x]['id']),
                         # 'image_url': str(images[x]['image']), 
                         'image_url': str(images[x]), 
                         'percentage': str(len(good)/minMatchCount*100),
