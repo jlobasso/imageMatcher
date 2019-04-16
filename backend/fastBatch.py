@@ -9,7 +9,6 @@ import json
 from pymongo import MongoClient
 
 conn = MongoClient()
-
 db = conn.imageMatcher
 
 
