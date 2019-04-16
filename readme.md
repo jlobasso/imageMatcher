@@ -14,7 +14,7 @@
 (PUEDE TIRAR ERROR DE TIMEOUT AL INSTALAR OPENCV Y OCV CONTRIB, EN DICHO CASO TIRARLO DE NUEVO)
 
 
-* docker run -d -p 5000:5000 imgmatch (http://localhost:5000/health para ver si funciona)
+* docker run -d -p 5000:5000 imgmatch (http://conf.urlBackend+':5000/health para ver si funciona)
 
 * docker ps para ver que esta corriendo
 * docker stop [el monbre que aparece en ps] para detener el container
@@ -34,7 +34,7 @@ pip install wheel
 
 * npm install http-server -g
 
-* http-server (Abre automáticamente los archivos estáticos en http://localhost:8080)
+* http-server (Abre automáticamente los archivos estáticos en http://conf.urlBackend+':8080)
 
 ---> Usando Python:
 
