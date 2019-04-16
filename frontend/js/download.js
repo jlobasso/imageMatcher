@@ -38,7 +38,7 @@ download.addEventListener("click", async () => {
     console.log(images)
 
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", conf.urlBackend+'/download', true);
+    xhr.open("POST", conf.urlBackend+'download', true);
     xhr.setRequestHeader("Content-Type", "text/plain");
 
     xhr.send(JSON.stringify(images));

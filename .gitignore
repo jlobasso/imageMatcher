@@ -4,6 +4,6 @@
 /backend/.virtualenvs
 /backend/serverBakend.sock
 /backend/conf.ini
-/   frontend/js/conf.js
+/frontend/js/conf.js
 *.pyc
 status.json
