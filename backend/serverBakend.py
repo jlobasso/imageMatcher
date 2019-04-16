@@ -61,9 +61,9 @@ api.add_resource(Match, '/match')
 api.add_resource(Health, '/health')
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1 and 'docker' in sys.argv:
-        app.run(debug=True, host='0.0.0.0')
-    else:    
+    if len(sys.argv) > 1 and 'dev' in sys.argv:
         app.run(port='5000', debug=True)
+    else:    
+        app.run()
   
   
