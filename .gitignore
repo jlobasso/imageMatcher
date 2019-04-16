@@ -1,5 +1,6 @@
 /function/__pycache__
 /__pycache__
 /__pycache__/*
+/backend/.virtualenvs
 *.pyc
 status.json
