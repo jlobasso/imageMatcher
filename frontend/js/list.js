@@ -7,7 +7,7 @@ var cantAnalizadas = 0;
 
 var getStatus = () => {
 
-    fetch('status.json?' + Math.random() + '=' + Math.random())
+    fetch('status/status.json?' + Math.random() + '=' + Math.random())
         .then((response) => response.json())
         .then((status) => {
             statusInfo.innerHTML = `Completado: ${Math.floor((status.absoluteComputed / (status.running.of * status.comparing.of)) * 100)}%
