@@ -1,14 +1,25 @@
 
 from pymongo import MongoClient
 
-conn = MongoClient(connect=False)
+conn = MongoClient()
 
 db = conn.imageMatcher
 
-def testFunc():
-    print('antes')
+print('antes de la funcion')
     
-    exist = db.download_live_search.find({"imageId":''}).count()
+exist = db.download_live_search.find()
+
+print(exist)
+
+print('despues de la funcion')
+
+
+def testFunc():
+    print('antes dentro de la funcion')
+    
+    exist = db.download_live_search.find()
     
     print(exist)
+
+    print('despues dentro de la funcion')
     

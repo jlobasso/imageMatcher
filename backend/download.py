@@ -6,7 +6,7 @@ import json
 from pymongo import MongoClient
 from threading import Timer
 
-conn = MongoClient(connect=False)
+conn = MongoClient()
 
 db = conn.imageMatcher
 
