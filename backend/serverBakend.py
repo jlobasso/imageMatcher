@@ -11,7 +11,6 @@ from match import *
 from fastBatch import *
 from datetime import datetime, date, time, timedelta
 import urllib
-
 from test import *
 
 app = Flask(__name__)
@@ -46,20 +45,14 @@ class Download(Resource):
         
         data = json.loads(request.data)
         insertImage(data)
-        # downloadImage()
 
 class Match(Resource):
-    def get(self):
-
-        # url1 = request.args.get('url1')
-        
+    def get(self):        
         return uniqueMatch(request.args)
 
 
 class Test(Resource):
-    def get(self):
-
-        
+    def get(self):        
         print("----------------------------------------")
         print("TEST") 
         print("----------------------------------------")

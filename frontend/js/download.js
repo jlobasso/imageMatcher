@@ -42,8 +42,5 @@ download.addEventListener("click", async () => {
     xhr.setRequestHeader("Content-Type", "text/plain");
 
     xhr.send(JSON.stringify(images));
-
-    // function encode_utf8(s) {
-    //     return unescape(encodeURIComponent(s));
-    // } ('\u4e0a\u6d77')
+    
 })

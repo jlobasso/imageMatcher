@@ -43,15 +43,12 @@ def downloadImage():
     print ('tiempo de descarga total de archivos: ',elapsed)
 
 
-
-
 def insertImage(data):   
 
     collection = db.download_live_search
     images = db.download_live_search.find({},{"imageId": 1})
 
     for x in range(0, len(data)):      
-
 
         for y in range(0, len(data[x]['images'])):
 
@@ -60,8 +57,6 @@ def insertImage(data):
 
             exist = db.download_live_search.find({"imageId":data[x]['images'][y]['imageId'], "sellerId":data[x]['sellerId']}).count()
             
-            print(exist)
-
             if not exist:
 
                 rec = {} 
@@ -75,8 +70,7 @@ def insertImage(data):
                 rec['downloaded'] = False
                 rec['compare'] = True
 
-                collection.insert(rec)
-                
+                collection.insert(rec)                
 
     downloadImage()
 
