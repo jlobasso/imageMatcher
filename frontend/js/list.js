@@ -30,12 +30,12 @@ submit.addEventListener("click", async () => {
 
     time.start = new Date();
 
-    const textarea = document.getElementById("Json")
-    const json = JSON.parse(textarea.value);
-    // // const json = await fetch('./livesearchShort.json')
-    // //     .then(function (response) {
-    // //         return response.json();
-    // //     })
+    // const textarea = document.getElementById("Json")
+    // const json = JSON.parse(textarea.value);
+    const json = await fetch('./livesearchShort.json')
+        .then(function (response) {
+            return response.json();
+        })
 
     var previousResults = document.getElementsByClassName('div-block-2');
     while (previousResults[0]) {
