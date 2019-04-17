@@ -1,7 +1,7 @@
 
 from pymongo import MongoClient
 
-conn = MongoClient()
+conn = MongoClient(connect=False)
 
 db = conn.imageMatcher
 

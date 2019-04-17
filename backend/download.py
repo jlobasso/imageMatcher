@@ -6,7 +6,7 @@ import json
 from pymongo import MongoClient
 from threading import Timer
 
-conn = MongoClient()
+conn = MongoClient(connect=False)
 
 db = conn.imageMatcher
 
@@ -58,7 +58,7 @@ def insertImage(data):
 
             print(data[x]['images'][y]['imageId'])
             print(data[x]['sellerId'])
-            
+
             exist = db.download_live_search.find({"imageId":data[x]['images'][y]['imageId'], "sellerId":data[x]['sellerId']}).count()
             
             print(exist)
