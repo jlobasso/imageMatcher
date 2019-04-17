@@ -19,6 +19,7 @@ def url_to_image(url):
     return image
 
 def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCategory):
+   
     images2 = getImages(compareCategory)
     images = getImages('download')
     len2 = len(images2)
@@ -47,7 +48,7 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
             
             print("recorriendo "+str(x+1)+" de "+str(len(images))+ " comparando con "+str(y+1)+" de "+str(len2))
 
-            F = open("status.json","w+")
+            F = open("../frontend/status/status.json","w+")
 
             status = {
                         "absoluteComputed": str(kInageComputed),
@@ -78,7 +79,7 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
             if float(len(good)/minMatchCount*100) > float(minPercentMatch):
                 bestMatches.append(
                     {
-                        'article_id': str(db.download_live_search.find({'imageId':images[x], 'downloaded': False},{'articleId':1}),
+                        'article_id': db.download_live_search.find({'imageId':images[x], 'downloaded': False},{'articleId':1},
                         'title': str(db.download_live_search.find({'imageId':images[x], 'downloaded': False},{'title':1}),
                         # 'article_id': str(images[x]['id']),
                         # 'image_url': str(images[x]['image']), 

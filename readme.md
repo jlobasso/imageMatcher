@@ -1,6 +1,54 @@
-#######################
-#### REQUERIMIENTOS ###
-#######################
+###############################
+######## USANDO DOCKER ########
+###############################
+
+* !!!Todo se hace dentro de la carpeta del proyecto!!!
+
+* Instalar Docker
+
+ --- SERVIDOR DE BACKEND --- 
+
+
+* docker build -t imgmatch .  (NO OLVIDAR EL .  AL FINAL)
+
+(PUEDE TIRAR ERROR DE TIMEOUT AL INSTALAR OPENCV Y OCV CONTRIB, EN DICHO CASO TIRARLO DE NUEVO)
+
+
+* docker run -d -p 5000:5000 imgmatch (http://conf.urlBackend+':5000/health para ver si funciona)
+
+* docker ps para ver que esta corriendo
+* docker stop [el monbre que aparece en ps] para detener el container
+
+!!AGREGAR 
+pip install pymongo 
+pip install tensorflow==2.0.0-alpha0 
+pip install Keras-Applications
+pip install wheel
+
+
+ --- SERVIDOR DE FRONTEND ---
+
+!!!Cualquier servidor de archivos estáticos va a funcionar. Algunos ejémplos!!!
+
+---> Usando nodejs: 
+
+* npm install http-server -g
+
+* http-server (Abre automáticamente los archivos estáticos en http://conf.urlBackend+':8080)
+
+---> Usando Python:
+
+* instalar pip y python
+
+* pip install flask
+
+* python serverFrontend
+
+
+#####################
+####REQUERIMIENTOS###
+#####################
+
 
 apt-get update && \
         apt-get install -y \
@@ -18,29 +66,23 @@ apt-get update && \
         libpng-dev \
         libtiff-dev \
         libavformat-dev \
-        libpq-dev \
-        python3-dev
-        nginx \
-  
+        libpq-dev
+
+sudo apt-get install python3-dev    
 
 pip install virtualenv virtualenvwrapper
 sudo rm -rf ~/get-pip.py ~/.cache/pip
 
-#ojo donde definimos $HOME porque va a ser donde reside .virtualenvs#
-echo -e "\n# virtualenv and virtualenvwrapper" >> ~/.bashrc
-en el caso de analisis-imagenes 
-echo "export WORKON_HOME=/home/image-matcher/imageMatcher/backend/.virtualenvs" >> ~/.bashrc
+export WORKON_HOME=$HOME/.virtualenvs
+export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+source /usr/local/bin/virtualenvwrapper.sh
 
-echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.bashrc
-o bien : echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python" >> ~/.bashrc 
-echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc
+#creamos el virtualenv cv
+mkvirtualenv cv -p python3
+#nos metemos en el virtualenc cv
+workon cv
 
-#creamos el virtualenv imageMatcher
-mkvirtualenv imageMatcher -p python3
-#nos metemos en el virtualenv imageMatcher
-workon imageMatcher
-
-##Esto va dentro del virtualenv imageMatcher
+##Esto va dentro del virtualenv cv
 
 pip install opencv-python==3.3.0.10
 pip install opencv-contrib-python==3.3.0.10
@@ -56,46 +98,8 @@ pip install pillow
 pip install uwsgi
 
 
-#Si faltara instalar algo con pip, siempre iniciar el virtualenv con 
-workon imageMatcher
 
 
-
-######################################
-## CONFIGURACION DE NGINX CON FLASK ##
-######################################
-Ya está instalado nginx en realidad pero ver como referencia https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04
-
-#usuario de nginx
-nginx usa www-data como usuario, 
-asi que es conveniente que el código tenga,
-como owner al grupo www-data
-
-#Ver si está corriendo, pararlo, iniciarlo o recargarlo:
-systemctl status nginx
-systemctl stop nginx
-systemctl start nginx
-systemctl restart nginx 
-
-#Configurar servidor/servidores
-Editar y/o crear archivos en /etc/nginx/sites-available/
-Aunque se pudiera editar /etc/nginx/sites-available/default
-Se pueden poner varios archivos por servidor o varios servidores en un archivo
-El ejemplo básico para que ande un servidor de archivos estáticos es
-
-server {
-        listen 80;
-        listen [::]:80;
-
-        root /var/www/example.com/html;
-        index index.html index.htm index.nginx-debian.html;
-
-        server_name example.com www.example.com;
-
-        location / {
-                try_files $uri $uri/ =404;
-        }
-}
 
 
 

@@ -1,12 +1,12 @@
 const download = document.getElementById("download")
 
 download.addEventListener("click", async () => {
-    const json = await fetch('./livesearch.json')
-        .then(function (response) {
-            return response.json();
-        })
-    // const textarea = document.getElementById("Json")
-    // const json = JSON.parse(textarea.value);
+    // const json = await fetch('./livesearch.json')
+    //     .then(function (response) {
+    //         return response.json();
+    //     })
+    const textarea = document.getElementById("Json")
+    const json = JSON.parse(textarea.value);
 
 
     var images = [];
@@ -38,7 +38,7 @@ download.addEventListener("click", async () => {
     console.log(images)
 
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", 'http://localhost:5000/download', true);
+    xhr.open("POST", conf.urlBackend+'download', true);
     xhr.setRequestHeader("Content-Type", "text/plain");
 
     xhr.send(JSON.stringify(images));

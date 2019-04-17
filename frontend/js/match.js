@@ -36,11 +36,11 @@ submit.addEventListener("click", async () => {
     urlMmatch += `&sensibility=${input_sensibility.value/100}`
     urlMmatch += `&min_percent_match=${input_min_percent_match.value}`
 
-    fetch('http://localhost:5000/match?' + Math.random() + '=' + Math.random() + "&" + urlMmatch)
+    fetch(conf.urlBackend+'match?' + Math.random() + '=' + Math.random() + "&" + urlMmatch)
         .then((response) => response.json())
         .then((result) => {
             result = result.replace(/\.\.\/frontend/g,"")
-            imgMatch.src = 'http://localhost:8080'+result+'?' + Math.random() + '=' + Math.random();
+            imgMatch.src = +result+'?' + Math.random() + '=' + Math.random();
         }
 
         )
