@@ -56,8 +56,13 @@ def insertImage(data):
 
         for y in range(0, len(data[x]['images'])):
 
+            print(data[x]['images'][y]['imageId'])
+            print(data[x]['sellerId'])
+            
             exist = db.download_live_search.find({"imageId":data[x]['images'][y]['imageId'], "sellerId":data[x]['sellerId']}).count()
             
+            print(exist)
+
             if not exist:
 
                 rec = {} 
