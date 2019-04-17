@@ -1,13 +1,14 @@
 
-import urllib.request
-from threading import Timer
+from pymongo import MongoClient
 
-def func2():
-    try:
-        archivoDescargar = urllib.request.urlopen("http://mlb-s1-p.mlstatic.com/989292-MLB28693135589_112018-O.jpg", timeout=1)
-    except urllib.request.URLError:
-        r = Timer(1.0, func2)
-        r.start()
-        print("Hubo un error")
+conn = MongoClient()
 
-func2()
+db = conn.imageMatcher
+
+def testFunc():
+    print('antes')
+    
+    exist = db.download_live_search.find({"imageId":'', "sellerId":''}).count()
+    
+    print(exist)
+    

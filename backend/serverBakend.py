@@ -54,11 +54,19 @@ class Match(Resource):
         return uniqueMatch(request.args)
 
 
+class Test(Resource):
+    def get(self):
+
+        
+        return testFunc()
+
 
 api.add_resource(Process, '/process') 
 api.add_resource(Download, '/download')
 api.add_resource(Match, '/match') 
 api.add_resource(Health, '/health')
+api.add_resource(Test, '/test')
+
 
 if __name__ == '__main__':
     if len(sys.argv) > 1 and 'dev' in sys.argv:
