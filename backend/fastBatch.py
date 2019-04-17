@@ -6,6 +6,10 @@ import urllib.request
 from function.searchRepo import * 
 from json import dumps
 import json
+from pymongo import MongoClient
+
+conn = MongoClient()
+db = conn.imageMatcher
 
 
 def url_to_image(url):
@@ -24,7 +28,6 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
 
     orb = cv2.ORB_create()
 
-
     #Recorre imagenes de livesearch
     for x in range(0, len(images)):
         bestMatches = []
@@ -42,7 +45,7 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
             
             print("recorriendo "+str(x+1)+" de "+str(len(images))+ " comparando con "+str(y+1)+" de "+str(len2))
 
-            F = open("status.json","w+")
+            F = open("../frontend/status/status.json","w+")
 
             status = {
                         "absoluteComputed": str(kInageComputed),
@@ -75,12 +78,18 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
                 if m.distance < sensibility*100:
                         good.append(m)
 
+            imageId = images[x].replace(".jpg", "").split("/")
+            imageId = imageId[len(imageId)-1]
 
+            print(imageId)
+            dataDB = db.download_live_search.find({'imageId':str(imageId)},{'_id':0,'title':1,'articleId':1})
+                      
             if float(len(good)/minMatchCount*100) > float(minPercentMatch):
                 bestMatches.append(
                     {
+                        'article_id': str(dataDB[0]['articleId']),
+                        'title': str(dataDB[0]['title']),
                         # 'article_id': str(images[x]['id']),
-                        'article_id': str(images[x]),
                         # 'image_url': str(images[x]['image']),  
                         'image_url': str(images[x]), 
                         'percentage': str(len(good)/minMatchCount*100),

@@ -7,7 +7,6 @@ from pymongo import MongoClient
 from threading import Timer
 
 conn = MongoClient()
-
 db = conn.imageMatcher
 
 class NumpyEncoder(json.JSONEncoder):
@@ -37,7 +36,7 @@ def downloadImage():
         
         img = cv2.imread('../frontend/repo/joico/download/'+images[x]['imageId'], 0)
         # img = json.dumps(img, cls=NumpyEncoder)
-        db.download_live_search.update_one({ "imageId" : images[x]['imageId']  },{ "$set": { "downloaded" : True } })
+        db.download_live_search.update({ "imageId" : images[x]['imageId']  },{ "$set": { "downloaded" : True } })
         print(db.download_live_search.find({"downloaded":True}).count())
 
     elapsed = time.time() - now        
@@ -56,8 +55,13 @@ def insertImage(data):
 
         for y in range(0, len(data[x]['images'])):
 
+            print(data[x]['images'][y]['imageId'])
+            print(data[x]['sellerId'])
+
             exist = db.download_live_search.find({"imageId":data[x]['images'][y]['imageId'], "sellerId":data[x]['sellerId']}).count()
             
+            print(exist)
+
             if not exist:
 
                 rec = {} 
@@ -71,7 +75,7 @@ def insertImage(data):
                 rec['downloaded'] = False
                 rec['compare'] = True
 
-                collection.insert_one(rec)
+                collection.insert(rec)
                 
 
     downloadImage()

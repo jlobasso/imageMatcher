@@ -12,6 +12,8 @@ from fastBatch import *
 from datetime import datetime, date, time, timedelta
 import urllib
 
+from test import *
+
 app = Flask(__name__)
 api = Api(app)
 CORS(app)
@@ -54,11 +56,23 @@ class Match(Resource):
         return uniqueMatch(request.args)
 
 
+class Test(Resource):
+    def get(self):
+
+        
+        print("----------------------------------------")
+        print("TEST") 
+        print("----------------------------------------")
+
+        return testFunc()
+
 
 api.add_resource(Process, '/process') 
 api.add_resource(Download, '/download')
 api.add_resource(Match, '/match') 
 api.add_resource(Health, '/health')
+api.add_resource(Test, '/test')
+
 
 if __name__ == '__main__':
     if len(sys.argv) > 1 and 'dev' in sys.argv:

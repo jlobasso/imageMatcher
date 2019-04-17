@@ -7,7 +7,7 @@ var cantAnalizadas = 0;
 
 var getStatus = () => {
 
-    fetch('status.json?' + Math.random() + '=' + Math.random())
+    fetch('../status/status.json?' + Math.random() + '=' + Math.random())
         .then((response) => response.json())
         .then((status) => {
             statusInfo.innerHTML = `Completado: ${Math.floor((status.absoluteComputed / (status.running.of * status.comparing.of)) * 100)}%
@@ -158,6 +158,9 @@ drawResults = (data) => {
 
         var title = document.createElement("div");
         title.classList.add("title");
+        
+        var match = document.createElement("div");
+        match.classList.add("match");
 
         var article = document.createElement("div");
         article.classList.add("mlid");
@@ -178,6 +181,7 @@ drawResults = (data) => {
         let sensibility = +document.getElementById("sensibility").value / 100;
         var minPercentMatch = +document.getElementById("min-percent-match").value
 
+        title.innerHTML = imgMatch.title;
 
         var urlMmatch = `url1=${imgMatch.image_url}`
         urlMmatch += `&url2=${imgMatch.image_repo}`
@@ -187,22 +191,22 @@ drawResults = (data) => {
         urlMmatch += `&min_percent_match=${minPercentMatch}`
 
         var matchLink = document.createElement("a")
-        matchLink.innerHTML = dataArticle[imgMatch.article_id]
+        matchLink.innerHTML = "CHECK"
         matchLink.href = "match.html?" + urlMmatch
         matchLink.target = "_blank"
-        title.appendChild(matchLink)
+        match.appendChild(matchLink)
 
         imgMatch.image_url = imgMatch.image_url.replace(/\.\.\/frontend/g,"")
 
         imgMatch.image_repo = imgMatch.image_repo.replace(/\.\.\/frontend/g,"")
 
-        // title.innerHTML = dataArticle[imgMatch.article_id]
-        title.innerHTML = imgMatch.title;
 
+        // title.innerHTML = dataArticle[imgMatch.article_id]
         article.innerHTML = "ML ID: " + imgMatch.article_id;
 
 
         container.appendChild(title)
+        container.appendChild(match)
         container.appendChild(article)
 
         var col1 = document.createElement("div");
