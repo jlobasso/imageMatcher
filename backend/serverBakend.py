@@ -28,6 +28,7 @@ class Process(Resource):
         tiempo1 = datetime.now()
         
         print("----------------------------------------")
+        print("MATCH PROCESS") 
         print("Fecha y Hora:", tiempo1)  # Muestra fecha y hora
         print("----------------------------------------")
         
@@ -46,13 +47,9 @@ class Download(Resource):
         
         data = json.loads(request.data)
         insertImage(data)
-        # downloadImage()
 
 class Match(Resource):
-    def get(self):
-
-        # url1 = request.args.get('url1')
-        
+    def get(self):        
         return uniqueMatch(request.args)
 
 

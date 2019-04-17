@@ -5,6 +5,7 @@ import matplotlib.image as mpimg
 import urllib.request
 from function.searchRepo import * 
 from json import dumps
+from glob import glob
 import json
 from pymongo import MongoClient
 
@@ -17,6 +18,11 @@ def url_to_image(url):
     image = np.asarray(bytearray(resp.read()), dtype="uint8")
     image = cv2.imdecode(image, cv2.IMREAD_COLOR)
     return image
+
+def getImages(path):
+    img = glob("/home/image-matcher/imageMatcher/frontend/repo/joico/"+path+"/*")
+    return img
+    
 
 def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCategory):
     images2 = getImages(compareCategory)
