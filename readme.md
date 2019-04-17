@@ -66,6 +66,7 @@ workon imageMatcher
 ######################################
 Ya está instalado nginx en realidad pero ver como referencia https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04
 
+#usuario de nginx
 nginx usa www-data como usuario, 
 asi que es conveniente que el código tenga,
 como owner al grupo www-data
@@ -76,6 +77,25 @@ systemctl stop nginx
 systemctl start nginx
 systemctl restart nginx 
 
+#Configurar servidor/servidores
+Editar y/o crear archivos en /etc/nginx/sites-available/
+Aunque se pudiera editar /etc/nginx/sites-available/default
+Se pueden poner varios archivos por servidor o varios servidores en un archivo
+El ejemplo básico para que ande un servidor de archivos estáticos es
+
+server {
+        listen 80;
+        listen [::]:80;
+
+        root /var/www/example.com/html;
+        index index.html index.htm index.nginx-debian.html;
+
+        server_name example.com www.example.com;
+
+        location / {
+                try_files $uri $uri/ =404;
+        }
+}
 
 
 
