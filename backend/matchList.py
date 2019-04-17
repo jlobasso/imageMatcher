@@ -76,13 +76,16 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
                 if m.distance < sensibility*n.distance:
                     good.append(m)
 
+            print(imageId)
+            dataDB = db.download_live_search.find({'imageId':str(imageId)},{'_id':0,'title':1,'articleId':1})
+                      
             if float(len(good)/minMatchCount*100) > float(minPercentMatch):
                 bestMatches.append(
                     {
-                        'article_id': db.download_live_search.find({'imageId':images[x], 'downloaded': False},{'articleId':1},
-                        'title': str(db.download_live_search.find({'imageId':images[x], 'downloaded': False},{'title':1}),
+                        'article_id': str(dataDB[0]['articleId']),
+                        'title': str(dataDB[0]['title']),
                         # 'article_id': str(images[x]['id']),
-                        # 'image_url': str(images[x]['image']), 
+                        # 'image_url': str(images[x]['image']),  
                         'image_url': str(images[x]), 
                         'percentage': str(len(good)/minMatchCount*100),
                         'image_repo': str(images2[y]), 
