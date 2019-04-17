@@ -8,7 +8,7 @@ db = conn.imageMatcher
 def testFunc():
     print('antes')
     
-    exist = db.download_live_search.find({"imageId":'', "sellerId":''}).count()
+    exist = db.download_live_search.find({"imageId":''}).count()
     
     print(exist)
     

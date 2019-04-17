@@ -12,6 +12,8 @@ from fastBatch import *
 from datetime import datetime, date, time, timedelta
 import urllib
 
+from test import *
+
 app = Flask(__name__)
 api = Api(app)
 CORS(app)
@@ -58,6 +60,10 @@ class Test(Resource):
     def get(self):
 
         
+        print("----------------------------------------")
+        print("TEST") 
+        print("----------------------------------------")
+
         return testFunc()
 
 
