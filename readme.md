@@ -68,7 +68,8 @@ apt-get update && \
         libavformat-dev \
         libpq-dev \
         python-tk \
-        python3-dev 
+        python3-dev \ 
+        python3-tk-dbg
 
 pip install virtualenv virtualenvwrapper
 sudo rm -rf ~/get-pip.py ~/.cache/pip
