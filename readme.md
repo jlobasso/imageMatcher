@@ -66,16 +66,22 @@ apt-get update && \
         libpng-dev \
         libtiff-dev \
         libavformat-dev \
-        libpq-dev
-
-sudo apt-get install python3-dev    
+        libpq-dev \
+        python-tk \
+        python3-dev 
 
 pip install virtualenv virtualenvwrapper
 sudo rm -rf ~/get-pip.py ~/.cache/pip
 
-export WORKON_HOME=$HOME/.virtualenvs
-export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
-source /usr/local/bin/virtualenvwrapper.sh
+### Ojo donde ponemos el home de los virtualenvs
+##probar estos comandos antes
+echo -e "\n# virtualenv and virtualenvwrapper" >> ~/.bashrc
+echo "export WORKON_HOME=$HOME/.virtualenvs" >> ~/.bashrc
+echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.bashrc
+puede llegar a ser  echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python" >> ~/.bashrc
+echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc
+puede llegar a serecho "source $HOME/local/bin/virtualenvwrapper.sh" >> ~/.bashrc
+
 
 #creamos el virtualenv cv
 mkvirtualenv cv -p python3
@@ -96,6 +102,7 @@ pip install tensorflow==2.0.0-alpha0
 pip install Keras-Applications
 pip install pillow
 pip install uwsgi
+pip install tkinter
 
 
 
