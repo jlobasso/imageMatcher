@@ -8,6 +8,11 @@ from json import dumps
 from glob import glob
 import json
 from pymongo import MongoClient
+import configparser
+
+config = configparser.ConfigParser()
+config.read('conf.ini')
+print(config['paths']['frontend-path'])
 
 conn = MongoClient()
 db = conn.imageMatcher
@@ -20,7 +25,7 @@ def url_to_image(url):
     return image
 
 def getImages(path):
-    img = glob("/home/image-matcher/imageMatcher/frontend/repo/joico/"+path+"/*")
+    img = glob(config['paths']['frontend-path']+"repo/joico/"+path+"/*")
     return img
     
 
@@ -51,7 +56,11 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
             
             print("recorriendo "+str(x+1)+" de "+str(len(images))+ " comparando con "+str(y+1)+" de "+str(len2))
 
-            F = open("/home/image-matcher/imageMatcher/frontend/status/status.json","w+")
+            F = open(config['paths']['frontend-path']+"status/status.json","w+")
+
+            print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT")
+            print(config['paths']['frontend-path']+"status/status.json")
+            print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT")
 
             status = {
                         "absoluteComputed": str(kInageComputed),
