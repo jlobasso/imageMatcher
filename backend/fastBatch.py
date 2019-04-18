@@ -12,7 +12,6 @@ import configparser
 
 config = configparser.ConfigParser()
 config.read('conf.ini')
-print(config['paths']['frontend-path'])
 
 conn = MongoClient()
 db = conn.imageMatcher
@@ -39,7 +38,11 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
 
     orb = cv2.ORB_create()
 
-    #Recorre imagenes de livesearch
+    if len(images) == 0:
+        return {'matches': [], 'imagenes1': 0, 'imagenes2': 0, "status": "No hay imagenes en "+config['paths']['frontend-path']+"repo/joico/download/"}
+    if len(images2) == 0:
+        return {'matches': [], 'imagenes1': 0, 'imagenes2': 0, "status": "No hay imagenes en la carpeta seleccionada"}    
+
     for x in range(0, len(images)):
         bestMatches = []
         
@@ -126,5 +129,5 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
             # print(bestMatches)
             globalMatches.append(bestMatches)
 
-    return {'matches': globalMatches, 'imagenes1': len(images), 'imagenes2': len2}
+    return {'matches': globalMatches, 'imagenes1': len(images), 'imagenes2': len2, "status":"OK"}
 
