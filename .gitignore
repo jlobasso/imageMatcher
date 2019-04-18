@@ -5,6 +5,7 @@
 /backend/serverBakend.sock
 /backend/conf.ini
 /frontend/js/conf.js
+frontend/js/conf.js
 /frontend/status/status.json
 /frontend/repo/joico/download3000/*
 *.pyc
