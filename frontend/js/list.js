@@ -196,9 +196,9 @@ drawResults = (data) => {
         matchLink.target = "_blank"
         match.appendChild(matchLink)
 
-        imgMatch.image_url = imgMatch.image_url.replace(/\.\.\/frontend/g,"")
+        // imgMatch.image_url = imgMatch.image_url.replace(/\.\.\/frontend/g,"")
 
-        imgMatch.image_repo = imgMatch.image_repo.replace(/\.\.\/frontend/g,"")
+        // imgMatch.image_repo = imgMatch.image_repo.replace(/\.\.\/frontend/g,"")
 
 
         // title.innerHTML = dataArticle[imgMatch.article_id]

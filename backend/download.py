@@ -5,9 +5,11 @@ import time
 import json
 from pymongo import MongoClient
 from threading import Timer
+import configparser
 
-conn = MongoClient()
-db = conn.imageMatcher
+config = configparser.ConfigParser()
+config.read('conf.ini')
+
 
 class NumpyEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -17,28 +19,23 @@ class NumpyEncoder(json.JSONEncoder):
 
 def downloadImage():
 
+    conn = MongoClient()
+    db = conn.imageMatcher
     now = time.time()  
+    images = db.download_live_search.find({ 'downloaded': False })
 
-    images = db.download_live_search.find({"downloaded":False})
-
-    for x in range(0, images.count()):
-
+    for x in images:
         try:
-            archivoDescargar = urllib.request.urlopen(images[x]['url'], timeout=10)
-            ficheroGuardar = open('../frontend/repo/joico/download/'+images[x]['imageId']+'.jpg',"wb")
+            archivoDescargar = urllib.request.urlopen(x['url'], timeout=10)
+            ficheroGuardar = open(config['paths']['frontend-path']+"repo/joico/download/"+x['imageId']+".jpg","wb")
             ficheroGuardar.write(archivoDescargar.read())
             ficheroGuardar.close()
         except urllib.request.URLError:
             print("Salteamos la imagen y continuamos")
             continue
-            # r = Timer(600.0, downloadImage)
-            # r.start()
         
-        img = cv2.imread('../frontend/repo/joico/download/'+images[x]['imageId'], 0)
-        # img = json.dumps(img, cls=NumpyEncoder)
-        db.download_live_search.update({ "imageId" : images[x]['imageId']  },{ "$set": { "downloaded" : True } })
-        print(db.download_live_search.find({"downloaded":True}).count())
-
+        db.download_live_search.update({ "imageId" : x['imageId']  },{ "$set": { "downloaded" : True } })
+        
     elapsed = time.time() - now        
     print ('tiempo de descarga total de archivos: ',elapsed)
 
@@ -47,20 +44,15 @@ def downloadImage():
 
 def insertImage(data):   
 
+    conn = MongoClient()
+    db = conn.imageMatcher
     collection = db.download_live_search
     images = db.download_live_search.find({},{"imageId": 1})
 
-    for x in range(0, len(data)):      
-
-
+    for x in range(0, len(data)-1):     
         for y in range(0, len(data[x]['images'])):
 
-            print(data[x]['images'][y]['imageId'])
-            print(data[x]['sellerId'])
-
             exist = db.download_live_search.find({"imageId":data[x]['images'][y]['imageId'], "sellerId":data[x]['sellerId']}).count()
-            
-            print(exist)
 
             if not exist:
 
@@ -75,7 +67,7 @@ def insertImage(data):
                 rec['downloaded'] = False
                 rec['compare'] = True
 
-                collection.insert(rec)
+                collection.insert(rec, w=0)
                 
 
     downloadImage()

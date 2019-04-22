@@ -16,6 +16,7 @@ config.read('conf.ini')
 conn = MongoClient()
 db = conn.imageMatcher
 
+baseForMatched = 'download'
 
 def url_to_image(url):
     resp = urllib.request.urlopen(url)
@@ -24,13 +25,13 @@ def url_to_image(url):
     return image
 
 def getImages(path):
-    img = glob(config['paths']['frontend-path']+"repo/joico/"+path+"/*")    
+    img = glob(config['paths']['frontend-path']+"repo/joico/"+path+"/*")        
     return img
     
 
 def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCategory):
     images2 = getImages(compareCategory)
-    images = getImages('download')
+    images = getImages(baseForMatched)
     len2 = len(images2)
     globalMatches = []
 
@@ -58,12 +59,7 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
             kInageComputed = kInageComputed + 1
             
             print("recorriendo "+str(x+1)+" de "+str(len(images))+ " comparando con "+str(y+1)+" de "+str(len2))
-
             F = open(config['paths']['frontend-path']+"status/status.json","w+")
-
-            # print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT")
-            # print(config['paths']['frontend-path']+"status/status.json")
-            # print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT")
 
             status = {
                         "absoluteComputed": str(kInageComputed),
@@ -96,11 +92,25 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
                 if m.distance < sensibility*100:
                         good.append(m)
 
-            imageId = images[x].replace(".jpg", "").split("/")
-            imageId = imageId[len(imageId)-1]
+            # imageId = images[x].replace(".jpg", "").split("/")
+            # imageId = imageId[len(imageId)-1]
+            
+            cleanImg = images[x].split("/")
+            searchImgDb = cleanImg[len(cleanImg)-1]
+            searchImgDb = searchImgDb.replace(".jpg", "")
+            
+            
+            searchImgRepo = config['paths']['repo-path']+baseForMatched+"/"+cleanImg[len(cleanImg)-1]
+            
+            cleanImg2 = images2[y].split("/")
+            ImgRepoOrigin = config['paths']['repo-path']+compareCategory+"/"+cleanImg2[len(cleanImg2)-1]
+            
+            
+            print(searchImgRepo)
+            print(searchImgDb)
+            print(ImgRepoOrigin)
 
-            print(imageId)
-            dataDB = db.download_live_search.find({'imageId':str(imageId)},{'_id':0,'title':1,'articleId':1})
+            dataDB = db.download_live_search.find({'imageId':str(searchImgDb)},{'_id':0,'title':1,'articleId':1})
                       
             if float(len(good)/minMatchCount*100) > float(minPercentMatch):
                 bestMatches.append(
@@ -109,9 +119,9 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
                         'title': str(dataDB[0]['title']),
                         # 'article_id': str(images[x]['id']),
                         # 'image_url': str(images[x]['image']),  
-                        'image_url': str(images[x]), 
+                        'image_url': str(searchImgRepo), 
                         'percentage': str(len(good)/minMatchCount*100),
-                        'image_repo': str(images2[y]), 
+                        'image_repo': str(ImgRepoOrigin), 
 
                     })
 

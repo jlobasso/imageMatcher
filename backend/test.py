@@ -1,9 +1,11 @@
-import configparser
 
-config = configparser.ConfigParser()
-vard = config.read('conf.ini')
+from pymongo import MongoClient
 
-# for attr in dir(config):
-#     print("obj.%s = %r" % (attr, getattr(config, attr)))
+conn = MongoClient()
+db = conn.imageMatcher
 
-print(vard)
+
+
+images = db.download_live_search.find({ 'downloaded': False })
+
+print(images.count()-1)

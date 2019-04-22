@@ -39,8 +39,9 @@ submit.addEventListener("click", async () => {
     fetch(conf.urlBackend+'match?' + Math.random() + '=' + Math.random() + "&" + urlMmatch)
         .then((response) => response.json())
         .then((result) => {
-            result = result.replace(/\.\.\/frontend/g,"")
-            imgMatch.src = +result+'?' + Math.random() + '=' + Math.random();
+            console.log(result)
+            // result = result.replace(/\.\.\/frontend/g,"")
+            imgMatch.src = result+'?' + Math.random() + '=' + Math.random();
         }
 
         )
