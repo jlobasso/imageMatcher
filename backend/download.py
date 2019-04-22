@@ -24,6 +24,8 @@ def downloadImage():
     now = time.time()  
     images = db.download_live_search.find({ 'downloaded': False })
 
+    print("Imagenes por bajar:"+str(images.count()))
+
     for x in images:
         try:
             archivoDescargar = urllib.request.urlopen(x['url'], timeout=10)
@@ -43,6 +45,8 @@ def downloadImage():
 
 
 def insertImage(data):   
+
+    print("Cantidad de imagenes a insertar en la base de datos: "+str(len(data)))
 
     conn = MongoClient()
     db = conn.imageMatcher
@@ -66,6 +70,7 @@ def insertImage(data):
                 rec['sellerId'] = data[x]['sellerId']
                 rec['downloaded'] = False
                 rec['compare'] = True
+                rec['categorized'] = False
 
                 collection.insert(rec, w=0)
                 
