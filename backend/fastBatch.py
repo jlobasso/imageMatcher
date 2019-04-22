@@ -24,7 +24,7 @@ def url_to_image(url):
     return image
 
 def getImages(path):
-    img = glob(config['paths']['frontend-path']+"repo/joico/"+path+"/*")
+    img = glob(config['paths']['frontend-path']+"repo/joico/"+path+"/*")    
     return img
     
 
@@ -61,9 +61,9 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
 
             F = open(config['paths']['frontend-path']+"status/status.json","w+")
 
-            print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT")
-            print(config['paths']['frontend-path']+"status/status.json")
-            print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT")
+            # print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT")
+            # print(config['paths']['frontend-path']+"status/status.json")
+            # print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT")
 
             status = {
                         "absoluteComputed": str(kInageComputed),

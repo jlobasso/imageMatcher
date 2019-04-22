@@ -1,25 +1,9 @@
+import configparser
 
-from pymongo import MongoClient
+config = configparser.ConfigParser()
+vard = config.read('conf.ini')
 
-conn = MongoClient()
+# for attr in dir(config):
+#     print("obj.%s = %r" % (attr, getattr(config, attr)))
 
-db = conn.imageMatcher
-
-print('antes de la funcion')
-    
-exist = db.download_live_search.find()
-
-print(exist)
-
-print('despues de la funcion')
-
-
-def testFunc():
-    print('antes dentro de la funcion')
-    
-    exist = db.download_live_search.find()
-    
-    print(exist)
-
-    print('despues dentro de la funcion')
-    
+print(vard)
