@@ -12,8 +12,6 @@ def uniqueMatch(params):
     img1 = cv2.imread(config['paths']['frontend-path']+params.get('url1'), 0)
     img2 = cv2.imread(config['paths']['frontend-path']+params.get('url2'), 0)
 
-    # print(config['paths']['frontend-path']+'/'+params.get('url1'))
-
     orb = cv2.ORB_create()
 
     kp1 = orb.detect(img1,None)
@@ -28,50 +26,18 @@ def uniqueMatch(params):
 
     good = []
     for m in matches:
-        if m.distance < 5000:
+        if m.distance < float(params.get('sensibility'))*100:
             good.append(m)
-
-    print("eeeeeeeeeeeeeeeeeeeeeeeeeeeee")
-    print(len(good))        
-    print("eeeeeeeeeeeeeeeeeeeeeeeeeeeee")
-
-    matchesMask = None
 
     draw_params = dict(matchColor = (0,255,0), # draw matches in green color
                     singlePointColor = None,
-                    matchesMask = matchesMask, # draw only inliers
+                    matchesMask = None, # draw only inliers
                     flags = 2)
 
-
-    # Draw first 10 matches.
-    img3 = cv2.drawMatches(img1,kp1,img2,kp2,good[:30], None,**draw_params)
-
-    # good = []
-    # for m in matches:
-    #     if m.distance < float(params.get('sensibility'))*100:
-    #         good.append(m)
-
-
-    # # print(len(good))        
-
-    # matchesMask = None
-
-    # draw_params = dict(matchColor = (0,255,0), # draw matches in green color
-    #                     singlePointColor = None,
-    #                     matchesMask = matchesMask, # draw only inliers
-    #                     flags = 2)
-
-
     # # Draw first 10 matches.
-    # img3 = cv2.drawMatches(img1,kp1,img2,kp2,good[:int(params.get('min_match_count'))], None,**draw_params)
+    img3 = cv2.drawMatches(img1,kp1,img2,kp2,good[:int(params.get('min_match_count'))], None,**draw_params)
 
-    # # img3 = cv2.drawMatches(img1,kp1,img2,kp2,good[:30], None,**draw_params)
     plt.imshow(img3)
-
-
-
     plt.savefig(config['paths']['frontend-path']+config['paths']['tmp-path']+'match.png')
 
     return config['paths']['tmp-path']+'match.png'
-
-    # cv2.destroyAllWindows()

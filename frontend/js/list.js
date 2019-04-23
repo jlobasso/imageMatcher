@@ -99,7 +99,7 @@ submit.addEventListener("click", async () => {
     }
 
     let minMatchCount = +document.getElementById("min-match-count").value;
-    let scale = +document.getElementById("scale").value;
+    // let scale = +document.getElementById("scale").value;
     let sensibility = +document.getElementById("sensibility").value / 100;
     var minPercentMatch = +document.getElementById("min-percent-match").value;
     let compareCategory = document.getElementById("compare-category").value
@@ -107,7 +107,7 @@ submit.addEventListener("click", async () => {
     data = {
         'imagenes': imagenes,
         'min_match_count': minMatchCount,
-        'scale': scale,
+        // 'scale': scale,
         'sensibility': sensibility,
         'min_percent_match': minPercentMatch,
         "compare_category": compareCategory
@@ -177,7 +177,7 @@ drawResults = (data) => {
 
 
         let minMatchCount = +document.getElementById("min-match-count").value;
-        let scale = +document.getElementById("scale").value;
+        // let scale = +document.getElementById("scale").value;
         let sensibility = +document.getElementById("sensibility").value / 100;
         var minPercentMatch = +document.getElementById("min-percent-match").value
 
@@ -186,7 +186,7 @@ drawResults = (data) => {
         var urlMmatch = `url1=${imgMatch.image_url}`
         urlMmatch += `&url2=${imgMatch.image_repo}`
         urlMmatch += `&min_match_count=${minMatchCount}`
-        urlMmatch += `&scale=${scale}`
+        // urlMmatch += `&scale=${scale}`
         urlMmatch += `&sensibility=${sensibility}`
         urlMmatch += `&min_percent_match=${minPercentMatch}`
 

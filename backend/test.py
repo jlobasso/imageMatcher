@@ -5,7 +5,8 @@ conn = MongoClient()
 db = conn.imageMatcher
 
 
+collection = "download_live_search"
 
-images = db.download_live_search.find({ 'downloaded': False })
+images = db[collection].find().count()
 
-print(images.count()-1)
+print(images)

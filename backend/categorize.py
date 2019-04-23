@@ -32,7 +32,8 @@ model = MobileNetV2(weights='imagenet')
 def categorize():
     conn = MongoClient()
     db = conn.imageMatcher
-    images = db.download_live_search.find({ 'downloaded': True, 'categorized': False })
+    collection = "download_live_search"
+    images = db[collection].find({ 'downloaded': True, 'categorized': False })
 
     predictions = []
     predictionsWeight = {}

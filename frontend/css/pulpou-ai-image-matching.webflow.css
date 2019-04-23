@@ -83,13 +83,21 @@
   width: 80px;
 }
 
+.text-field-storage {
+  width: 300px;
+}
+
 .submit-button {
-  margin-top: 16px;
+  margin-top: 30px;
   margin-bottom: 54px;
 }
 
 .download-button {
-  margin-top: 16px;
+  margin-top: 30px;
+  margin-bottom: 54px;
+}
+.delete-button {
+  margin-top: 30px;
   margin-bottom: 54px;
 }
 

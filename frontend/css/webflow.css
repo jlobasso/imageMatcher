@@ -87,7 +87,7 @@ html.w-mod-touch * {
 }
 .w-button {
   display: inline-block;
-  padding: 9px 15px;
+  padding: 4px;
   background-color: #3898EC;
   color: white;
   border: 0;
@@ -98,8 +98,19 @@ html.w-mod-touch * {
 }
 .w-buttonDownload {
   display: inline-block;
-  padding: 9px 15px;
-  background-color: rgb(122, 192, 9);
+  padding: 4px;
+  background-color: rgb(85, 133, 9);
+  color: white;
+  border: 0;
+  line-height: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 0;
+}
+.w-buttonDelete {
+  display: inline-block;
+  padding: 4px;
+  background-color: rgb(212, 50, 50);
   color: white;
   border: 0;
   line-height: inherit;

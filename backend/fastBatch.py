@@ -91,24 +91,15 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
             for m in matches:
                 if m.distance < sensibility*100:
                         good.append(m)
-
-            # imageId = images[x].replace(".jpg", "").split("/")
-            # imageId = imageId[len(imageId)-1]
             
             cleanImg = images[x].split("/")
             searchImgDb = cleanImg[len(cleanImg)-1]
             searchImgDb = searchImgDb.replace(".jpg", "")
             
-            
             searchImgRepo = config['paths']['repo-path']+baseForMatched+"/"+cleanImg[len(cleanImg)-1]
             
             cleanImg2 = images2[y].split("/")
             ImgRepoOrigin = config['paths']['repo-path']+compareCategory+"/"+cleanImg2[len(cleanImg2)-1]
-            
-            
-            print(searchImgRepo)
-            print(searchImgDb)
-            print(ImgRepoOrigin)
 
             dataDB = db.download_live_search.find({'imageId':str(searchImgDb)},{'_id':0,'title':1,'articleId':1})
                       

@@ -8,6 +8,7 @@ download.addEventListener("click", async () => {
     const textarea = document.getElementById("Json")
     const json = JSON.parse(textarea.value);
 
+    const input = document.getElementById("storage")
 
     var images = [];
     json.forEach(a => {
@@ -35,15 +36,9 @@ download.addEventListener("click", async () => {
         }
     });
 
-    console.log(images)
-
     var xhr = new XMLHttpRequest();
     xhr.open("POST", conf.urlBackend+'download', true);
     xhr.setRequestHeader("Content-Type", "text/plain");
 
     xhr.send(JSON.stringify(images));
-
-    // function encode_utf8(s) {
-    //     return unescape(encodeURIComponent(s));
-    // } ('\u4e0a\u6d77')
 })
