@@ -17,26 +17,26 @@ class NumpyEncoder(json.JSONEncoder):
             return obj.tolist()
         return json.JSONEncoder.default(self, obj)
 
-def downloadImage():
+def downloadImage(collection):
 
     conn = MongoClient()
     db = conn.imageMatcher
     now = time.time()  
-    images = db.download_live_search.find({ 'downloaded': False })
+    images = db[collection].find({ 'downloaded': False })
 
     print("Imagenes por bajar:"+str(images.count()))
 
     for x in images:
         try:
             archivoDescargar = urllib.request.urlopen(x['url'], timeout=10)
-            ficheroGuardar = open(config['paths']['frontend-path']+"repo/joico/download/"+x['imageId']+".jpg","wb")
+            ficheroGuardar = open(config['paths']['frontend-path']+collection+x['imageId']+".jpg","wb")
             ficheroGuardar.write(archivoDescargar.read())
             ficheroGuardar.close()
         except urllib.request.URLError:
             print("Salteamos la imagen y continuamos")
             continue
         
-        db.download_live_search.update({ "imageId" : x['imageId']  },{ "$set": { "downloaded" : True } })
+        db[collection].update({ "imageId" : x['imageId']  },{ "$set": { "downloaded" : True } })
         
     elapsed = time.time() - now        
     print ('tiempo de descarga total de archivos: ',elapsed)
@@ -46,36 +46,41 @@ def downloadImage():
 
 def insertImage(data):   
 
-    print("Cantidad de imagenes a insertar en la base de datos: "+str(len(data)))
+
+    kindOfStorage = data['kindOfStorage'] 
+    storageData = data['storageData']
+    storageName = data['storageName']
+
+    print("Cantidad de imagenes a insertar en la base de datos: "+str(len(storageData)))
 
     conn = MongoClient()
     db = conn.imageMatcher
-    collection = db.download_live_search
-    images = db.download_live_search.find({},{"imageId": 1})
+    collection = kindOfStorage+"-"+storageName
+    images = db[collection].find({},{"imageId": 1})
 
-    for x in range(0, len(data)-1):     
-        for y in range(0, len(data[x]['images'])):
+    for x in range(0, len(storageData)-1):     
+        for y in range(0, len(storageData[x]['images'])):
 
-            exist = db.download_live_search.find({"imageId":data[x]['images'][y]['imageId'], "sellerId":data[x]['sellerId']}).count()
+            exist = db[collection].find({"imageId":storageData[x]['images'][y]['imageId'], "sellerId":storageData[x]['sellerId']}).count()
 
             if not exist:
 
                 rec = {} 
-                rec['imageId'] = data[x]['images'][y]['imageId']
-                rec['url'] = data[x]['images'][y]['url']
-                rec['categoryId'] = data[x]['categoryId']
-                rec['articleId'] = data[x]['articleId']
-                rec['title'] = data[x]['title']
-                rec['link'] = data[x]['link']
-                rec['sellerId'] = data[x]['sellerId']
+                rec['imageId'] = storageData[x]['images'][y]['imageId']
+                rec['url'] = storageData[x]['images'][y]['url']
+                rec['categoryId'] = storageData[x]['categoryId']
+                rec['articleId'] = storageData[x]['articleId']
+                rec['title'] = storageData[x]['title']
+                rec['link'] = storageData[x]['link']
+                rec['sellerId'] = storageData[x]['sellerId']
                 rec['downloaded'] = False
                 rec['compare'] = True
                 rec['categorized'] = False
 
-                collection.insert(rec, w=0)
+                db[collection].insert(rec, w=0)
                 
 
-    downloadImage()
+    downloadImage(collection)
 
 
 
