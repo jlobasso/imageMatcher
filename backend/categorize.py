@@ -6,7 +6,6 @@ from tensorflow.keras.applications.mobilenet_v2 import preprocess_input, decode_
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
-from glob import glob
 import time
 from pymongo import MongoClient
 import configparser
@@ -23,10 +22,6 @@ def process_image(img_path,size = 224):
   pImg = preprocess_input(img_array)
   return pImg
 
-def getImages(path):
-    img = glob("../frontend/repo/joico/"+path+"/*")
-    return img
-
 model = MobileNetV2(weights='imagenet')
 
 def categorize():
@@ -38,7 +33,6 @@ def categorize():
     predictions = []
     predictionsWeight = {}
 
-    # test_imgs_paths = getImages('download')
     # totalAmountToAnalize = len(test_imgs_paths)
     test_imgs_paths = images
     totalAmountToAnalize = images.count()
@@ -47,9 +41,9 @@ def categorize():
 
     for test_img_path in test_imgs_paths:
 
-        print(config['paths']['frontend-path']+"repo/joico/download/"+test_img_path['imageId']+'.jpg')
+        print(config['paths']['storage-path']+"/download/"+test_img_path['imageId']+'.jpg')
 
-        pImg = process_image(config['paths']['frontend-path']+"repo/joico/download/"+test_img_path['imageId']+'.jpg')
+        pImg = process_image(config['paths']['storage-path']+"download/"+test_img_path['imageId']+'.jpg')
 
         features = model.predict(pImg)
 
