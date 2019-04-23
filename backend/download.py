@@ -26,17 +26,17 @@ def downloadImage(collection):
 
     print("Imagenes por bajar:"+str(images.count()))
 
-    for x in images:
+    for ximg in images:
         try:
-            archivoDescargar = urllib.request.urlopen(x['url'], timeout=10)
-            ficheroGuardar = open(config['paths']['frontend-path']+collection+x['imageId']+".jpg","wb")
+            archivoDescargar = urllib.request.urlopen(ximg['url'], timeout=10)
+            ficheroGuardar = open(config['paths']['storage-full-path']+collection+'/'+ximg['imageId']+".jpg","wb")
             ficheroGuardar.write(archivoDescargar.read())
             ficheroGuardar.close()
         except urllib.request.URLError:
             print("Salteamos la imagen y continuamos")
             continue
         
-        db[collection].update({ "imageId" : x['imageId']  },{ "$set": { "downloaded" : True } })
+        db[collection].update({ "imageId" : ximg['imageId']  },{ "$set": { "downloaded" : True } })
         
     elapsed = time.time() - now        
     print ('tiempo de descarga total de archivos: ',elapsed)
@@ -46,6 +46,8 @@ def downloadImage(collection):
 
 def insertImage(data):   
 
+
+    print(data)
 
     kindOfStorage = data['kindOfStorage'] 
     storageData = data['storageData']
@@ -58,21 +60,21 @@ def insertImage(data):
     collection = kindOfStorage+"-"+storageName
     images = db[collection].find({},{"imageId": 1})
 
-    for x in range(0, len(storageData)-1):     
-        for y in range(0, len(storageData[x]['images'])):
+    for storagePosition in range(0, len(storageData)-1):     
+        for imagePosition in range(0, len(storageData[storagePosition]['images'])):
 
-            exist = db[collection].find({"imageId":storageData[x]['images'][y]['imageId'], "sellerId":storageData[x]['sellerId']}).count()
+            exist = db[collection].find({"imageId":storageData[storagePosition]['images'][imagePosition]['imageId'], "sellerId":storageData[storagePosition]['sellerId']}).count()
 
             if not exist:
 
                 rec = {} 
-                rec['imageId'] = storageData[x]['images'][y]['imageId']
-                rec['url'] = storageData[x]['images'][y]['url']
-                rec['categoryId'] = storageData[x]['categoryId']
-                rec['articleId'] = storageData[x]['articleId']
-                rec['title'] = storageData[x]['title']
-                rec['link'] = storageData[x]['link']
-                rec['sellerId'] = storageData[x]['sellerId']
+                rec['imageId'] = storageData[storagePosition]['images'][imagePosition]['imageId']
+                rec['url'] = storageData[storagePosition]['images'][imagePosition]['url']
+                rec['categoryId'] = storageData[storagePosition]['categoryId']
+                rec['articleId'] = storageData[storagePosition]['articleId']
+                rec['title'] = storageData[storagePosition]['title']
+                rec['link'] = storageData[storagePosition]['link']
+                rec['sellerId'] = storageData[storagePosition]['sellerId']
                 rec['downloaded'] = False
                 rec['compare'] = True
                 rec['categorized'] = False
