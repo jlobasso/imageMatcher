@@ -5,7 +5,7 @@ import matplotlib.image as mpimg
 import urllib.request
 from function.searchRepo import * 
 from json import dumps
-from glob import glob
+from function.searchRepo import * 
 import json
 from pymongo import MongoClient
 import configparser
@@ -23,12 +23,7 @@ def url_to_image(url):
     image = np.asarray(bytearray(resp.read()), dtype="uint8")
     image = cv2.imdecode(image, cv2.IMREAD_COLOR)
     return image
-
-def getImages(path):
-    img = glob(config['paths']['frontend-path']+"repo/joico/"+path+"/*")        
-    return img
-    
-
+   
 def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCategory):
     images2 = getImages(compareCategory)
     images = getImages(baseForMatched)
@@ -40,7 +35,7 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
     orb = cv2.ORB_create()
 
     if len(images) == 0:
-        return {'matches': [], 'imagenes1': 0, 'imagenes2': 0, "status": "No hay imagenes en "+config['paths']['frontend-path']+"repo/joico/download/"}
+        return {'matches': [], 'imagenes1': 0, 'imagenes2': 0, "status": "No hay imagenes en "+config['paths']['storage-path']+"/download/"}
     if len(images2) == 0:
         return {'matches': [], 'imagenes1': 0, 'imagenes2': 0, "status": "No hay imagenes en la carpeta seleccionada"}    
 
@@ -96,10 +91,10 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
             searchImgDb = cleanImg[len(cleanImg)-1]
             searchImgDb = searchImgDb.replace(".jpg", "")
             
-            searchImgRepo = config['paths']['repo-path']+baseForMatched+"/"+cleanImg[len(cleanImg)-1]
+            searchImgRepo = config['paths']['storage-path']+baseForMatched+"/"+cleanImg[len(cleanImg)-1]
             
             cleanImg2 = images2[y].split("/")
-            ImgRepoOrigin = config['paths']['repo-path']+compareCategory+"/"+cleanImg2[len(cleanImg2)-1]
+            ImgRepoOrigin = config['paths']['storage-path']+compareCategory+"/"+cleanImg2[len(cleanImg2)-1]
 
             dataDB = db.download_live_search.find({'imageId':str(searchImgDb)},{'_id':0,'title':1,'articleId':1})
                       

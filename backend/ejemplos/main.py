@@ -12,8 +12,8 @@ def url_to_image(url):
 	return image
 
 
-img1 = cv2.imread('../../frontend/repo/joico/Shampoo/Recortadas/BL_Shampoo_300ml.jpg',0) # queryImage
-img2 = url_to_image('http://mlb-s2-p.mlstatic.com/854454-MLB26525962127_122017-O.jpg') # trainImage
+# img1 = cv2.imread('../../frontend/repo/joico/Shampoo/Recortadas/BL_Shampoo_300ml.jpg',0) # queryImage
+# img2 = url_to_image('http://mlb-s2-p.mlstatic.com/854454-MLB26525962127_122017-O.jpg') # trainImage
 # img1 = cv2.imread('../frontend/repo/pruebaNike-Air-Force-1-Low-Moto-W-1100x553.png',0) # queryImage
 # img2 = cv2.imread('../frontend/repo/pruebanike-air-force-1-dominican-republic-de-lo-mio-release-date-2.jpg',0) # trainImage
 

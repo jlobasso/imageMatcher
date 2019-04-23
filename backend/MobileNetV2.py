@@ -6,7 +6,7 @@ from tensorflow.keras.applications.mobilenet_v2 import preprocess_input, decode_
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
-from glob import glob
+from function.searchRepo import * 
 import time
 start = time.time()
 
@@ -17,10 +17,6 @@ def process_image(img_path,size = 224):
   img_array = np.expand_dims(img_array, axis=0)
   pImg = preprocess_input(img_array)
   return pImg
-
-def getImages(path):
-    img = glob("../frontend/repo/joico/"+path+"/*")
-    return img
 
 model = MobileNetV2(weights='imagenet')
 
