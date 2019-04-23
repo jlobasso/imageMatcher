@@ -26,10 +26,15 @@ def downloadImage(collection):
 
     print("Imagenes por bajar:"+str(images.count()))
 
+    newPath = config['paths']['storage-full-path']+collection
+
+    if not os.path.exists(newPath):
+        os.mkdir(newPath)
+
     for ximg in images:
         try:
             archivoDescargar = urllib.request.urlopen(ximg['url'], timeout=10)
-            ficheroGuardar = open(config['paths']['storage-full-path']+collection+'/'+ximg['imageId']+".jpg","wb")
+            ficheroGuardar = open(newPath+'/'+ximg['imageId']+".jpg","wb")
             ficheroGuardar.write(archivoDescargar.read())
             ficheroGuardar.close()
         except urllib.request.URLError:
