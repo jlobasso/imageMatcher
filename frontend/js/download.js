@@ -7,7 +7,9 @@ downloadSuspected.addEventListener("click", () => download("suspected"))
 var download = async (kindOfStorage) => {
 
     const storageName = document.querySelectorAll(`.${kindOfStorage} #storage-name-${kindOfStorage}`)[0].value
-    const storageData = JSON.parse(document.querySelectorAll(`.${kindOfStorage} #data-${kindOfStorage}`)[0].innerHTML)
+    const storageData = JSON.parse(document.querySelectorAll(`.${kindOfStorage} #data-${kindOfStorage}`)[0].value)
+
+   console.log(`.${kindOfStorage} #data-${kindOfStorage}`)
 
     var images = [];
     storageData.forEach(a => {
