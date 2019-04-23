@@ -1,17 +1,16 @@
-const download = document.getElementById("download")
+const downloadOriginals = document.getElementById("download-originals")
+const downloadSuspected = document.getElementById("download-suspected")
 
-download.addEventListener("click", async () => {
-    // const json = await fetch('./livesearch.json')
-    //     .then(function (response) {
-    //         return response.json();
-    //     })
-    const textarea = document.getElementById("Json")
-    const json = JSON.parse(textarea.value);
+downloadOriginals.addEventListener("click", () => download("originals"))
+downloadSuspected.addEventListener("click", () => download("suspected"))
 
-    const input = document.getElementById("storage")
+var download = async (kindOfStorage) => {
+
+    const storageName = document.querySelectorAll(`.${kindOfStorage} #storage-name-${kindOfStorage}`)[0].value
+    const storageData = JSON.parse(document.querySelectorAll(`.${kindOfStorage} #data-${kindOfStorage}`)[0].innerHTML)
 
     var images = [];
-    json.forEach(a => {
+    storageData.forEach(a => {
 
         if ('images' in a && a.images.length > 0) {
 
@@ -36,9 +35,17 @@ download.addEventListener("click", async () => {
         }
     });
 
+    const storeData = {
+        kindOfStorage: kindOfStorage,
+        storageName: storageName,
+        storageData: images
+    }
+
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", conf.urlBackend+'download', true);
+    xhr.open("POST", conf.urlBackend + 'download', true);
     xhr.setRequestHeader("Content-Type", "text/plain");
 
-    xhr.send(JSON.stringify(images));
-})
+    xhr.send(JSON.stringify(storeData));
+
+}
+
