@@ -5,7 +5,6 @@ import matplotlib.image as mpimg
 import urllib.request
 from function.searchRepo import * 
 from json import dumps
-from function.searchRepo import * 
 import json
 from pymongo import MongoClient
 import configparser

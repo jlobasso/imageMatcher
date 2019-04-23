@@ -1,11 +1,13 @@
 import numpy as np
 import cv2
+import os
 import urllib.request
 import time
 import json
 from pymongo import MongoClient
 from threading import Timer
 import configparser
+from categorize import *
 
 config = configparser.ConfigParser()
 config.read('conf.ini')
@@ -46,13 +48,13 @@ def downloadImage(collection):
     elapsed = time.time() - now        
     print ('tiempo de descarga total de archivos: ',elapsed)
 
-
+    categorize(collection)
 
 
 def insertImage(data):   
 
 
-    print(data)
+    # print(data)
 
     kindOfStorage = data['kindOfStorage'] 
     storageData = data['storageData']

@@ -2,7 +2,7 @@
 from function.searchRepo import * 
 from pymongo import MongoClient
 import configparser
-# from categorize import *
+from categorize import *
 
 config = configparser.ConfigParser()
 config.read('conf.ini')
@@ -24,8 +24,10 @@ for imagePosition in images:
     imageName = cleanImg[len(cleanImg)-1]
     imageId = imageName.split(".")[0]
     
-    imageName = imageName.encode('utf-8', 'surrogateescape').decode('tf-8')
+    imageName = imageName.encode('utf-8', 'surrogateescape').decode('utf-8')
     imageId = imageId.encode('utf-8', 'surrogateescape').decode('utf-8')
+#     imageName = imageName.encode('ascii', 'ignore').decode('ascii')
+#     imageId = imageId.encode('ascii', 'ignore').decode('ascii')
     
     exist = db[collection].find({"imageId":imageId}).count()
 
@@ -46,3 +48,6 @@ for imagePosition in images:
         rec['categorized'] = False
 
         db[collection].insert(rec)
+
+
+categorize(collection)
