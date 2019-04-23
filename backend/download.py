@@ -9,6 +9,7 @@ from threading import Timer
 import configparser
 from categorize import *
 
+
 config = configparser.ConfigParser()
 config.read('conf.ini')
 
@@ -34,9 +35,10 @@ def downloadImage(collection):
         os.mkdir(newPath)
 
     for ximg in images:
+
         try:
             archivoDescargar = urllib.request.urlopen(ximg['url'], timeout=10)
-            ficheroGuardar = open(newPath+'/'+ximg['imageId']+".jpg","wb")
+            ficheroGuardar = open(newPath+'/'+ximg['imageName'],"wb")
             ficheroGuardar.write(archivoDescargar.read())
             ficheroGuardar.close()
         except urllib.request.URLError:
@@ -70,12 +72,16 @@ def insertImage(data):
     for storagePosition in range(0, len(storageData)-1):     
         for imagePosition in range(0, len(storageData[storagePosition]['images'])):
 
+            imageName = storageData[storagePosition]['images'][imagePosition]['url'].split("/")
+            imageName = imageName[len(imageName)-1]
+
             exist = db[collection].find({"imageId":storageData[storagePosition]['images'][imagePosition]['imageId'], "sellerId":storageData[storagePosition]['sellerId']}).count()
 
             if not exist:
 
                 rec = {} 
                 rec['imageId'] = storageData[storagePosition]['images'][imagePosition]['imageId']
+                rec['imageName'] = imageName
                 rec['url'] = storageData[storagePosition]['images'][imagePosition]['url']
                 rec['categoryId'] = storageData[storagePosition]['categoryId']
                 rec['articleId'] = storageData[storagePosition]['articleId']

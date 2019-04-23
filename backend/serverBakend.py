@@ -9,6 +9,7 @@ import json
 from download import *
 from match import *
 from fastBatch import *
+from getGroups import *
 from datetime import datetime, date, time, timedelta
 import urllib
 
@@ -50,6 +51,9 @@ class Match(Resource):
     def get(self):        
         return uniqueMatch(request.args)
 
+class Groups(Resource):
+    def get(self):
+        return getGroups(), 200, {'Content-Type':'application/json'}
 
 class Test(Resource):
     def get(self):
@@ -66,6 +70,7 @@ api.add_resource(Process, '/process')
 api.add_resource(Download, '/download')
 api.add_resource(Match, '/match') 
 api.add_resource(Health, '/health')
+api.add_resource(Groups, '/groups')
 api.add_resource(Test, '/test')
 
 
