@@ -1,16 +1,28 @@
-var getGroups = () => {
+var getGroups = async () => {
 
-    fetch('status/status.json?' + Math.random() + '=' + Math.random())
-        .then((response) => response.json())
-        .then((status) => {
-            statusInfo.innerHTML = `Completado: ${Math.floor((status.absoluteComputed / (status.running.of * status.comparing.of)) * 100)}%
-                                    Recorriendo ${status.running.current} 
-                                    de ${status.running.of} 
-                                    comparando con ${status.comparing.current} 
-                                    de ${status.comparing.of}`
-            cantAnalizadas = status.comparing.of * status.running.of
-        }
+    return await fetch(conf.urlBackend + 'groups')
+        .then((res) => res.json())
+        
+}
 
-        )
+var updateGroupsSelects = async () => {
+
+    const gropus = await getGroups();
+    
+    const storageA = document.getElementById("storageA")
+    const storageB = document.getElementById("storageB")
+
+    gropus.forEach(g=>{
+        const optA = document.createElement("option");
+        optA.value = g.group;
+        optA.textContent = g.group;
+
+        const optB = document.createElement("option");
+        optB.value = g.group;
+        optB.textContent = g.group;
+        
+        storageA.appendChild(optA);
+        storageB.appendChild(optB);
+    })
 
 }
