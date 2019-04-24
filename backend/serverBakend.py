@@ -4,14 +4,13 @@ from flask_restful import Resource, Api
 from flask_cors import CORS
 from json import dumps
 import json 
-# from flask.ext.jsonpify import jsonify
+from datetime import datetime, date, time, timedelta
+
 # from matchList import *
+from fastBatch import *
 from download import *
 from match import *
-from fastBatch import *
 from getGroups import *
-from datetime import datetime, date, time, timedelta
-import urllib
 
 app = Flask(__name__)
 api = Api(app)
