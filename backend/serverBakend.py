@@ -6,8 +6,8 @@ from json import dumps
 import json 
 from datetime import datetime, date, time, timedelta
 
-from matchList import *
-# from fastBatch import *
+# from matchList import *
+from fastBatch import *
 from download import *
 from match import *
 from getGroups import *
