@@ -9,4 +9,8 @@ frontend/js/conf.js
 /frontend/status/status.json
 *.pyc
 frontend/js/conf.js
-frontend/storage/*
+frontend/storage/originals-prueba-02001/*
+frontend/storage/suspected-prueba-02001/*
+frontend/storage/suspected-prueba_0001/*
+frontend/storage/suspected-prueba_0002/*
+frontend/storage/suspected-prueba_0003/*
