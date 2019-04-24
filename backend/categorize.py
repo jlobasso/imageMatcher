@@ -55,7 +55,13 @@ def categorize(collection):
           predictionsWeight[str(decoded[0][0][1])] = predictionsWeight[str(decoded[0][0][1])] + 1
 
     print(predictionsWeight) 
-    db.groupCategories.insert({'group':collection,'predictionsWeight':predictionsWeight}, w=0)       
+
+    predictionsWeight = sorted(predictionsWeight.items(), key=lambda kv: kv[1], reverse=True)
+
+    for i in range(len(predictionsWeight)): 
+         predictionsWeight[i] = {predictionsWeight[i][0]:predictionsWeight[i][1]}
+
+    db.groupCategories.insert({'group':collection,'total': totalAmountToAnalize,'predictionsWeight':predictionsWeight}, w=0)       
     end = time.time()
     eachImageTime = (end - start)/totalAmountToAnalize 
     print("Tiempo total (segundos): ", end - start)
