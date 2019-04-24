@@ -44,17 +44,10 @@ submit.addEventListener("click", async () => {
         getStatus()
     }, 1000);
 
-
-    // let id = 0;
-    // var imagenes = [];
-
-    // /** OJO QUE ESTOY RECORTANDO EL ARRAY!!!! */
-    // imagenes = imagenes.slice(0, imagenes.length);
-
-    // cantImagesToCompare = imagenes.length;
+    let process = document.getElementById("process").value
 
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", conf.urlBackend+'process', true);
+    xhr.open("POST", conf.urlBackend+process, true);
 
     //Send the proper header information along with the request
     // xhr.setRequestHeader("Content-Type", "application/json");
@@ -71,7 +64,6 @@ submit.addEventListener("click", async () => {
     }
 
     let minMatchCount = +document.getElementById("min-match-count").value;
-    // let scale = +document.getElementById("scale").value;
     let sensibility = +document.getElementById("sensibility").value / 100;
     var minPercentMatch = +document.getElementById("min-percent-match").value;
     let storageA = document.getElementById("storageA").value
