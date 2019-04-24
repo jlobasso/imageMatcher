@@ -12,7 +12,7 @@ config.read('conf.ini')
 
 conn = MongoClient()
 db = conn.imageMatcher
-def match(minMatchCount, sensibility, minPercentMatch, storageA, storageB):
+def matchSift(minMatchCount, sensibility, minPercentMatch, storageA, storageB):
     
     imagesA = db[storageA].find()
     pathA = config['paths']['storage-full-path']+storageA+'/'
@@ -30,7 +30,6 @@ def match(minMatchCount, sensibility, minPercentMatch, storageA, storageB):
     search_params = dict(checks=50)
     flann = cv2.FlannBasedMatcher(index_params, search_params)
     sift = cv2.xfeatures2d.SIFT_create()
-    # orb = cv2.ORB_create()
 
     if lenA == 0:
         return {'matches': [], 'imagenes1': 0, 'imagenes2': 0, "status": "No hay imagenes en "+pathA}
@@ -38,22 +37,16 @@ def match(minMatchCount, sensibility, minPercentMatch, storageA, storageB):
         return {'matches': [], 'imagenes1': 0, 'imagenes2': 0, "status": "No hay imagenes en "+pathB}    
  
     for imgA in imagesA:
-        print('AAAA')
         bestMatches = []        
         imageA = cv2.imread(pathA+imgA['imageName'], 0)
-        kp1, des1 = sift.detectAndCompute(imageA, None)
-
-        # kp1 = orb.detect(imageA,None)
-        # kp1, des1 = orb.compute(imageA, kp1)        
+        kp1, des1 = sift.detectAndCompute(imageA, None)   
 
         # recorre las imagenes originales del repo local
         imagesB = db[storageB].find()
         for imgB in imagesB:
-            print('B')
             # print(imgB['imageName'].encode("ascii", "ignore").decode("ascii"))
             kInageComputed = kInageComputed + 1
             
-            # print("recorriendo "+str(x+1)+" de "+str(len(images))+ " comparando con "+str(y+1)+" de "+str(len2))
             F = open(config['paths']['status-path']+"status.json","w+")
 
             status = {
@@ -73,10 +66,6 @@ def match(minMatchCount, sensibility, minPercentMatch, storageA, storageB):
             imageB = cv2.imread(pathB+imgB['imageName'], 0)                              
             kp2, des2 = sift.detectAndCompute(imageB, None)
 
-            # kp2 = orb.detect(imageB,None)
-            # kp2, des2 = orb.compute(imageB, kp2)
-
-            # bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
             try:
                 # matches = bf.match(des1,des2)     
                 matches = flann.knnMatch(des1, des2, k=2)           
@@ -85,12 +74,6 @@ def match(minMatchCount, sensibility, minPercentMatch, storageA, storageB):
                 print(imgA['imageName'].encode("ascii", "ignore").decode("ascii"))
                 print(imgB['imageName'].encode("ascii", "ignore").decode("ascii"))                
                   
-
-            # good = []
-            # for m in matches:
-            #     if m.distance < sensibility*100:
-            #         good.append(m)
-
             good = []
             for m, n in matches:
                 if m.distance < sensibility*n.distance:
