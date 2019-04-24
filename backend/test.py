@@ -60,14 +60,7 @@ a = {
         }
     }
 
-# def extract_time(json):
-#     try:
+for attr, value in k.__dict__.items():
+        print(attr, value)
 
-#         return int(json)
-#     except KeyError:
-#         return 0
-
-# # lines.sort() is more efficient than lines = lines.sorted()
-# sorted = a['predictionsWeight'].sort(key=extract_time, reverse=True)
-
-print(a['predictionsWeight'])
+# print(a['predictionsWeight'])
