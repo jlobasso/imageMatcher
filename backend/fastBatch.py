@@ -2,8 +2,6 @@ import numpy as np
 import cv2
 from matplotlib import pyplot as plt
 import matplotlib.image as mpimg
-import urllib.request
-from function.searchRepo import * 
 from json import dumps
 import json
 from pymongo import MongoClient
@@ -14,69 +12,74 @@ config.read('conf.ini')
 
 conn = MongoClient()
 db = conn.imageMatcher
-
-baseForMatched = 'download'
-
-def url_to_image(url):
-    resp = urllib.request.urlopen(url)
-    image = np.asarray(bytearray(resp.read()), dtype="uint8")
-    image = cv2.imdecode(image, cv2.IMREAD_COLOR)
-    return image
    
-def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCategory):
-    images2 = getImages(compareCategory)
-    images = getImages(baseForMatched)
-    len2 = len(images2)
+def match(minMatchCount, sensibility, minPercentMatch, storageA, storageB):
+    
+    imagesA = db[storageA].find()
+    pathA = config['paths']['storage-full-path']+storageA+'/'
+
+    imagesB = db[storageB].find()
+    pathB = config['paths']['storage-full-path']+storageB+'/'
+     
+    lenA = imagesA.count()    
+    lenB = imagesB.count()
+
     globalMatches = []
-
     kInageComputed = 0
-
     orb = cv2.ORB_create()
 
-    if len(images) == 0:
-        return {'matches': [], 'imagenes1': 0, 'imagenes2': 0, "status": "No hay imagenes en "+config['paths']['storage-path']+"/download/"}
-    if len(images2) == 0:
-        return {'matches': [], 'imagenes1': 0, 'imagenes2': 0, "status": "No hay imagenes en la carpeta seleccionada"}    
+    if lenA == 0:
+        return {'matches': [], 'imagenes1': 0, 'imagenes2': 0, "status": "No hay imagenes en "+pathA}
+    if lenB == 0:
+        return {'matches': [], 'imagenes1': 0, 'imagenes2': 0, "status": "No hay imagenes en "+pathB}    
+ 
+    for imgA in imagesA:
+        print('AAAA')
+        # print(imgA['imageName'].encode("ascii", "ignore").decode("ascii"))
+        bestMatches = []        
+        imageA = cv2.imread(pathA+imgA['imageName'], 0)
 
-    for x in range(0, len(images)):
-        bestMatches = []
-        
-        # img1 = url_to_image(images[x]['image'])
-        img1 = cv2.imread(images[x], 0)
-
-        kp1 = orb.detect(img1,None)
-        kp1, des1 = orb.compute(img1, kp1)
+        kp1 = orb.detect(imageA,None)
+        kp1, des1 = orb.compute(imageA, kp1)
 
         # recorre las imagenes originales del repo local
-        for y in range(0, len2):
-
+        imagesB = db[storageB].find()
+        
+        for imgB in imagesB:
+            print('B')
+            # print(imgB['imageName'].encode("ascii", "ignore").decode("ascii"))
             kInageComputed = kInageComputed + 1
             
-            print("recorriendo "+str(x+1)+" de "+str(len(images))+ " comparando con "+str(y+1)+" de "+str(len2))
-            F = open(config['paths']['frontend-path']+"status/status.json","w+")
+            # print("recorriendo "+str(x+1)+" de "+str(len(images))+ " comparando con "+str(y+1)+" de "+str(len2))
+            F = open(config['paths']['status-path']+"status.json","w+")
 
             status = {
                         "absoluteComputed": str(kInageComputed),
                         "running":{
-                                    "current":str(x+1), 
-                                    "of":str(len(images))
+                                    "current":str(1), 
+                                    "of":str(lenA)
                                     },
                         "comparing":{
-                                    "current":str(y+1), 
-                                    "of":str(len2)
+                                    "current":str(1), 
+                                    "of":str(lenB)
                                     }                     
                     }            
             F.write(json.dumps(status))
             F.close()
 
-            img2 = cv2.imread(images2[y], 0)
+            imageB = cv2.imread(pathB+imgB['imageName'], 0)
 
-            kp2 = orb.detect(img2,None)
-            kp2, des2 = orb.compute(img2, kp2)
+            kp2 = orb.detect(imageB,None)
+            kp2, des2 = orb.compute(imageB, kp2)
 
             bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
-
-            matches = bf.match(des1,des2)
+            try:
+                matches = bf.match(des1,des2)                
+            except:
+                break
+                print(imgA['imageName'].encode("ascii", "ignore").decode("ascii"))
+                print(imgB['imageName'].encode("ascii", "ignore").decode("ascii"))                
+                  
 
             # Sort them in the order of their distance.
             matches = sorted(matches, key = lambda x:x.distance)
@@ -86,27 +89,29 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
                 if m.distance < sensibility*100:
                         good.append(m)
             
-            cleanImg = images[x].split("/")
-            searchImgDb = cleanImg[len(cleanImg)-1]
-            searchImgDb = searchImgDb.replace(".jpg", "")
+            # cleanImg = images[x].split("/")
+            # searchImgDb = cleanImg[len(cleanImg)-1]
+            # searchImgDb = searchImgDb.replace(".jpg", "")
             
-            searchImgRepo = config['paths']['storage-path']+baseForMatched+"/"+cleanImg[len(cleanImg)-1]
+            # searchImgRepo = config['paths']['storage-path']+storageA+"/"+cleanImg[len(cleanImg)-1]
             
-            cleanImg2 = images2[y].split("/")
-            ImgRepoOrigin = config['paths']['storage-path']+compareCategory+"/"+cleanImg2[len(cleanImg2)-1]
+            # cleanImg2 = images2[y].split("/")
+            # ImgRepoOrigin = config['paths']['storage-path']+storageB+"/"+cleanImg2[len(cleanImg2)-1]
 
-            dataDB = db.download_live_search.find({'imageId':str(searchImgDb)},{'_id':0,'title':1,'articleId':1})
+            # dataDB = db[storageB].find({'imageId':str(searchImgDb)},{'_id':0,'title':1,'articleId':1})
                       
             if float(len(good)/minMatchCount*100) > float(minPercentMatch):
                 bestMatches.append(
                     {
-                        'article_id': str(dataDB[0]['articleId']),
-                        'title': str(dataDB[0]['title']),
-                        # 'article_id': str(images[x]['id']),
-                        # 'image_url': str(images[x]['image']),  
-                        'image_url': str(searchImgRepo), 
+                        'article_id_a': imgA['articleId'],
+                        'title_a': imgA['title'],
+                        'image_path_a': config['paths']['storage-path']+storageA+'/'+imgA['imageName'], 
+                        'image_name_a': imgA['imageName'], 
+                        'article_id_b': imgB['articleId'],
+                        'title_b': imgB['title'],
+                        'image_path_b': config['paths']['storage-path']+storageB+'/'+imgB['imageName'],
+                        'image_name_b': imgB['imageName'], 
                         'percentage': str(len(good)/minMatchCount*100),
-                        'image_repo': str(ImgRepoOrigin), 
 
                     })
 
@@ -121,8 +126,7 @@ def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCat
             bestMatches.sort(key=extract, reverse=True)
             
         if len(bestMatches) > 0:
-            # print(bestMatches)
             globalMatches.append(bestMatches)
 
-    return {'matches': globalMatches, 'imagenes1': len(images), 'imagenes2': len2, "status":"OK"}
+    return {'matches': globalMatches, 'imagenesA': lenA, 'imagenesB': lenB, "status":"OK"}
 

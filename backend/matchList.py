@@ -2,29 +2,25 @@ import numpy as np
 import cv2
 from matplotlib import pyplot as plt
 import matplotlib.image as mpimg
-import urllib.request
 from function.searchRepo import * 
-from json import dumps
 import json
 from pymongo import MongoClient
+import configparser
+
+config = configparser.ConfigParser()
+config.read('conf.ini')
 
 conn = MongoClient()
-
 db = conn.imageMatcher
 
-def url_to_image(url):
-    resp = urllib.request.urlopen(url)
-    image = np.asarray(bytearray(resp.read()), dtype="uint8")
-    image = cv2.imdecode(image, cv2.IMREAD_COLOR)
-    return image
+# baseForMatched = 'download'
 
-def match(images, minMatchCount, scale, sensibility, minPercentMatch, compareCategory):
+def match(images, minMatchCount, scale, sensibility, minPercentMatch, storageA, storageB):
    
-    images2 = getImages(compareCategory)
-    images = getImages('download')
+    images = getImages(config['paths']['storage-path']+storageA)
+    images2 = getImages(config['paths']['storage-path']+storageB)
     len2 = len(images2)
     globalMatches = []
-
     kInageComputed = 0
     FLANN_INDEX_KDTREE = 0
     index_params = dict(algorithm=FLANN_INDEX_KDTREE, trees=5)

@@ -34,7 +34,7 @@ class Process(Resource):
         data = json.loads(request.data)
         
         # if str(data['min_match_count'] ) != "":
-        result = match(data['imagenes'], data['min_match_count'], data['scale'], data['sensibility'], data['min_percent_match'], data['compare_category'])
+        result = match(data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'])
         return result, 200, {'Content-Type':'application/json'}
         
         
