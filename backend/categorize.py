@@ -12,7 +12,7 @@ import configparser
 
 config = configparser.ConfigParser()
 config.read('conf.ini')
-start = time.time()
+
 
 # process an image to be mobilenet friendly
 def process_image(img_path,size = 224):
@@ -25,6 +25,7 @@ def process_image(img_path,size = 224):
 model = MobileNetV2(weights='imagenet')
 
 def categorize(collection):
+    start = time.time()
     conn = MongoClient()
     db = conn.imageMatcher
     images = db[collection].find({ 'downloaded': True, 'categorized': False })

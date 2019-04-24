@@ -1,15 +1,15 @@
-const downloadOriginals = document.getElementById("download-originals")
-const downloadSuspected = document.getElementById("download-suspected")
+const downloadButton = document.getElementById("download")
 
-downloadOriginals.addEventListener("click", () => download("originals"))
-downloadSuspected.addEventListener("click", () => download("suspected"))
+downloadButton.addEventListener("click", () => download())
 
-var download = async (kindOfStorage) => {
+const download = async () => {
 
-    const storageName = document.querySelectorAll(`.${kindOfStorage} #storage-name-${kindOfStorage}`)[0].value
-    const storageData = JSON.parse(document.querySelectorAll(`.${kindOfStorage} #data-${kindOfStorage}`)[0].value)
+    kindOfStorage = document.querySelector('#kindOfStorage input[name="kindOfStorage"]:checked').value;
 
-   console.log(`.${kindOfStorage} #data-${kindOfStorage}`)
+    const storageName = document.querySelectorAll(`.storage #storage-name`)[0].value
+    const storageData = JSON.parse(document.querySelectorAll(`.storage #data`)[0].value)
+
+   console.log(`.storage #data`)
 
     var images = [];
     storageData.forEach(a => {
