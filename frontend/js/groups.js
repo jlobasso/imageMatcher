@@ -2,6 +2,7 @@ const storageA = document.getElementById("storageA")
 const storageB = document.getElementById("storageB")
 const categories = document.getElementById("category")
 const totalImagesC = document.getElementById("totalImages")
+const totalCategoriesSelectedC = document.getElementById("totalCategoriesSelected")
 
 var consolidatedGroups = [];
 
@@ -58,6 +59,12 @@ storageB.addEventListener('change', () => {
     calculateIntersectionCategories()
 })
 
+categories.addEventListener('change', ()=>{
+    let selected = document.querySelectorAll('#category option:checked');
+    let sum = Array.from(selected).reduce((a,el) => a + parseInt(el.getAttribute('quantity')),0);
+    totalCategoriesSelectedC.innerHTML = "Total seleccionado: "+sum;
+})
+
 const calculateIntersectionCategories = () => {
     const stgA = storageA.options[storageA.selectedIndex].value;
     const stgB = storageB.options[storageB.selectedIndex].value;
@@ -78,7 +85,7 @@ const calculateIntersectionCategories = () => {
                     if (map.includes(c)) {
                         let q = parseInt(cant[c]) + parseInt(p[c])
                         totalImages += q;
-                        intersectedCategories.push(c+ ": " + q);
+                        intersectedCategories.push({"quantity":q,"value": c, "text":c+ ": " + q});
                     }
                     else {
                         map.push(c);
@@ -99,7 +106,7 @@ const calculateIntersectionCategories = () => {
                     if (map.includes(c)) {
                         let q = parseInt(cant[c]) + parseInt(p[c]);
                         totalImages += q;
-                        intersectedCategories.push(c+ ": " + q);
+                        intersectedCategories.push({"quantity":q,"value": c, "text":c+ ": " + q});
                     }
                     else {
                         map.push(c);
@@ -136,8 +143,9 @@ const updateSelectIntersectedCategories = (intersectedCategories) => {
     intersectedCategories.forEach(g => {
 
         const opt = document.createElement("option");
-        opt.value = g;
-        opt.textContent = g
+        opt.value = g.value;
+        opt.textContent = g.text
+        opt.setAttribute('quantity', g.quantity);
 
         categories.appendChild(opt);
     })
