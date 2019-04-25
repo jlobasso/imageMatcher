@@ -22,48 +22,57 @@
     <div id="main-container" class="wrapper w-container"><img src="images/favicon-256.png" width="100" alt="" class="image">
       <h1 class="heading">1. Datos por analizar</h1>
 
-    
+
       <div class="w-form storage">
-          
+
         <fieldset id="kindOfStorage">
           <label for="suspected-group">Carga Repo Sospechoso</label>
           <input id="suspected-group" type="radio" value="suspected" checked name="kindOfStorage">
           <label for="original-group">Carga repo Original</label>
           <input id="original-group" type="radio" value="originals" name="kindOfStorage">
         </fieldset>
-    
+
         <label for="data">JSON con datos para la descarga de imagenes a verificar</label>
         <textarea id="data" name="json" data-name="json" required="" row="10" class="textarea w-input">
-            
+
 
           </textarea>
         <div>
           <label for="storage-name">Nombre de Storage</label>
-          <input id="storage-name" type="text" class="text-field-storage  w-input" maxlength="500" required=""
-            value="">
+          <input id="storage-name" type="text" class="text-field-storage  w-input" maxlength="500" required="" value="">
         </div>
         <div>
           <input id="download" type="submit" value="DOWNLOAD" data-wait="Download..." class="download-button w-buttonDownload"></form>
         </div>
       </div>
       <div>
-        <div class="input-wraper">
-          <label for="storageA">Storage A</label>
-          <select id="storageA">
-              <option>Seleccione...</option>
-          </select>
-        </div>
-        <div class="input-wraper">
-          <label for="storageB">Storage B</label>
-          <select id="storageB">
-              <option>Seleccione...</option>
-          </select>
-        </div>
-        <div class="input-wraper">
-          <label for="category">Categoria</label>
-          <select id="category"> 
-              <option>Seleccione...</option>           
-          </select>
+        <div class="group-input-wraper">
+          <div class="input-wraper">
+            <label for="storageA">Storage A</label>
+            <select id="storageA">
+              <option value="0">Seleccione...</option>
+            </select>
+          </div>
+          <div class="input-wraper">
+            <label for="storageB">Storage B</label>
+            <select id="storageB">
+              <option value="0">Seleccione...</option>
+            </select>
+          </div>
+          <div class="input-wraper">
+            <label for="category">Categorias</label>
+            <select multiple size=0 id="category">
+              <option value="0">Seleccione...</option>
+            </select>
+            <div id="totalImages">0</div>
+          </div>
+          <div class="input-wraper">
+            <label for="process">Método</label>
+            <select id="process">
+              <option selected="true" value="process-fast">FAST</option>
+              <option value="process-sift">SIFT</option>
+            </select>
+          </div>
         </div>
       </div>
       <div>

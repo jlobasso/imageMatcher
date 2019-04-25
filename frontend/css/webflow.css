@@ -1875,3 +1875,8 @@ textarea.w-select {
   clear: both;
   text-align: center;
 }
+
+.group-input-wraper{
+  min-height: 148px;
+  display: flex;
+}
