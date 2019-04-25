@@ -56,9 +56,14 @@ class Download(Resource):
         data = json.loads(request.data)
         insertImage(data)
 
-class Match(Resource):
+class MatchFast(Resource):
     def get(self):        
-        return uniqueMatch(request.args)
+        return uniqueMatchFast(request.args)
+
+
+class MatchSift(Resource):
+    def get(self):        
+        return uniqueMatchSift(request.args)
 
 class Groups(Resource):
     def get(self):

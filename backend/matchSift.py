@@ -7,7 +7,7 @@ import configparser
 config = configparser.ConfigParser()
 config.read('conf.ini')
 
-def uniqueMatch(params):
+def uniqueMatchSift(params):
 
     img1 = cv2.imread(config['paths']['frontend-path']+params.get('url1'), 0)
     img2 = cv2.imread(config['paths']['frontend-path']+params.get('url2'), 0)

@@ -24,7 +24,7 @@ def process_image(img_path,size = 224):
 
 model = MobileNetV2(weights='imagenet')
 
-def categorize(collection):
+def categorize(collection, kindOfStorage):
     start = time.time()
     conn = MongoClient()
     db = conn.imageMatcher
@@ -61,7 +61,7 @@ def categorize(collection):
     for i in range(len(predictionsWeight)): 
          predictionsWeight[i] = {predictionsWeight[i][0]:predictionsWeight[i][1]}
 
-    db.groupCategories.insert({'group':collection,'total': totalAmountToAnalize,'predictionsWeight':predictionsWeight}, w=0)       
+    db.groupCategories.insert({'group':collection, 'kindOfStorage':kindOfStorage,'total': totalAmountToAnalize,'predictionsWeight':predictionsWeight}, w=0)       
     end = time.time()
     eachImageTime = (end - start)/totalAmountToAnalize 
     print("Tiempo total (segundos): ", end - start)

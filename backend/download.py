@@ -20,7 +20,7 @@ class NumpyEncoder(json.JSONEncoder):
             return obj.tolist()
         return json.JSONEncoder.default(self, obj)
 
-def downloadImage(collection):
+def downloadImage(collection, kindOfStorage):
 
     conn = MongoClient()
     db = conn.imageMatcher
@@ -50,13 +50,10 @@ def downloadImage(collection):
     elapsed = time.time() - now        
     print ('tiempo de descarga total de archivos: ',elapsed)
 
-    categorize(collection)
+    categorize(collection, kindOfStorage)
 
 
 def insertImage(data):   
-
-
-    # print(data)
 
     kindOfStorage = data['kindOfStorage'] 
     storageData = data['storageData']
@@ -95,7 +92,7 @@ def insertImage(data):
                 db[collection].insert(rec, w=0)
                 
 
-    downloadImage(collection)
+    downloadImage(collection, kindOfStorage)
 
 
 

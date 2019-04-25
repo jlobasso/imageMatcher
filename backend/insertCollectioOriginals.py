@@ -50,4 +50,4 @@ for imagePosition in images:
         db[collection].insert(rec)
 
 
-categorize(collection)
+categorize(collection, kindOfStorage)
