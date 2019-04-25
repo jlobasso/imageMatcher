@@ -1,6 +1,7 @@
 const storageA = document.getElementById("storageA")
 const storageB = document.getElementById("storageB")
 const categories = document.getElementById("category")
+const totalImagesC = document.getElementById("totalImages")
 
 var consolidatedGroups = [];
 
@@ -19,6 +20,16 @@ var updateGroupsSelects = async () => {
     
     storageA.innerHTML = "";
     storageB.innerHTML = "";
+
+    const optA0 = document.createElement("option");
+    optA0.value = 0;
+    optA0.textContent = "Seleccione...";
+    const optB0 = document.createElement("option");
+    optB0.value = 0;
+    optB0.textContent = "Seleccione...";
+        
+    storageA.appendChild(optA0);
+    storageB.appendChild(optB0);
 
     groups.forEach((g,i)=> {
 
@@ -51,9 +62,13 @@ const calculateIntersectionCategories = () => {
     const stgA = storageA.options[storageA.selectedIndex].value;
     const stgB = storageB.options[storageB.selectedIndex].value;
 
+    if(!stgA || !stgB) return;
+
+    totalImages = 0;
 
     intersectedCategories = [];
     map = [];
+    cant = {}
     consolidatedGroups.forEach((e, i) => {
 
         if (e.group === stgA) {
@@ -61,10 +76,14 @@ const calculateIntersectionCategories = () => {
             e.predictionsWeight.forEach(p => {
                 Object.keys(p).forEach((c, i) => {
                     if (map.includes(c)) {
-                        intersectedCategories.push(c);
+                        let q = parseInt(cant[c]) + parseInt(p[c])
+                        totalImages += q;
+                        intersectedCategories.push(c+ ": " + q);
                     }
                     else {
                         map.push(c);
+                        cant[c] = p[c]
+                        // console.log(p[c])
                     }
 
                 });
@@ -78,10 +97,13 @@ const calculateIntersectionCategories = () => {
             e.predictionsWeight.forEach(p => {
                 Object.keys(p).forEach((c, i) => {
                     if (map.includes(c)) {
-                        intersectedCategories.push(c);
+                        let q = parseInt(cant[c]) + parseInt(p[c]);
+                        totalImages += q;
+                        intersectedCategories.push(c+ ": " + q);
                     }
                     else {
                         map.push(c);
+                        cant[c] = p[c]
                     }
 
                 });
@@ -91,8 +113,8 @@ const calculateIntersectionCategories = () => {
         }
 
     })
-
-    updateSelectIntersectedCategories(intersectedCategories)
+        
+    updateSelectIntersectedCategories(intersectedCategories, totalImages)
 
 }
 
@@ -100,6 +122,16 @@ const calculateIntersectionCategories = () => {
 const updateSelectIntersectedCategories = (intersectedCategories) => {
 
     categories.innerHTML = "";
+    categories.size = intersectedCategories.length;
+    totalImagesC.innerHTML = "Total: "+totalImages
+    // if(!intersectedCategories.lenght){
+    //     const optC0 = document.createElement("option");
+    //     optC0.value = 0;
+    //     optC0.textContent = "Seleccione...";
+    
+    //     categories.appendChild(optC0);
+    // }
+
 
     intersectedCategories.forEach(g => {
 

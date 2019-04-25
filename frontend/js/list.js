@@ -68,13 +68,13 @@ submit.addEventListener("click", async () => {
     var minPercentMatch = +document.getElementById("min-percent-match").value;
     let storageA = document.getElementById("storageA").value
     let storageB = document.getElementById("storageB").value
-
+    
     data = {
         'min_match_count': minMatchCount,
         'sensibility': sensibility,
         'min_percent_match': minPercentMatch,
         "storageA": storageA,
-        "storageB": storageB
+        "storageB": storageB,
     };
 
     xhr.send(JSON.stringify(data));
