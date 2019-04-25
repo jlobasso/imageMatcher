@@ -12,12 +12,12 @@ config.read('conf.ini')
 
 conn = MongoClient()
 db = conn.imageMatcher
-def matchSift(minMatchCount, sensibility, minPercentMatch, storageA, storageB):
+def matchSift(minMatchCount, sensibility, minPercentMatch, storageA, storageB, categories):
     
-    imagesA = db[storageA].find()
+    imagesA = db[storageA].find({ 'category': {'$in': categories}})
     pathA = config['paths']['storage-full-path']+storageA+'/'
 
-    imagesB = db[storageB].find()
+    imagesB = db[storageB].find({ 'category': {'$in': categories}})
     pathB = config['paths']['storage-full-path']+storageB+'/'
      
     lenA = imagesA.count()    
@@ -42,7 +42,7 @@ def matchSift(minMatchCount, sensibility, minPercentMatch, storageA, storageB):
         kp1, des1 = sift.detectAndCompute(imageA, None)   
 
         # recorre las imagenes originales del repo local
-        imagesB = db[storageB].find()
+        imagesB = db[storageB].find({ 'category': {'$in': categories}})
         for imgB in imagesB:
             # print(imgB['imageName'].encode("ascii", "ignore").decode("ascii"))
             kInageComputed = kInageComputed + 1

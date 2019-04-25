@@ -30,7 +30,7 @@ class ProcessFast(Resource):
         data = json.loads(request.data)
         
         # if str(data['min_match_count'] ) != "":
-        result = match(data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'], data['categories'])
+        result = matchFast(data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'], data['categories'])
         return result, 200, {'Content-Type':'application/json'}
 
 class ProcessSift(Resource):
@@ -42,7 +42,7 @@ class ProcessSift(Resource):
         data = json.loads(request.data)
         
         # if str(data['min_match_count'] ) != "":
-        result = match(data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'], data['categories'])
+        result = matchSift(data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'], data['categories'])
         return result, 200, {'Content-Type':'application/json'}
         
         

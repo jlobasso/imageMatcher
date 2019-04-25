@@ -6,6 +6,9 @@ from json import dumps
 import json
 from pymongo import MongoClient
 import configparser
+import datetime
+
+
 
 config = configparser.ConfigParser()
 config.read('conf.ini')
@@ -13,8 +16,10 @@ config.read('conf.ini')
 conn = MongoClient()
 db = conn.imageMatcher
    
-def match(minMatchCount, sensibility, minPercentMatch, storageA, storageB, categories):
+def matchFast(minMatchCount, sensibility, minPercentMatch, storageA, storageB, categories):
     
+    timeA = datetime.datetime.now()
+
     imagesA = db[storageA].find({ 'category': {'$in': categories}})
 
     pathA = config['paths']['storage-full-path']+storageA+'/'
@@ -129,5 +134,14 @@ def match(minMatchCount, sensibility, minPercentMatch, storageA, storageB, categ
         if len(bestMatches) > 0:
             globalMatches.append(bestMatches)
 
-    return {'matches': globalMatches, 'imagenesA': lenA, 'imagenesB': lenB, "status":"OK"}
+    timeB = datetime.datetime.now()
+    delta = timeB - timeA 
+    milisecondsElapsed = int(delta.total_seconds() * 1000)
+
+    totalMatches = lenA * lenB
+
+    db.batchStats.insert({ "method":"fast", "totalMatches":totalMatches, "milisecondsElapsed": milisecondsElapsed, "oneMatch": milisecondsElapsed/totalMatches})      
+
+
+    return {'matches': globalMatches, 'imagenesA': lenA, 'imagenesB': lenB, "milisecondsElapsed":milisecondsElapsed, "status":"OK"}
 
