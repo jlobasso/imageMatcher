@@ -44,7 +44,7 @@ def match(minMatchCount, sensibility, minPercentMatch, storageA, storageB, categ
         kp1, des1 = orb.compute(imageA, kp1)
 
         # recorre las imagenes originales del repo local
-        imagesB = db[storageB].find()
+        imagesB = db[storageB].find({ 'category': {'$in': categories}})
         
         for imgB in imagesB:
             print('B')
