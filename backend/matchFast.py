@@ -1,11 +1,14 @@
 import numpy as np
 import cv2
 from matplotlib import pyplot as plt
-import urllib.request
+from pymongo import MongoClient
 import configparser
 
 config = configparser.ConfigParser()
 config.read('conf.ini')
+
+conn = MongoClient()
+db = conn.imageMatcher
 
 def uniqueMatchFast(params):
 

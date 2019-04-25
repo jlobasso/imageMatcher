@@ -37,12 +37,14 @@ def downloadImage(collection, kindOfStorage):
     for ximg in images:
 
         try:
-            archivoDescargar = urllib.request.urlopen(ximg['url'], timeout=10)
+            req = urllib.request.Request(ximg['url'])
+            req.add_header('User-Agent', 'Mozilla/5.0 (compatible; MSIE 10.0; Macintosh; Intel Mac OS X 10_7_3; Trident/6.0)')
+            archivoDescargar = urllib.request.urlopen(req, timeout=3)
             ficheroGuardar = open(newPath+'/'+ximg['imageName'],"wb")
             ficheroGuardar.write(archivoDescargar.read())
             ficheroGuardar.close()
         except urllib.request.URLError:
-            print("Salteamos la imagen y continuamos")
+            print("No se pudo descargar la imagen desde "+ximg['url'])
             continue
         
         db[collection].update({ "imageId" : ximg['imageId']  },{ "$set": { "downloaded" : True } })
@@ -50,7 +52,11 @@ def downloadImage(collection, kindOfStorage):
     elapsed = time.time() - now        
     print ('tiempo de descarga total de archivos: ',elapsed)
 
-    categorize(collection, kindOfStorage)
+    cantidad = db[collection].find({ "downloaded" : True } ).count()
+    if cantidad > 0:
+        categorize(collection, kindOfStorage)
+    else:
+        print("No se descargaron las imagenes en el storage")
 
 
 def insertImage(data):   

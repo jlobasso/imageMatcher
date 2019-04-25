@@ -34,7 +34,7 @@ def match(minMatchCount, sensibility, minPercentMatch, storageA, storageB):
         return {'matches': [], 'imagenes1': 0, 'imagenes2': 0, "status": "No hay imagenes en "+pathB}    
  
     for imgA in imagesA:
-        print('AAAA')
+        print('Storage A')
         # print(imgA['imageName'].encode("ascii", "ignore").decode("ascii"))
         bestMatches = []        
         imageA = cv2.imread(pathA+imgA['imageName'], 0)
@@ -46,7 +46,7 @@ def match(minMatchCount, sensibility, minPercentMatch, storageA, storageB):
         imagesB = db[storageB].find()
         
         for imgB in imagesB:
-            print('B')
+            print('Storage B')
             # print(imgB['imageName'].encode("ascii", "ignore").decode("ascii"))
             kInageComputed = kInageComputed + 1
             
