@@ -13,12 +13,13 @@ config.read('conf.ini')
 conn = MongoClient()
 db = conn.imageMatcher
    
-def match(minMatchCount, sensibility, minPercentMatch, storageA, storageB):
+def match(minMatchCount, sensibility, minPercentMatch, storageA, storageB, categories):
     
-    imagesA = db[storageA].find()
+    imagesA = db[storageA].find({ 'category': {'$in': categories}})
+
     pathA = config['paths']['storage-full-path']+storageA+'/'
 
-    imagesB = db[storageB].find()
+    imagesB = db[storageB].find({ 'category': {'$in': categories}})
     pathB = config['paths']['storage-full-path']+storageB+'/'
      
     lenA = imagesA.count()    
