@@ -140,10 +140,13 @@ drawResults = (data) => {
         let minMatchCount = +document.getElementById("min-match-count").value;
         let sensibility = +document.getElementById("sensibility").value / 100;
         var minPercentMatch = +document.getElementById("min-percent-match").value
+        let process = document.getElementById("process").value
+
 
         title.innerHTML = imgMatch.title_a;
 
-        var urlMmatch = `url1=${imgMatch.image_path_a}`
+        var urlMmatch = `match=${'match-'+process.split('-')[1]}`
+        urlMmatch += `&url1=${imgMatch.image_path_a}`
         urlMmatch += `&url2=${imgMatch.image_path_b}`
         urlMmatch += `&min_match_count=${minMatchCount}`
         urlMmatch += `&sensibility=${sensibility}`
@@ -154,6 +157,7 @@ drawResults = (data) => {
         matchLink.href = "match.html?" + urlMmatch
         matchLink.target = "_blank"
         match.appendChild(matchLink)
+        
         article.innerHTML = "ML ID: " + imgMatch.article_id_a;
 
         container.appendChild(title)
