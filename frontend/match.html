@@ -23,17 +23,7 @@
   <div class="mainwrapper">
   <div id="main-container" class="wrapper w-container"><img src="images/favicon-256.png" width="100" alt="" class="image">
     <h1 class="heading">Datos por analizar</h1>
-    <div class="input-wraper" style="width: 100%">
-      <label for="process">Tipo de Proceso</label>
-      <select       
-        id="process" 
-        class="text-field w-input" 
-        maxlength="256" 
-        width="100%" 
-      >
-        <option value="match-fast" selected>FAST</option>
-        <option value="match-sift">SIFT</option>
-      </select> 
+    <div class="input-wraper" style="width: 100%">      
       <label for="url1">URL 1</label>
       <input 
         id="url1" 
@@ -55,7 +45,21 @@
     </div>
     <br />
     <div>
-      <div class="input-wraper">
+        <div class="input-wraper">
+          <label for="process">Tipo de Proceso</label>
+          <select       
+            id="match" 
+            class="text-field w-input" 
+            maxlength="256" 
+            required="" 
+            value=0
+          >
+          >
+            <option value="match-fast">FAST</option>
+            <option value="match-sift">SIFT</option>
+          </select> 
+        </div>
+        <div class="input-wraper">
           <label for="min-match-count">Min match count</label>
           <input 
             id="min-match-count" 
@@ -89,7 +93,6 @@
           >
         </div>
       </div>  
-      <br />
     <div class="submitWrapper">
         <input id="submit" type="submit" value="ENVIAR" data-wait="Aguarde..." class="submit-button w-button"></form>
     </div>

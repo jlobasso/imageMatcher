@@ -1,15 +1,19 @@
 var url_string = window.location.href
 var url = new URL(url_string);
 
-var process = url.searchParams.get("process");
+
+var match = url.searchParams.get("match");
 var url1 = url.searchParams.get("url1");
 var url2 = url.searchParams.get("url2");
 var min_match_count = url.searchParams.get("min_match_count");
 var sensibility = url.searchParams.get("sensibility");
 var min_percent_match = url.searchParams.get("min_percent_match");
 
-var input_process = document.getElementById("process")
-input_process.value = process;
+var select_match = document.getElementById("match");
+
+[...select_match].forEach(o=>{if(o.value === match){o.selected = "true"}})
+
+select_match.value = match;
 
 var input_url1 = document.getElementById("url1")
 input_url1.value = url1;
@@ -41,7 +45,7 @@ submit.addEventListener("click", async () => {
 
 
     // fetch(conf.urlBackend+'match?' + Math.random() + '=' + Math.random() + "&" + urlMmatch)
-    fetch(conf.urlBackend+input_process.value+'?' + Math.random() + '=' + Math.random() + "&" + urlMmatch)
+    fetch(conf.urlBackend+select_match.value+'?' + Math.random() + '=' + Math.random() + "&" + urlMmatch)
         .then((response) => response.json())
         .then((result) => {
             console.log(result)
