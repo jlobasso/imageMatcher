@@ -9,6 +9,7 @@ from datetime import datetime, date, time, timedelta
 from matchList import *
 from matchSift import *
 from fastBatch import *
+from fastBatchStrictCategory import *
 from matchFast import *
 from download import *
 from getGroups import *
@@ -30,7 +31,7 @@ class ProcessFast(Resource):
         data = json.loads(request.data)
         
         # if str(data['min_match_count'] ) != "":
-        result = matchFast(data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'], data['categories'])
+        result = matchFastStrictCategory(data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'], data['categories'])
         return result, 200, {'Content-Type':'application/json'}
 
 class ProcessSift(Resource):
