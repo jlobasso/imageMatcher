@@ -16,7 +16,7 @@ config.read('conf.ini')
 conn = MongoClient()
 db = conn.imageMatcher
    
-def matchFastStrictCategory(minMatchCount, sensibility, minPercentMatch, storageA, storageB, categories):
+def matchFastStrict(minMatchCount, sensibility, minPercentMatch, storageA, storageB, categories):
     
     timeA = datetime.datetime.now()
     pathA = config['paths']['storage-full-path']+storageA+'/'
@@ -132,13 +132,14 @@ def matchFastStrictCategory(minMatchCount, sensibility, minPercentMatch, storage
                                 'article_id_a': categoriesA['images'][idxA]['articleId'],
                                 'title_a': categoriesA['images'][idxA]['title'],
                                 'image_path_a': config['paths']['storage-path']+storageA+'/'+categoriesA['images'][idxA]['imageName'], 
+                                'category_a': categoriesA['_id'],
                                 'image_name_a': categoriesA['images'][idxA]['imageName'], 
                                 'article_id_b': categoriesB['images'][idxB]['articleId'],
                                 'title_b': categoriesB['images'][idxB]['title'],
                                 'image_path_b': config['paths']['storage-path']+storageB+'/'+categoriesB['images'][idxB]['imageName'],
                                 'image_name_b': categoriesB['images'][idxB]['imageName'], 
+                                'category_b': categoriesB['_id'],
                                 'percentage': str(len(good)/minMatchCount*100),
-
                             })
 
                     imagenRecorridas = +1

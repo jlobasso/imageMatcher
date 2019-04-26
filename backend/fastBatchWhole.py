@@ -16,7 +16,7 @@ config.read('conf.ini')
 conn = MongoClient()
 db = conn.imageMatcher
    
-def matchFast(minMatchCount, sensibility, minPercentMatch, storageA, storageB, categories):
+def matchFastWhole(minMatchCount, sensibility, minPercentMatch, storageA, storageB, categories):
     
     timeA = datetime.datetime.now()
 
@@ -112,6 +112,8 @@ def matchFast(minMatchCount, sensibility, minPercentMatch, storageA, storageB, c
                         'article_id_a': imgA['articleId'],
                         'title_a': imgA['title'],
                         'image_path_a': config['paths']['storage-path']+storageA+'/'+imgA['imageName'], 
+                        'category_a': imgA['category'],
+                        'category_b': imgB['category'],
                         'image_name_a': imgA['imageName'], 
                         'article_id_b': imgB['articleId'],
                         'title_b': imgB['title'],

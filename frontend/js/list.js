@@ -40,14 +40,19 @@ submit.addEventListener("click", async () => {
     const statusContainer = document.getElementById("status-container")
     statusContainer.style.display = "block"
 
+    
     var statusInterval = setInterval(() => {
         getStatus()
     }, 1000);
-
+    
+    let categoryStrict = document.getElementById("categoryStrict").value
     let process = document.getElementById("process").value
+ 
+    kindOfBatchProcess = process+"-"+categoryStrict;
+
 
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", conf.urlBackend+process, true);
+    xhr.open("POST", conf.urlBackend+kindOfBatchProcess, true);
 
     //Send the proper header information along with the request
     // xhr.setRequestHeader("Content-Type", "application/json");
@@ -174,20 +179,27 @@ drawResults = (data) => {
 
         var title1 = document.createElement("div");
         var title2 = document.createElement("div");
+        var category1 = document.createElement("div");
+        var category2 = document.createElement("div");
 
         title1.innerHTML = "Imagen del anuncio: <br>" + imgMatch.image_name_a;
-
+        category1.innerHTML = "Categoria: " + imgMatch.category_a;
+        
         img1.src = imgMatch.image_path_a
         col1.appendChild(img1)
         col1.appendChild(title1)
+        col1.appendChild(category1)
         row.appendChild(col1)
-
+        
         title2.innerHTML = "Imagen catálogo marca: <br>" + imgMatch.image_name_b;
+        category2.innerHTML = "Categoria: " + imgMatch.category_b;
 
         img2.src = imgMatch.image_path_b
         col2.appendChild(img2)
         col2.appendChild(title2)
+        col2.appendChild(category2)
         row.appendChild(col2)
+
 
         var percentage = document.createElement("div");
         percentage.innerHTML = parseFloat(imgMatch.percentage).toFixed(2) + "%";

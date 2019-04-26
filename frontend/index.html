@@ -64,9 +64,20 @@
             <select multiple size=0 id="category">
               <option value="0">Seleccione...</option>
             </select>
-            <div id="totalImages">Total: 0</div>
+            <div id="totalImages">Total imagenes: 0</div>
             <div id="totalCategoriesSelected">Total seleccionado: 0</div>
-            <div id="totalMatchesSelected">Total matcheos a realizar: 0</div>
+            <div id="totalMatchesSelected">Total matcheos a realizar total: 0</div>
+            <div id="totalMatchesSelectedCategoryStrict">Total matcheos a realizar restringiendo categoria: 0</div>
+          </div>
+
+        </div>
+        <div class="group-input-wraper">
+          <div class="input-wraper">
+            <label for="categoryStrict">Concordancia de categoria</label>
+            <select id="categoryStrict">
+              <option value="strict" selected="true">Matchea categoría con categoría</option>
+              <option value="whole">Matchea categoría todas con todas</option>
+            </select>
           </div>
           <div class="input-wraper">
             <label for="process">Método</label>

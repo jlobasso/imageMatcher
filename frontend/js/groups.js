@@ -4,6 +4,9 @@ const categories = document.getElementById("category")
 const totalImagesC = document.getElementById("totalImages")
 const totalCategoriesSelectedC = document.getElementById("totalCategoriesSelected")
 const totalMatchesSelected = document.getElementById("totalMatchesSelected")
+const totalMatchesSelectedCategoryStrict = document.getElementById("totalMatchesSelectedCategoryStrict")
+
+
 
 var consolidatedGroups = [];
 
@@ -63,13 +66,49 @@ storageB.addEventListener('change', () => {
 categories.addEventListener('change', () => {
     let selected = document.querySelectorAll('#category option:checked');
     let sum = Array.from(selected).reduce((a, el) => a + parseInt(el.getAttribute('quantity')), 0);
-    
+
 
     const stgA = storageA.options[storageA.selectedIndex].value;
     const stgB = storageB.options[storageB.selectedIndex].value;
 
     let cantImgCatA = 0;
     let cantImgCatB = 0;
+
+    let catSelected = [...selected].map(o => o.value);
+
+    let weight = {}
+    let totalWeight = 0;
+
+    consolidatedGroups.forEach(c => {
+
+        if (c.group === stgA) {
+            c.predictionsWeight.forEach(it => {
+                for (let category in it) {
+                    if(catSelected.includes(category)){
+                        weight[category] = parseInt(it[category])
+                    }
+                }
+
+            })
+        }
+    })
+
+    consolidatedGroups.forEach(c => {
+
+        if (c.group === stgB) {
+            c.predictionsWeight.forEach(it => {
+                for (let category in it) {
+                    if(catSelected.includes(category)){
+                        weight[category] *= parseInt(it[category])
+                        totalWeight += weight[category];
+                    }
+                }
+
+            })
+        }
+    })
+
+    totalMatchesSelectedCategoryStrict.innerHTML = "Total matcheos a realizar restringiendo categoria: "+totalWeight;
 
     Array.from(selected).forEach((ccc) => {
 
@@ -97,7 +136,7 @@ categories.addEventListener('change', () => {
 
     })
 
-    totalMatchesSelected.innerHTML = "Total matcheos a realizar: "+cantImgCatA*cantImgCatB
+    totalMatchesSelected.innerHTML = "Total matcheos a realizar: " + cantImgCatA * cantImgCatB
 
     totalCategoriesSelectedC.innerHTML = `Total seleccionado: ${sum} (${cantImgCatA},${cantImgCatB})`;
 

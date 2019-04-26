@@ -8,8 +8,8 @@ from datetime import datetime, date, time, timedelta
 
 from matchList import *
 from matchSift import *
-from fastBatch import *
-from fastBatchStrictCategory import *
+from fastBatchWhole import *
+from fastBatchStrict import *
 from matchFast import *
 from download import *
 from getGroups import *
@@ -22,19 +22,32 @@ class Health(Resource):
     def get(self):
         return "Tranki, anda ;)", 200, {'Content-Type':'application/json'}
 
-class ProcessFast(Resource):
+class ProcessFastStrict(Resource):
     def post(self):        
         print("----------------------------------------")
-        print("MATCH PROCESS") 
+        print("MATCH PROCESS FAST STRICT") 
         print("----------------------------------------")
         
         data = json.loads(request.data)
         
         # if str(data['min_match_count'] ) != "":
-        result = matchFastStrictCategory(data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'], data['categories'])
+        result = matchFastStrict(data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'], data['categories'])
         return result, 200, {'Content-Type':'application/json'}
 
-class ProcessSift(Resource):
+class ProcessFastWhole(Resource):
+    def post(self):        
+        print("----------------------------------------")
+        print("MATCH PROCESS FAST STRICT") 
+        print("----------------------------------------")
+        
+        data = json.loads(request.data)
+        
+        # if str(data['min_match_count'] ) != "":
+        result = matchFastWhole(data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'], data['categories'])
+        return result, 200, {'Content-Type':'application/json'}
+
+
+class ProcessSiftStrict(Resource):
     def post(self):        
         print("----------------------------------------")
         print("MATCH PROCESS SIFT") 
@@ -43,7 +56,19 @@ class ProcessSift(Resource):
         data = json.loads(request.data)
         
         # if str(data['min_match_count'] ) != "":
-        result = matchSift(data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'], data['categories'])
+        result = matchSiftWhole(data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'], data['categories'])
+        return result, 200, {'Content-Type':'application/json'}
+
+class ProcessSiftWhole(Resource):
+    def post(self):        
+        print("----------------------------------------")
+        print("MATCH PROCESS SIFT") 
+        print("----------------------------------------")
+        
+        data = json.loads(request.data)
+        
+        # if str(data['min_match_count'] ) != "":
+        result = matchSiftWhole(data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'], data['categories'])
         return result, 200, {'Content-Type':'application/json'}
         
         
@@ -79,8 +104,12 @@ class Test(Resource):
         return testFunc()
 
 
-api.add_resource(ProcessFast, '/process-fast') 
-api.add_resource(ProcessSift, '/process-sift') 
+api.add_resource(ProcessFastStrict, '/process-fast-strict')
+api.add_resource(ProcessFastWhole, '/process-fast-whole')
+
+api.add_resource(ProcessSiftStrict, '/process-sift-strict')
+api.add_resource(ProcessSiftWhole, '/process-sift-whole')
+
 api.add_resource(Download, '/download')
 api.add_resource(MatchFast, '/match-fast') 
 api.add_resource(MatchSift, '/match-sift') 

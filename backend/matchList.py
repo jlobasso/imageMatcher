@@ -12,7 +12,7 @@ config.read('conf.ini')
 
 conn = MongoClient()
 db = conn.imageMatcher
-def matchSift(minMatchCount, sensibility, minPercentMatch, storageA, storageB, categories):
+def matchSiftWhole(minMatchCount, sensibility, minPercentMatch, storageA, storageB, categories):
     
     imagesA = db[storageA].find({ 'category': {'$in': categories}})
     pathA = config['paths']['storage-full-path']+storageA+'/'
