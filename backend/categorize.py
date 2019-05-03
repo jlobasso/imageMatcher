@@ -1,18 +1,15 @@
+from function.start import *
+
 from tensorflow import keras
 from tensorflow.keras.applications import MobileNetV2
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input, decode_predictions
 
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
-import time
-from pymongo import MongoClient
-import configparser
-
 config = configparser.ConfigParser()
 config.read('conf.ini')
 
+conn = MongoClient()
+db = conn.imageMatcher
 
 # process an image to be mobilenet friendly
 def process_image(img_path,size = 224):

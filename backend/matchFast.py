@@ -1,8 +1,5 @@
-import numpy as np
-import cv2
+from function.start import *
 from matplotlib import pyplot as plt
-from pymongo import MongoClient
-import configparser
 
 config = configparser.ConfigParser()
 config.read('conf.ini')
@@ -31,6 +28,8 @@ def uniqueMatchFast(params):
     for m in matches:
         if m.distance < float(params.get('sensibility'))*100:
             good.append(m)
+
+ 
 
     draw_params = dict(matchColor = (0,255,0), # draw matches in green color
                     singlePointColor = None,

@@ -1,5 +1,5 @@
 
-from function.start import *
+from function.start import * 
 
 config = configparser.ConfigParser()
 config.read('conf.ini')
@@ -7,18 +7,13 @@ config.read('conf.ini')
 conn = MongoClient()
 db = conn.imageMatcher
    
-def matchFastWhole(minMatchCount, sensibility, minPercentMatch, storageA, storageB, categories):
-    
+def matchSiftWhole(minMatchCount, sensibility, minPercentMatch, storageA, storageB, categories):
     timeA = datetime.datetime.now()
-
-    if len(categories) == 0:
-        imagesA = db[storageA].find()
-        imagesB = db[storageB].find()
-    else:        
-        imagesA = db[storageA].find({ 'category': {'$in': categories}})
-        imagesB = db[storageB].find({ 'category': {'$in': categories}})
     
+    imagesA = db[storageA].find({ 'category': {'$in': categories}})
     pathA = config['paths']['storage-full-path']+storageA+'/'
+
+    imagesB = db[storageB].find({ 'category': {'$in': categories}})
     pathB = config['paths']['storage-full-path']+storageB+'/'
      
     lenA = imagesA.count()    
@@ -26,7 +21,13 @@ def matchFastWhole(minMatchCount, sensibility, minPercentMatch, storageA, storag
 
     globalMatches = []
     kInageComputed = 0
-    orb = cv2.ORB_create()
+    FLANN_INDEX_KDTREE = 0
+    index_params = dict(algorithm=FLANN_INDEX_KDTREE, trees=5)
+    search_params = dict(checks=50)
+    flann = cv2.FlannBasedMatcher(index_params, search_params)
+    sift = cv2.xfeatures2d.SIFT_create()
+
+
 
     if lenA == 0:
         return {'matches': [], 'imagenes1': 0, 'imagenes2': 0, "status": "No hay imagenes en "+pathA}
@@ -34,26 +35,17 @@ def matchFastWhole(minMatchCount, sensibility, minPercentMatch, storageA, storag
         return {'matches': [], 'imagenes1': 0, 'imagenes2': 0, "status": "No hay imagenes en "+pathB}    
  
     for imgA in imagesA:
-        # print('Storage A')
         # print(imgA['imageName'].encode("ascii", "ignore").decode("ascii"))
         bestMatches = []        
         imageA = cv2.imread(pathA+imgA['imageName'], 0)
-
-        kp1 = orb.detect(imageA,None)
-        kp1, des1 = orb.compute(imageA, kp1)
+        kp1, des1 = sift.detectAndCompute(imageA, None)   
 
         # recorre las imagenes originales del repo local
-        if len(categories) == 0:
-            imagesB = db[storageB].find()
-        else:
-            imagesB = db[storageB].find({ 'category': {'$in': categories}})
-
+        imagesB = db[storageB].find({ 'category': {'$in': categories}})
         for imgB in imagesB:
-            # print('Storage B')
             # print(imgB['imageName'].encode("ascii", "ignore").decode("ascii"))
             kInageComputed = kInageComputed + 1
             
-            # print("recorriendo "+str(x+1)+" de "+str(len(images))+ " comparando con "+str(y+1)+" de "+str(len2))
             F = open(config['paths']['status-path']+"status.json","w+")
 
             status = {
@@ -70,48 +62,33 @@ def matchFastWhole(minMatchCount, sensibility, minPercentMatch, storageA, storag
             F.write(json.dumps(status))
             F.close()
 
-            imageB = cv2.imread(pathB+imgB['imageName'], 0)
+     
 
-            kp2 = orb.detect(imageB,None)
-            kp2, des2 = orb.compute(imageB, kp2)
 
-            bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
-            try:
-                matches = bf.match(des1,des2)                
+
+
+            imageB = cv2.imread(pathB+imgB['imageName'], 0)                              
+            kp2, des2 = sift.detectAndCompute(imageB, None)
+
+            try: 
+                matches = flann.knnMatch(des1, des2, k=2)           
             except:
                 break
                 print(imgA['imageName'].encode("ascii", "ignore").decode("ascii"))
                 print(imgB['imageName'].encode("ascii", "ignore").decode("ascii"))                
                   
-
-            # Sort them in the order of their distance.
-            matches = sorted(matches, key = lambda x:x.distance)
-
             good = []
-            for m in matches:
-                
-                if m.distance < sensibility*100:
-                        good.append(m)
-            
-            # cleanImg = images[x].split("/")
-            # searchImgDb = cleanImg[len(cleanImg)-1]
-            # searchImgDb = searchImgDb.replace(".jpg", "")
-            
-            # searchImgRepo = config['paths']['storage-path']+storageA+"/"+cleanImg[len(cleanImg)-1]
-            
-            # cleanImg2 = images2[y].split("/")
-            # ImgRepoOrigin = config['paths']['storage-path']+storageB+"/"+cleanImg2[len(cleanImg2)-1]
-
-            # dataDB = db[storageB].find({'imageId':str(searchImgDb)},{'_id':0,'title':1,'articleId':1})
-                      
+            for m, n in matches:
+                if m.distance < sensibility*n.distance:
+                    good.append(m)            
+                  
+                  
             if float(len(good)/minMatchCount*100) > float(minPercentMatch):
                 bestMatches.append(
                     {
                         'article_id_a': imgA['articleId'],
                         'title_a': imgA['title'],
                         'image_path_a': config['paths']['storage-path']+storageA+'/'+imgA['imageName'], 
-                        'category_a': imgA['category'],
-                        'category_b': imgB['category'],
                         'image_name_a': imgA['imageName'], 
                         'article_id_b': imgB['articleId'],
                         'title_b': imgB['title'],
@@ -140,8 +117,7 @@ def matchFastWhole(minMatchCount, sensibility, minPercentMatch, storageA, storag
 
     totalMatches = lenA * lenB
 
-    db.batchStats.insert({ "method":"fast", "totalMatches":totalMatches, "milisecondsElapsed": milisecondsElapsed, "oneMatch": milisecondsElapsed/totalMatches})      
-
+    db.batchStats.insert({ "method":"sift", "totalMatches":totalMatches, "milisecondsElapsed": milisecondsElapsed, "oneMatch": milisecondsElapsed/totalMatches})      
 
     return {'matches': globalMatches, 'imagenesA': lenA, 'imagenesB': lenB, "milisecondsElapsed":milisecondsElapsed, "status":"OK"}
 

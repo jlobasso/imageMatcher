@@ -1,4 +1,4 @@
-from function.start import *
+from function.start import * 
 
 config = configparser.ConfigParser()
 config.read('conf.ini')
@@ -6,7 +6,7 @@ config.read('conf.ini')
 conn = MongoClient()
 db = conn.imageMatcher
    
-def matchFastStrict(minMatchCount, sensibility, minPercentMatch, storageA, storageB, categories):
+def matchSiftStrict(minMatchCount, sensibility, minPercentMatch, storageA, storageB, categories):
     
     timeA = datetime.datetime.now()
     pathA = config['paths']['storage-full-path']+storageA+'/'
@@ -34,24 +34,26 @@ def matchFastStrict(minMatchCount, sensibility, minPercentMatch, storageA, stora
 
     globalMatches = []
     kInageComputed = 0
-    #ORB
-    orb = cv2.ORB_create()
+
+
+    FLANN_INDEX_KDTREE = 0
+    index_params = dict(algorithm=FLANN_INDEX_KDTREE, trees=5)
+    search_params = dict(checks=50)
+    flann = cv2.FlannBasedMatcher(index_params, search_params)
+    sift = cv2.xfeatures2d.SIFT_create()
 
     #recorremos cada categoria A
     for categoriesA in cursorA:
-
         #---EXCEPTION---
         if len(categoriesA['images']) == 0:
             return {'matches': [], 'imagenes1': 0, 'imagenes2': 0, "status": "No hay imagenes de la categoria "+categoriesA['_id']}
 
         #recorremos cada imagen de cada categoria A
         for idxA in range(len(categoriesA['images'])):
-
-            #ORB
+            # print(imgA['imageName'].encode("ascii", "ignore").decode("ascii"))
             bestMatches = []        
             imageA = cv2.imread(pathA+categoriesA['images'][idxA]['imageName'], 0)
-            kp1 = orb.detect(imageA,None)
-            kp1, des1 = orb.compute(imageA, kp1)
+            kp1, des1 = sift.detectAndCompute(imageA, None) 
 
             cursorB = db[storageB].aggregate([
                         {
@@ -80,7 +82,7 @@ def matchFastStrict(minMatchCount, sensibility, minPercentMatch, storageA, stora
                 for idxB in range(len(categoriesB['images'])):
                     # print(idxB)
                     kInageComputed = kInageComputed + 1
-            
+
                     F = open(config['paths']['status-path']+"status.json","w+")
                     status = {
                                 "absoluteComputed": str(kInageComputed),
@@ -97,27 +99,21 @@ def matchFastStrict(minMatchCount, sensibility, minPercentMatch, storageA, stora
                     F.close()
 
                     imageB = cv2.imread(pathB+categoriesB['images'][idxB]['imageName'], 0)
+                    kp2, des2 = sift.detectAndCompute(imageB, None)
 
-                    #ORB
-                    kp2 = orb.detect(imageB,None)
-                    kp2, des2 = orb.compute(imageB, kp2)
-                    bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
-                    try:
-                        matches = bf.match(des1,des2)                
-                    except:                        
-                        break               
+                    try: 
+                        matches = flann.knnMatch(des1, des2, k=2)           
+                    except:
+                        break
+                        print(imgA['imageName'].encode("ascii", "ignore").decode("ascii"))
+                        print(imgB['imageName'].encode("ascii", "ignore").decode("ascii"))                
                   
-
-                    # Sort them in the order of their distance.
-                    matches = sorted(matches, key = lambda x:x.distance)
-
                     good = []
-                    for m in matches:
-                        if m.distance > 90:
-                            print(m.distance)
-                        if m.distance < sensibility*100:
-                                good.append(m)
-            
+                    for m, n in matches:
+                        if m.distance < sensibility*n.distance:
+                            good.append(m)            
+                  
+                  
                     if float(len(good)/minMatchCount*100) > float(minPercentMatch):
                         bestMatches.append(
                             {
@@ -134,6 +130,21 @@ def matchFastStrict(minMatchCount, sensibility, minPercentMatch, storageA, stora
                                 'percentage': str(len(good)/minMatchCount*100),
                             })
 
+                        db.Stats.insert({ 
+                            "method":"sift", 
+                            'article_id_a': categoriesA['images'][idxA]['articleId'],
+                            'title_a': categoriesA['images'][idxA]['title'],
+                            'image_path_a': config['paths']['storage-path']+storageA+'/'+categoriesA['images'][idxA]['imageName'], 
+                            'category_a': categoriesA['_id'],
+                            'image_name_a': categoriesA['images'][idxA]['imageName'], 
+                            'article_id_b': categoriesB['images'][idxB]['articleId'],
+                            'title_b': categoriesB['images'][idxB]['title'],
+                            'image_path_b': config['paths']['storage-path']+storageB+'/'+categoriesB['images'][idxB]['imageName'],
+                            'image_name_b': categoriesB['images'][idxB]['imageName'], 
+                            'category_b': categoriesB['_id'],
+                            'percentage': str(len(good)/minMatchCount*100),
+                            })
+
                     imagenRecorridas = +1
 
                     def extract(json):
@@ -147,14 +158,18 @@ def matchFastStrict(minMatchCount, sensibility, minPercentMatch, storageA, stora
             if len(bestMatches) > 0:
                 globalMatches.append(bestMatches)
 
+
     timeB = datetime.datetime.now()
     delta = timeB - timeA 
     milisecondsElapsed = int(delta.total_seconds() * 1000)
 
     totalMatches = kInageComputed
 
-    db.batchStats.insert({ "method":"fast", "totalMatches":totalMatches, "milisecondsElapsed": milisecondsElapsed, "oneMatch": milisecondsElapsed/totalMatches})      
-
+    db.batchStats.insert({ 
+        "method":"sift", 
+        "totalMatches":totalMatches, 
+        "milisecondsElapsed": milisecondsElapsed, 
+        "oneMatch": milisecondsElapsed/totalMatches
+        })      
 
     return {'matches': globalMatches, 'imagenesA': lengthA, 'imagenesB': lengthB, "milisecondsElapsed":milisecondsElapsed, "status":"OK"}
-
