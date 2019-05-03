@@ -1,3 +1,5 @@
+import sys
+sys.path.insert(0, '/categorize')
 import numpy as np
 import cv2
 import os

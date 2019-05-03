@@ -11,7 +11,7 @@ from pymongo import MongoClient
 import configparser
 
 config = configparser.ConfigParser()
-config.read('conf.ini')
+config.read('../conf.ini')
 
 
 # process an image to be mobilenet friendly
