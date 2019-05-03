@@ -2,6 +2,7 @@ import urllib.request
 import os
 from function.start import *
 from categorize.categorize import *
+from imageToHash import *
 
 config = configparser.ConfigParser()
 config.read('conf.ini')
@@ -38,8 +39,9 @@ def downloadImage(collection, kindOfStorage):
         except urllib.request.URLError:
             print("No se pudo descargar la imagen desde "+ximg['url'])
             continue
-        
-        db[collection].update({ "imageId" : ximg['imageId']  },{ "$set": { "downloaded" : True } })
+
+        imageHash = imageToHash(newPath+'/'+ximg['imageName'])
+        db[collection].update({ "imageId" : ximg['imageId']  },{ "$set": { "downloaded" : True, "imageHash":imageHash } })
         
     end = time.time()
     # eachImageTime = (time.time() - start)/totalAmountToAnalize 
@@ -78,6 +80,7 @@ def insertImage(data):
                 rec = {} 
                 rec['imageId'] = storageData[storagePosition]['images'][imagePosition]['imageId']
                 rec['imageName'] = imageName
+                rec['imageHash'] = False
                 rec['url'] = storageData[storagePosition]['images'][imagePosition]['url']
                 rec['categoryId'] = storageData[storagePosition]['categoryId']
                 rec['articleId'] = storageData[storagePosition]['articleId']
