@@ -1,8 +1,5 @@
-import numpy as np
-import cv2
+from function.start import *
 from matplotlib import pyplot as plt
-from pymongo import MongoClient
-import configparser
 
 config = configparser.ConfigParser()
 config.read('conf.ini')
@@ -18,18 +15,22 @@ def uniqueMatchSift(params):
     search_params = dict(checks=50)
     flann = cv2.FlannBasedMatcher(index_params, search_params)
     sift = cv2.xfeatures2d.SIFT_create()
+#     sift = cv2.xfeatures2d.SURF_create(400)
 
     imageA = cv2.imread(path+params.get('url1'), 0)
     kp1, des1 = sift.detectAndCompute(imageA, None) 
+
     imageB = cv2.imread(path+params.get('url2'), 0)                              
     kp2, des2 = sift.detectAndCompute(imageB, None)
 
     matches = flann.knnMatch(des1, des2, k=2)  
 
+    matches = sorted(matches, key = lambda x:x[1].distance)
+
     good = []
     for m, n in matches:
-        if m.distance < float(params.get('sensibility'))*n.distance:
-            good.append(m)    
+        if n.distance >= float(params.get('sensibility'))*n.distance:
+            good.append(n)    
 
 
     draw_params = dict(matchColor = (0,255,0), # draw matches in green color

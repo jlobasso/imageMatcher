@@ -1,20 +1,13 @@
-import sys
-sys.path.insert(0, '/categorize')
-import numpy as np
-import cv2
-import os
 import urllib.request
-import time
-import json
-from pymongo import MongoClient
-from threading import Timer
-import configparser
-from categorize import *
-
+import os
+from function.start import *
+from categorize.categorize import *
 
 config = configparser.ConfigParser()
 config.read('conf.ini')
 
+conn = MongoClient()
+db = conn.imageMatcher
 
 class NumpyEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -23,10 +16,7 @@ class NumpyEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 def downloadImage(collection, kindOfStorage):
-
-    conn = MongoClient()
-    db = conn.imageMatcher
-    now = time.time()  
+    start = time.time()
     images = db[collection].find({ 'downloaded': False })
 
     print("Imagenes por bajar:"+str(images.count()))
@@ -51,8 +41,9 @@ def downloadImage(collection, kindOfStorage):
         
         db[collection].update({ "imageId" : ximg['imageId']  },{ "$set": { "downloaded" : True } })
         
-    elapsed = time.time() - now        
-    print ('tiempo de descarga total de archivos: ',elapsed)
+    end = time.time()
+    # eachImageTime = (time.time() - start)/totalAmountToAnalize 
+    print("tiempo de descarga total de archivos: ", end - start)
 
     cantidad = db[collection].find({ "downloaded" : True } ).count()
     if cantidad > 0:
