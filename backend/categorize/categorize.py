@@ -1,12 +1,17 @@
-from function.start import *
-
+import numpy as np
+import cv2
+import json
+from pymongo import MongoClient
+import configparser
+import datetime
+import time
 from tensorflow import keras
 from tensorflow.keras.applications import MobileNetV2
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input, decode_predictions
 
 config = configparser.ConfigParser()
-config.read('../conf.ini')
+config.read('conf.ini')
 
 conn = MongoClient()
 db = conn.imageMatcher
