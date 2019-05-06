@@ -103,6 +103,7 @@ def matchSiftStrict(minMatchCount, sensibility, minPercentMatch, storageA, stora
 
                     try: 
                         matches = flann.knnMatch(des1, des2, k=2)           
+                        matches = sorted(matches, key = lambda x:x[1].distance)
                     except:
                         break
                         print(imgA['imageName'].encode("ascii", "ignore").decode("ascii"))
@@ -111,7 +112,13 @@ def matchSiftStrict(minMatchCount, sensibility, minPercentMatch, storageA, stora
                     good = []
                     for m, n in matches:
                         if m.distance < sensibility*n.distance:
-                            good.append(m)            
+                            good.append(m)   
+
+
+                    # good = []
+                    # for m, n in matches:
+                    #     if n.distance >= float(params.get('sensibility'))*n.distance:
+                    #         good.append(n)            
                   
                   
                     if float(len(good)/minMatchCount*100) > float(minPercentMatch):
@@ -128,21 +135,6 @@ def matchSiftStrict(minMatchCount, sensibility, minPercentMatch, storageA, stora
                                 'image_name_b': categoriesB['images'][idxB]['imageName'], 
                                 'category_b': categoriesB['_id'],
                                 'percentage': str(len(good)/minMatchCount*100),
-                            })
-
-                        db.Stats.insert({ 
-                            "method":"sift", 
-                            'article_id_a': categoriesA['images'][idxA]['articleId'],
-                            'title_a': categoriesA['images'][idxA]['title'],
-                            'image_path_a': config['paths']['storage-path']+storageA+'/'+categoriesA['images'][idxA]['imageName'], 
-                            'category_a': categoriesA['_id'],
-                            'image_name_a': categoriesA['images'][idxA]['imageName'], 
-                            'article_id_b': categoriesB['images'][idxB]['articleId'],
-                            'title_b': categoriesB['images'][idxB]['title'],
-                            'image_path_b': config['paths']['storage-path']+storageB+'/'+categoriesB['images'][idxB]['imageName'],
-                            'image_name_b': categoriesB['images'][idxB]['imageName'], 
-                            'category_b': categoriesB['_id'],
-                            'percentage': str(len(good)/minMatchCount*100),
                             })
 
                     imagenRecorridas = +1

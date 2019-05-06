@@ -71,7 +71,8 @@ def matchSiftWhole(minMatchCount, sensibility, minPercentMatch, storageA, storag
             kp2, des2 = sift.detectAndCompute(imageB, None)
 
             try: 
-                matches = flann.knnMatch(des1, des2, k=2)           
+                matches = flann.knnMatch(des1, des2, k=2)  
+                matches = sorted(matches, key = lambda x:x[1].distance)         
             except:
                 break
                 print(imgA['imageName'].encode("ascii", "ignore").decode("ascii"))
@@ -82,6 +83,10 @@ def matchSiftWhole(minMatchCount, sensibility, minPercentMatch, storageA, storag
                 if m.distance < sensibility*n.distance:
                     good.append(m)            
                   
+            # good = []
+            # for m, n in matches:
+            #     if n.distance >= float(params.get('sensibility'))*n.distance:
+            #         good.append(n)   
                   
             if float(len(good)/minMatchCount*100) > float(minPercentMatch):
                 bestMatches.append(
