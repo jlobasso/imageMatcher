@@ -84,7 +84,8 @@ def matchFastStrict(sessionId, minMatchCount, sensibility, minPercentMatch, stor
             
                     F = open(config['paths']['status-path']+"status.json","w+")
                     status = {
-                                "sessionId":sessionId,
+                                "sessionId": sessionId,
+                                "method": "fastBatchStrict",
                                 "absoluteComputed": str(kInageComputed),
                                 "running":{
                                             "current":str(idxA), 
