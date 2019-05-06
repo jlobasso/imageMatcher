@@ -77,6 +77,11 @@ class Groups(Resource):
     def get(self):
         return getGroups(), 200, {'Content-Type':'application/json'}
 
+class MatchStatus(Resource):
+    def get(self):
+        from stats import matchStatus
+        return matchStatus(request.args), 200, {'Content-Type':'application/json'}
+
 class Test(Resource):
     def get(self):
         print("//*-*-*-*-*-*-*// TEST //*-*-*-*-*-*-*//")
@@ -86,6 +91,7 @@ class Test(Resource):
 
 api.add_resource(Health, '/health')
 api.add_resource(Groups, '/groups')
+api.add_resource(MatchStatus, '/match-status')
 
 api.add_resource(ProcessFastStrict, '/process-fast-strict')
 api.add_resource(ProcessFastWhole, '/process-fast-whole')

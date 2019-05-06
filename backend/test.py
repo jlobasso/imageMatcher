@@ -3,8 +3,10 @@ from pymongo import MongoClient
 conn = MongoClient()
 db = conn.imageMatcher
 
+categories =  ['pickup']
+category = "suspected-basura5"
 
-cursorA = db['suspected-carloschanta'].aggregate([
+cursorA = db[category].aggregate([
     {
         '$group':
         {
@@ -16,11 +18,13 @@ cursorA = db['suspected-carloschanta'].aggregate([
     {
         '$match': {
             '_id': {
-                '$in': ['wig', 'web_site']
+                '$in': ['pickup']
             }
         }
     }
-    ])
+    ],useCursor=True)
+
+print(type(cursorA))
 
 #recorremos cada categoria A
 for categoriesA in cursorA:
@@ -29,7 +33,7 @@ for categoriesA in cursorA:
         #recorremos cada imagen de cada categoria A
         for idxA in range(len(categoriesA['images'])): 
 
-                cursorB = db['suspected-pepe12345'].aggregate([
+                cursorB = db[category].aggregate([
                         {
                                 '$group':
                                 {
