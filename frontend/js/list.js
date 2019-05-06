@@ -2,6 +2,7 @@ const submit = document.getElementById("submit")
 const statusInfo = document.getElementById("status");
 const mainContainer = document.getElementById("main-container")
 const statusContainer = document.getElementById("status-container")
+const sessionId = conf.sessionId
 var cantImagesToCompare = 0;
 var cantAnalizadas = 0;
 
@@ -77,6 +78,7 @@ submit.addEventListener("click", async () => {
     let values = Array.from(selected).map(el => el.value);
 
     data = {
+        "sessionId":sessionId,
         'min_match_count': minMatchCount,
         'sensibility': sensibility,
         'min_percent_match': minPercentMatch,

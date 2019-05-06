@@ -6,7 +6,7 @@ config.read('conf.ini')
 conn = MongoClient()
 db = conn.imageMatcher
    
-def matchFastStrict(minMatchCount, sensibility, minPercentMatch, storageA, storageB, categories):
+def matchFastStrict(sessionId, minMatchCount, sensibility, minPercentMatch, storageA, storageB, categories):
     
     timeA = datetime.datetime.now()
     pathA = config['paths']['storage-full-path']+storageA+'/'
@@ -80,9 +80,11 @@ def matchFastStrict(minMatchCount, sensibility, minPercentMatch, storageA, stora
                 for idxB in range(len(categoriesB['images'])):
                     # print(idxB)
                     kInageComputed = kInageComputed + 1
+
             
                     F = open(config['paths']['status-path']+"status.json","w+")
                     status = {
+                                "sessionId":sessionId,
                                 "absoluteComputed": str(kInageComputed),
                                 "running":{
                                             "current":str(idxA), 
@@ -92,7 +94,9 @@ def matchFastStrict(minMatchCount, sensibility, minPercentMatch, storageA, stora
                                             "current":str(idxB), 
                                             "of":str(lengthB)
                                             }                     
-                            }            
+                            }     
+
+                    db.matchStatus.update({"sessionId":sessionId}, status, upsert=True)
                     F.write(json.dumps(status))
                     F.close()
 

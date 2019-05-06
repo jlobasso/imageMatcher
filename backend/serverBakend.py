@@ -20,7 +20,7 @@ class ProcessFastStrict(Resource):
         
         data = json.loads(request.data)
         from fastBatchStrict import matchFastStrict
-        result = matchFastStrict(data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'], data['categories'])
+        result = matchFastStrict(data['sessionId'], data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'], data['categories'])
         return result, 200, {'Content-Type':'application/json'}
 
 class ProcessFastWhole(Resource):
