@@ -78,21 +78,20 @@ def matchFastStrict(sessionId, minMatchCount, sensibility, minPercentMatch, stor
 
                 #recorremos cada imagen de cada categoria B
                 for idxB in range(len(categoriesB['images'])):
-                    # print(idxB)
+
                     kInageComputed = kInageComputed + 1
 
-            
                     F = open(config['paths']['status-path']+"status.json","w+")
                     status = {
-                                "sessionId": sessionId,
+                                "sessionId": str(sessionId),
                                 "method": "fastBatchStrict",
                                 "absoluteComputed": str(kInageComputed),
                                 "running":{
-                                            "current":str(idxA), 
+                                            "current":str(idxA+1), 
                                             "of":str(lengthA)
                                             },
                                 "comparing":{
-                                            "current":str(idxB), 
+                                            "current":str(idxB+1), 
                                             "of":str(lengthB)
                                             }                     
                             }     
@@ -118,8 +117,6 @@ def matchFastStrict(sessionId, minMatchCount, sensibility, minPercentMatch, stor
 
                     good = []
                     for m in matches:
-                        if m.distance > 90:
-                            print(m.distance)
                         if m.distance < sensibility*100:
                                 good.append(m)
             
