@@ -22,8 +22,8 @@ var getDownloadStatus = (end = false) => {
             .then((status) => {
                 downloadStatus.innerHTML = `Completado: ${parseInt(status.correctInsert) + parseInt(status.errorInsert || 0)} de ${status.count} 
                 Con error de inserción ${status.errorInsert} 
-                Tiempo total de descarga: ${status.timeDownload} 
-                Tiempo total de categorización: ${status.timeCategorize} 
+                Tiempo total de descarga: ${status.timeDownload} Seg.
+                Tiempo total de categorización: ${status.timeCategorize} Seg. 
                 `
             }
 
