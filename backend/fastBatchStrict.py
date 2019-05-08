@@ -81,7 +81,7 @@ def matchFastStrict(sessionId, minMatchCount, sensibility, minPercentMatch, stor
 
                     kInageComputed = kInageComputed + 1
 
-                    F = open(config['paths']['status-path']+"status.json","w+")
+                    # F = open(config['paths']['status-path']+"status.json","w+")
                     status = {
                                 "sessionId": str(sessionId),
                                 "method": "fastBatchStrict",
@@ -97,8 +97,8 @@ def matchFastStrict(sessionId, minMatchCount, sensibility, minPercentMatch, stor
                             }     
 
                     db.matchStatus.update({"sessionId":sessionId}, status, upsert=True)
-                    F.write(json.dumps(status))
-                    F.close()
+                    # F.write(json.dumps(status))
+                    # F.close()
 
                     imageB = cv2.imread(pathB+categoriesB['images'][idxB]['imageName'], 0)
 
