@@ -3,53 +3,8 @@ from pymongo import MongoClient
 conn = MongoClient()
 db = conn.imageMatcher
 
-categories =  ['pickup']
-category = "suspected-basura5"
+imageName = 'chevrolet_3800_pickup_xoptimizadax-kgRF--620x349@abc.jpg'
 
-cursorA = db[category].aggregate([
-    {
-        '$group':
-        {
-            '_id': '$category',
-            'images': { '$push': '$$ROOT' },
-            'count': { '$sum': 1 }
-        }
-    },
-    {
-        '$match': {
-            '_id': {
-                '$in': ['pickup']
-            }
-        }
-    }
-    ],useCursor=True)
+print(db['suspected-DDGG1'].find_one({"imageName":imageName},{"imageId":1, '_id':0})['imageId'])
 
-print(type(cursorA))
 
-#recorremos cada categoria A
-for categoriesA in cursorA:
-        print("A ---->",len(categoriesA['images']))
-        # print(groupA['_id'])
-        #recorremos cada imagen de cada categoria A
-        for idxA in range(len(categoriesA['images'])): 
-
-                cursorB = db[category].aggregate([
-                        {
-                                '$group':
-                                {
-                                '_id': '$category',
-                                'images': { '$push': '$$ROOT' },
-                                'count': { '$sum': 1 }
-                                }
-                        },
-                        {
-                                '$match': {
-                                '_id': categoriesA['_id'] 
-                                }
-                        }
-                        ])
-                print("IMG---A ---->",idxA)
-                #recorremos cada imagen de cada categoria B        
-                for categoriesB in cursorB:
-                        for idxB in range(len(categoriesB['images'])):
-                                print("B ---->",idxB)

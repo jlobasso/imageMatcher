@@ -24,7 +24,14 @@ def downloadImage(collection, kindOfStorage, sessionId):
     errorInsert = 0
     correctInsert = 0
     urlImageError = []
-    db[collDownload].insert_one({'sessionId': sessionId,'collection' : collection,'count' : count })
+    db[collDownload].insert_one({'sessionId': sessionId,
+                                'collection' : collection,
+                                'count' : count,
+                                'correctInsert' : 0,
+                                'errorInsert' : 0,
+                                'timeCategorize' : 0,
+                                'timeDownload' : 0
+                                })
 
 
     newPath = config['paths']['storage-full-path']+collection
@@ -60,8 +67,13 @@ def downloadImage(collection, kindOfStorage, sessionId):
         startTimeCategorize = time.time()
         categorize(collection, kindOfStorage)
         endTimeCategorize = time.time()
-        
-        db[collDownload].update_one({ "collection" : collection },{ "$set": { "timeCategorize" : endTimeCategorize - startTimeCategorize, 'timeDownload' : endTimeDownload - startTimeDownload } })
+
+
+        timeCategorize = round(endTimeCategorize - startTimeCategorize,2)
+
+        timeDownload = round(endTimeDownload - startTimeDownload,2)
+
+        db[collDownload].update_one({ "collection" : collection },{ "$set": { "timeCategorize" : timeCategorize, 'timeDownload' : timeDownload } })
         
     else:
         print("No se descargaron las imagenes en el storage")
@@ -89,24 +101,23 @@ def insertImage(data):
             imageName = imageName[len(imageName)-1]
 
             exist = db[collection].find({"imageId":storageData[storagePosition]['images'][imagePosition]['imageId'], "sellerId":storageData[storagePosition]['sellerId']}).count()
-
-            if not exist:
-
+              
+            if not exist or db[collection].find_one({"imageName":imageName},{"imageId":1, '_id':0})['imageId'] == 'NOT_IMG_ID':
                 rec = {} 
-                rec['imageId'] = storageData[storagePosition]['images'][imagePosition]['imageId']
+                rec['imageId'] = ('NOT_IMG_ID' if storageData[storagePosition]['images'][imagePosition]['imageId']=='' else storageData[storagePosition]['images'][imagePosition]['imageId']) 
                 rec['imageName'] = imageName
                 rec['imageHash'] = False
                 rec['url'] = storageData[storagePosition]['images'][imagePosition]['url']
-                rec['categoryId'] = storageData[storagePosition]['categoryId']
-                rec['articleId'] = storageData[storagePosition]['articleId']
-                rec['title'] = storageData[storagePosition]['title']
-                rec['link'] = storageData[storagePosition]['link']
-                rec['sellerId'] = storageData[storagePosition]['sellerId']
+                rec['categoryId'] = ('NOT_CATEGORY' if storageData[storagePosition]['categoryId']=='' else storageData[storagePosition]['categoryId'])            
+                rec['articleId'] = ('NOT_ARTICLE' if storageData[storagePosition]['articleId']=='' else storageData[storagePosition]['articleId'])            
+                rec['title'] = ('NOT_TITLE' if storageData[storagePosition]['title']=='' else storageData[storagePosition]['title'])            
+                rec['link'] = ('NOT_LINK' if storageData[storagePosition]['link']=='' else storageData[storagePosition]['link']) 
+                rec['sellerId'] = ('NOT_SELLER' if storageData[storagePosition]['sellerId']=='' else storageData[storagePosition]['sellerId']) 
                 rec['downloaded'] = False
                 rec['compare'] = True
                 rec['categorized'] = False
 
-                db[collection].insert_one(rec)
+            db[collection].insert_one(rec)
                 
 
     downloadImage(collection, kindOfStorage, sessionId)

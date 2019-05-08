@@ -19,5 +19,10 @@ def downloadStatus(args):
     try:
         response = [doc for doc in db.downloadStatus.find({"sessionId":args['sessionId']},{"_id":0})][0]
     except:
-        response = {"correctInsert" : 0}
+        response = {'count' : 0,
+                    'correctInsert' : 0,
+                    'errorInsert' : 0,
+                    'timeCategorize' : 0,
+                    'timeDownload' : 0
+                    }
     return response    
