@@ -20,7 +20,7 @@ var getDownloadStatus = (end=false) => {
         fetch(conf.urlBackend + 'download-status?sessionId=' + conf.sessionId)
             .then((response) => response.json())
             .then((status) => {
-                downloadStatus.innerHTML = `Completado: ${parseInt(status.correctInsert)+parseInt(status.errorInsert)} de ${status.count} 
+                downloadStatus.innerHTML = `Completado: ${parseInt(status.correctInsert)+parseInt(status.errorInsert || 0)} de ${status.count} 
                 Con error de inserción ${status.errorInsert} 
                 Tiempo total de descarga: ${status.timeDownload} 
                 Tiempo total de categorización: ${status.timeCategorize} 
