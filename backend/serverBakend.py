@@ -82,6 +82,11 @@ class MatchStatus(Resource):
         from stats import matchStatus
         return matchStatus(request.args), 200, {'Content-Type':'application/json'}
 
+class DownloadStatus(Resource):
+    def get(self):
+        from stats import downloadStatus
+        return downloadStatus(request.args), 200, {'Content-Type':'application/json'}
+
 class Test(Resource):
     def get(self):
         print("//*-*-*-*-*-*-*// TEST //*-*-*-*-*-*-*//")
@@ -92,6 +97,7 @@ class Test(Resource):
 api.add_resource(Health, '/health')
 api.add_resource(Groups, '/groups')
 api.add_resource(MatchStatus, '/match-status')
+api.add_resource(DownloadStatus, '/download-status')
 
 api.add_resource(ProcessFastStrict, '/process-fast-strict')
 api.add_resource(ProcessFastWhole, '/process-fast-whole')
