@@ -10,8 +10,13 @@ var getDownloadStatus = (end = false) => {
         fetch(conf.urlBackend + 'download-status?sessionId=' + conf.sessionId)
             .then((response) => response.json())
             .then((status) => {
-                downloadStatus.innerHTML = `Completado: ${parseInt(status.correctInsert) + parseInt(status.errorInsert)} de ${status.count} 
-                Con error de inserción ${status.errorInsert}`
+                if(!status.count){
+                    downloadStatus.innerHTML = ""
+                }else{
+                    downloadStatus.innerHTML = `Completado: ${parseInt(status.correctInsert) + parseInt(status.errorInsert)} de ${status.count} 
+                    Con error de inserción ${status.errorInsert}`
+                } 
+
             }
 
             )
@@ -22,8 +27,8 @@ var getDownloadStatus = (end = false) => {
             .then((status) => {
                 downloadStatus.innerHTML = `Completado: ${parseInt(status.correctInsert) + parseInt(status.errorInsert || 0)} de ${status.count} 
                 Con error de inserción ${status.errorInsert} 
-                Tiempo total de descarga: ${status.timeDownload} 
-                Tiempo total de categorización: ${status.timeCategorize} 
+                Tiempo total de descarga: ${status.timeDownload} Seg.
+                Tiempo total de categorización: ${status.timeCategorize} Seg. 
                 `
             }
 
@@ -33,6 +38,8 @@ var getDownloadStatus = (end = false) => {
 }
 
 const download = async () => {
+
+    downloadStatus.innerHTML = "";
 
     kindOfStorage = document.querySelector('#kindOfStorage input[name="kindOfStorage"]:checked').value;
 
