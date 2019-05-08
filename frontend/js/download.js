@@ -53,6 +53,7 @@ const download = async () => {
     });
 
     const storeData = {
+        sessionId: conf.sessionId,
         kindOfStorage: kindOfStorage,
         storageName: storageName,
         storageData: images
