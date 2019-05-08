@@ -1,6 +1,21 @@
 const downloadButton = document.getElementById("download")
+const downloadStatus = document.getElementById("download-status");
+let cantDownloaded = 0
 
 downloadButton.addEventListener("click", () => download())
+
+var getDownloadStatus = () => {
+
+    fetch(conf.urlBackend + 'download-status?sessionId=' + conf.sessionId)
+        .then((response) => response.json())
+        .then((status) => {
+            downloadStatus.innerHTML = `Completado: ${status.correctInsert}`
+
+        }
+
+        )
+
+}
 
 const download = async () => {
 
@@ -9,7 +24,7 @@ const download = async () => {
     const storageName = document.querySelectorAll(`.storage #storage-name`)[0].value
     const storageData = JSON.parse(document.querySelectorAll(`.storage #data`)[0].value)
 
-   console.log(`.storage #data`)
+    console.log(`.storage #data`)
 
     var images = [];
     storageData.forEach(a => {
@@ -38,14 +53,25 @@ const download = async () => {
     });
 
     const storeData = {
+        sessionId: conf.sessionId,
         kindOfStorage: kindOfStorage,
         storageName: storageName,
         storageData: images
     }
 
+    var downloadStatusInterval = setInterval(() => {
+        getDownloadStatus()
+    }, 1000);
+
     var xhr = new XMLHttpRequest();
     xhr.open("POST", conf.urlBackend + 'download', true);
     xhr.setRequestHeader("Content-Type", "text/plain");
+
+    xhr.onreadystatechange = function () {
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            setTimeout(() => { clearInterval(downloadStatusInterval) }, 2000)
+        }
+    }
 
     xhr.send(JSON.stringify(storeData));
 
