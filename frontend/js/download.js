@@ -4,15 +4,31 @@ let cantDownloaded = 0
 
 downloadButton.addEventListener("click", () => download())
 
-var getDownloadStatus = () => {
+var getDownloadStatus = (end=false) => {
 
-    fetch(conf.urlBackend + 'download-status?sessionId=' + conf.sessionId)
-        .then((response) => response.json())
-        .then((status) => {
-            downloadStatus.innerHTML = `Completado: ${status.correctInsert} de ${status.count}`
-        }
-
-        )
+    if(!end){
+        fetch(conf.urlBackend + 'download-status?sessionId=' + conf.sessionId)
+            .then((response) => response.json())
+            .then((status) => {
+                downloadStatus.innerHTML = `Completado: ${parseInt(status.correctInsert)+parseInt(status.errorInsert)} de ${status.count} 
+                Con error de inserción ${status.errorInsert}`
+            }
+    
+            )
+    }
+    else{
+        fetch(conf.urlBackend + 'download-status?sessionId=' + conf.sessionId)
+            .then((response) => response.json())
+            .then((status) => {
+                downloadStatus.innerHTML = `Completado: ${parseInt(status.correctInsert)+parseInt(status.errorInsert)} de ${status.count} 
+                Con error de inserción ${status.errorInsert} 
+                Tiempo total de descarga: ${status.timeDownload} 
+                Tiempo total de categorización: ${status.timeCategorize} 
+                `
+            }
+    
+            )
+    }
 
 }
 
@@ -67,6 +83,7 @@ const download = async () => {
     xhr.onreadystatechange = function () {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             setTimeout(() => { clearInterval(downloadStatusInterval) }, 2000)
+            getDownloadStatus(true);
         }
     }
 
