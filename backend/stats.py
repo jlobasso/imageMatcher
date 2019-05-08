@@ -16,7 +16,8 @@ def downloadStatus(args):
     
     conn = MongoClient()
     db = conn.imageMatcher
-
-    response = [doc for doc in db.downloadStatus.find({"sessionId":args['sessionId']},{"_id":0})][0]
-    
+    try:
+        response = [doc for doc in db.downloadStatus.find({"sessionId":args['sessionId']},{"_id":0})][0]
+    except:
+        response = {"correctInsert" : 0}
     return response    

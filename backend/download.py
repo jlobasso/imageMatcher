@@ -16,7 +16,7 @@ class NumpyEncoder(json.JSONEncoder):
             return obj.tolist()
         return json.JSONEncoder.default(self, obj)
 
-def downloadImage(collection, kindOfStorage):
+def downloadImage(collection, kindOfStorage, sessionId):
     startTimeDownload = time.time()
     collDownload = 'downloadStatus'
     images = db[collection].find({ 'downloaded': False })
@@ -24,7 +24,7 @@ def downloadImage(collection, kindOfStorage):
     errorInsert = 0
     correctInsert = 0
     urlImageError = []
-    db[collDownload].insert_one({'sessionId': 'JLOBASSO','collection' : collection,'count' : count,'startTimeDownload' : startTimeDownload })
+    db[collDownload].insert_one({'sessionId': sessionId,'collection' : collection,'count' : count })
 
 
     newPath = config['paths']['storage-full-path']+collection
@@ -60,7 +60,8 @@ def downloadImage(collection, kindOfStorage):
         startTimeCategorize = time.time()
         categorize(collection, kindOfStorage)
         endTimeCategorize = time.time()
-        db[collDownload].update_one({ "collection" : collection },{ "$set": { "timeCategorize" : endTimeCategorize - startTimeCategorize, 'endTimeDownload' : endTimeDownload } })
+        
+        db[collDownload].update_one({ "collection" : collection },{ "$set": { "timeCategorize" : endTimeCategorize - startTimeCategorize, 'timeDownload' : endTimeDownload - startTimeDownload } })
         
     else:
         print("No se descargaron las imagenes en el storage")
@@ -72,6 +73,7 @@ def insertImage(data):
     kindOfStorage = data['kindOfStorage'] 
     storageData = data['storageData']
     storageName = data['storageName']
+    sessionId = data['sessionId']
 
     # print("Cantidad de imagenes a insertar en la base de datos: "+str(len(storageData)))
 
@@ -107,7 +109,7 @@ def insertImage(data):
                 db[collection].insert_one(rec)
                 
 
-    downloadImage(collection, kindOfStorage, sellon)
+    downloadImage(collection, kindOfStorage, sessionId)
 
 
 
