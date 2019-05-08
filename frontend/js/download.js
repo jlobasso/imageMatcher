@@ -9,8 +9,7 @@ var getDownloadStatus = () => {
     fetch(conf.urlBackend + 'download-status?sessionId=' + conf.sessionId)
         .then((response) => response.json())
         .then((status) => {
-            downloadStatus.innerHTML = `Completado: ${status.correctInsert}`
-
+            downloadStatus.innerHTML = `Completado: ${status.correctInsert} de ${status.count}`
         }
 
         )
@@ -23,8 +22,6 @@ const download = async () => {
 
     const storageName = document.querySelectorAll(`.storage #storage-name`)[0].value
     const storageData = JSON.parse(document.querySelectorAll(`.storage #data`)[0].value)
-
-    console.log(`.storage #data`)
 
     var images = [];
     storageData.forEach(a => {
