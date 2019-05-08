@@ -8,7 +8,6 @@ var cantAnalizadas = 0;
 
 var getStatus = () => {
 
-    // fetch('status/status.json?' + Math.random() + '=' + Math.random())
     fetch(conf.urlBackend+'match-status?sessionId='+conf.sessionId)
         .then((response) => response.json())
         .then((status) => {
