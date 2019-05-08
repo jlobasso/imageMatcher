@@ -18,18 +18,13 @@ class NumpyEncoder(json.JSONEncoder):
 
 def downloadImage(collection, kindOfStorage):
     startTimeDownload = time.time()
+    collDownload = 'downloadStatus'
     images = db[collection].find({ 'downloaded': False })
     count = images.count()
     errorInsert = 0
     correctInsert = 0
     urlImageError = []
-    # dow =  
-    # dow['sessionId'] = 'JLOBASSO'
-    # dow['collection'] = collection
-    # dow['count'] = count
-    # dow['timeDownload'] = endTimeDownload - startTimeDownload
-    # dow['timeCategorize'] = endTimeCategorize - startTimeCategorize
-    db.download.insert_one({'sessionId': 'JLOBASSO','collection' : collection,'count' : count,'startTimeDownload' : startTimeDownload })
+    db[collDownload].insert_one({'sessionId': 'JLOBASSO','collection' : collection,'count' : count,'startTimeDownload' : startTimeDownload })
 
 
     newPath = config['paths']['storage-full-path']+collection
@@ -51,12 +46,12 @@ def downloadImage(collection, kindOfStorage):
             # print("No se pudo descargar la imagen desde "+ximg['url'])
             errorInsert = errorInsert + 1 
             urlImageError.append(ximg['url'])
-            db.download.update_one({ "collection" : collection },{ "$set": { "errorInsert" : errorInsert} })
+            db[collDownload].update_one({ "collection" : collection },{ "$set": { "errorInsert" : errorInsert} })
             continue
 
         imageHash = imageToHash(newPath+'/'+ximg['imageName'])
         db[collection].update_one({ "imageId" : ximg['imageId']  },{ "$set": { "downloaded" : True, "imageHash":imageHash } })
-        db.download.update_one({ "collection" : collection },{ "$set": { "correctInsert" : correctInsert } })
+        db[collDownload].update_one({ "collection" : collection },{ "$set": { "correctInsert" : correctInsert } })
             
     endTimeDownload = time.time()
     
@@ -65,7 +60,7 @@ def downloadImage(collection, kindOfStorage):
         startTimeCategorize = time.time()
         categorize(collection, kindOfStorage)
         endTimeCategorize = time.time()
-        db.download.update_one({ "collection" : collection },{ "$set": { "timeCategorize" : endTimeCategorize - startTimeCategorize, 'endTimeDownload' : endTimeDownload } })
+        db[collDownload].update_one({ "collection" : collection },{ "$set": { "timeCategorize" : endTimeCategorize - startTimeCategorize, 'endTimeDownload' : endTimeDownload } })
         
     else:
         print("No se descargaron las imagenes en el storage")
@@ -112,7 +107,7 @@ def insertImage(data):
                 db[collection].insert_one(rec)
                 
 
-    downloadImage(collection, kindOfStorage)
+    downloadImage(collection, kindOfStorage, sellon)
 
 
 
