@@ -17,10 +17,20 @@ class NumpyEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 def downloadImage(collection, kindOfStorage):
-    start = time.time()
+    startTimeDownload = time.time()
     images = db[collection].find({ 'downloaded': False })
+    count = images.count()
+    errorInsert = 0
+    correctInsert = 0
+    urlImageError = []
+    # dow =  
+    # dow['sessionId'] = 'JLOBASSO'
+    # dow['collection'] = collection
+    # dow['count'] = count
+    # dow['timeDownload'] = endTimeDownload - startTimeDownload
+    # dow['timeCategorize'] = endTimeCategorize - startTimeCategorize
+    db.download.insert_one({'sessionId': 'JLOBASSO','collection' : collection,'count' : count,'startTimeDownload' : startTimeDownload })
 
-    print("Imagenes por bajar:"+str(images.count()))
 
     newPath = config['paths']['storage-full-path']+collection
 
@@ -36,23 +46,31 @@ def downloadImage(collection, kindOfStorage):
             ficheroGuardar = open(newPath+'/'+ximg['imageName'],"wb")
             ficheroGuardar.write(archivoDescargar.read())
             ficheroGuardar.close()
+            correctInsert = correctInsert + 1
         except urllib.request.URLError:
-            print("No se pudo descargar la imagen desde "+ximg['url'])
+            # print("No se pudo descargar la imagen desde "+ximg['url'])
+            errorInsert = errorInsert + 1 
+            urlImageError.append(ximg['url'])
+            db.download.update_one({ "collection" : collection },{ "$set": { "errorInsert" : errorInsert} })
             continue
 
         imageHash = imageToHash(newPath+'/'+ximg['imageName'])
-        db[collection].update({ "imageId" : ximg['imageId']  },{ "$set": { "downloaded" : True, "imageHash":imageHash } })
-        
-    end = time.time()
-    # eachImageTime = (time.time() - start)/totalAmountToAnalize 
-    print("tiempo de descarga total de archivos: ", end - start)
-
-    cantidad = db[collection].find({ "downloaded" : True } ).count()
-    if cantidad > 0:
+        db[collection].update_one({ "imageId" : ximg['imageId']  },{ "$set": { "downloaded" : True, "imageHash":imageHash } })
+        db.download.update_one({ "collection" : collection },{ "$set": { "correctInsert" : correctInsert } })
+            
+    endTimeDownload = time.time()
+    
+    # cantidad = db[collection].find({ "downloaded" : True } ).count()
+    if correctInsert > 0:
+        startTimeCategorize = time.time()
         categorize(collection, kindOfStorage)
+        endTimeCategorize = time.time()
+        db.download.update_one({ "collection" : collection },{ "$set": { "timeCategorize" : endTimeCategorize - startTimeCategorize, 'endTimeDownload' : endTimeDownload } })
+        
     else:
         print("No se descargaron las imagenes en el storage")
 
+    
 
 def insertImage(data):   
 
@@ -60,7 +78,7 @@ def insertImage(data):
     storageData = data['storageData']
     storageName = data['storageName']
 
-    print("Cantidad de imagenes a insertar en la base de datos: "+str(len(storageData)))
+    # print("Cantidad de imagenes a insertar en la base de datos: "+str(len(storageData)))
 
     conn = MongoClient()
     db = conn.imageMatcher
@@ -91,7 +109,7 @@ def insertImage(data):
                 rec['compare'] = True
                 rec['categorized'] = False
 
-                db[collection].insert(rec, w=0)
+                db[collection].insert_one(rec)
                 
 
     downloadImage(collection, kindOfStorage)
