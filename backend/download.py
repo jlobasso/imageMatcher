@@ -21,16 +21,17 @@ def downloadImage(collection, kindOfStorage, sessionId):
     collDownload = 'downloadStatus'
     images = db[collection].find({ 'downloaded': False })
     count = images.count()
-    errorInsert = 0
-    correctInsert = 0
+    errorDownload = 0
+    correctDownload = 0
     urlImageError = []
     db[collDownload].insert_one({'sessionId': sessionId,
                                 'collection' : collection,
                                 'count' : count,
-                                'correctInsert' : 0,
-                                'errorInsert' : 0,
+                                'correctDownload' : 0,
+                                'errorDownload' : 0,
                                 'timeCategorize' : 0,
-                                'timeDownload' : 0
+                                'timeDownload' : 0,
+                                'processing' : True 
                                 })
 
 
@@ -48,32 +49,29 @@ def downloadImage(collection, kindOfStorage, sessionId):
             ficheroGuardar = open(newPath+'/'+ximg['imageName'],"wb")
             ficheroGuardar.write(archivoDescargar.read())
             ficheroGuardar.close()
-            correctInsert = correctInsert + 1
+            correctDownload = correctDownload + 1
         except urllib.request.URLError:
             # print("No se pudo descargar la imagen desde "+ximg['url'])
-            errorInsert = errorInsert + 1 
+            errorDownload = errorDownload + 1 
             urlImageError.append(ximg['url'])
-            db[collDownload].update_one({ "collection" : collection },{ "$set": { "errorInsert" : errorInsert} })
+            db[collDownload].update_one({ "collection" : collection },{ "$set": { "errorDownload" : errorDownload} })
             continue
 
         imageHash = imageToHash(newPath+'/'+ximg['imageName'])
         db[collection].update_one({ "imageId" : ximg['imageId']  },{ "$set": { "downloaded" : True, "imageHash":imageHash } })
-        db[collDownload].update_one({ "collection" : collection },{ "$set": { "correctInsert" : correctInsert } })
+        db[collDownload].update_one({ "collection" : collection },{ "$set": { "correctDownload" : correctDownload } })
             
     endTimeDownload = time.time()
     
     # cantidad = db[collection].find({ "downloaded" : True } ).count()
-    if correctInsert > 0:
+    if correctDownload > 0:
         startTimeCategorize = time.time()
         categorize(collection, kindOfStorage)
         endTimeCategorize = time.time()
-
-
         timeCategorize = round(endTimeCategorize - startTimeCategorize,2)
-
         timeDownload = round(endTimeDownload - startTimeDownload,2)
 
-        db[collDownload].update_one({ "collection" : collection },{ "$set": { "timeCategorize" : timeCategorize, 'timeDownload' : timeDownload } })
+        db[collDownload].update_one({ "collection" : collection },{ "$set": { "timeCategorize" : timeCategorize, 'timeDownload' : timeDownload, "processing" : False } })
         
     else:
         print("No se descargaron las imagenes en el storage")
@@ -94,15 +92,20 @@ def insertImage(data):
     collection = kindOfStorage+"-"+storageName
     images = db[collection].find({},{"imageId": 1})
 
-    for storagePosition in range(0, len(storageData)-1):     
+    for storagePosition in range(0, len(storageData)):   
         for imagePosition in range(0, len(storageData[storagePosition]['images'])):
+    
 
             imageName = storageData[storagePosition]['images'][imagePosition]['url'].split("/")
             imageName = imageName[len(imageName)-1]
 
             exist = db[collection].find({"imageId":storageData[storagePosition]['images'][imagePosition]['imageId'], "sellerId":storageData[storagePosition]['sellerId']}).count()
-              
-            if not exist or db[collection].find_one({"imageName":imageName},{"imageId":1, '_id':0})['imageId'] == 'NOT_IMG_ID':
+            
+            prevImage = db[collection].find_one({"imageName":imageName},{"imageId":1, '_id':0})
+
+            # db[collection].find_one({"imageName":imageName},{"imageId":1, '_id':0})['imageId'] == 'NOT_IMG_ID'
+
+            if not exist or (prevImage and prevImage['imageId'] == 'NOT_IMG_ID'):
                 rec = {} 
                 rec['imageId'] = ('NOT_IMG_ID' if storageData[storagePosition]['images'][imagePosition]['imageId']=='' else storageData[storagePosition]['images'][imagePosition]['imageId']) 
                 rec['imageName'] = imageName
@@ -117,7 +120,7 @@ def insertImage(data):
                 rec['compare'] = True
                 rec['categorized'] = False
 
-            db[collection].insert_one(rec)
+                db[collection].insert_one(rec)
                 
 
     downloadImage(collection, kindOfStorage, sessionId)
