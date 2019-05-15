@@ -17,20 +17,24 @@ conn = MongoClient()
 db = conn.imageMatcher
 
 # process an image to be mobilenet friendly
-def process_image(img_path,size = 224):
-  img = image.load_img(img_path, target_size=(size, size))
-  img_array = image.img_to_array(img)
-  img_array = np.expand_dims(img_array, axis=0)
-  pImg = preprocess_input(img_array)
-  return pImg
+
+
+def process_image(img_path, size=224):
+    img = image.load_img(img_path, target_size=(size, size))
+    img_array = image.img_to_array(img)
+    img_array = np.expand_dims(img_array, axis=0)
+    pImg = preprocess_input(img_array)
+    return pImg
+
 
 model = MobileNetV2(weights='imagenet')
+
 
 def categorize(collection, kindOfStorage):
     start = time.time()
     conn = MongoClient()
     db = conn.imageMatcher
-    images = db[collection].find({ 'downloaded': True, 'categorized': False })
+    images = db[collection].find({'downloaded': True, 'categorized': False})
 
     predictions = []
     predictionsWeight = {}
@@ -41,31 +45,37 @@ def categorize(collection, kindOfStorage):
     print("Cantidad de Imagenes a analizar: ", totalAmountToAnalize)
 
     for test_img_path in images:
-      imageName = test_img_path['imageName'] #.encode('ascii', 'ignore').decode('ascii')
-      pImg = process_image(newPath+"/"+imageName)
+        # .encode('ascii', 'ignore').decode('ascii')
+        imageName = test_img_path['imageName']
+        pImg = process_image(newPath+"/"+imageName)
 
-      features = model.predict(pImg)
+        features = model.predict(pImg)
 
-      decoded = decode_predictions(features, top=1)
+        decoded = decode_predictions(features, top=1)
 
-      db[collection].update({ "imageId" : test_img_path['imageId']  },{ "$set": { "categorized" : True, "category": decoded[0][0][1]} })
+        db[collection].update({"imageId": test_img_path['imageId']}, {
+                              "$set": {"categorized": True, "category": decoded[0][0][1]}})
 
-      if str(decoded[0][0][1]) not in predictions:
-          predictions.append(str(decoded[0][0][1]))
-          predictionsWeight[str(decoded[0][0][1])] = 1
-      else:
-          predictionsWeight[str(decoded[0][0][1])] = predictionsWeight[str(decoded[0][0][1])] + 1
+        if str(decoded[0][0][1]) not in predictions:
+            predictions.append(str(decoded[0][0][1]))
+            predictionsWeight[str(decoded[0][0][1])] = 1
+        else:
+            predictionsWeight[str(decoded[0][0][1])] = predictionsWeight[str(
+                decoded[0][0][1])] + 1
 
-    print(predictionsWeight) 
+    print(predictionsWeight)
 
-    predictionsWeight = sorted(predictionsWeight.items(), key=lambda kv: kv[1], reverse=True)
+    predictionsWeight = sorted(
+        predictionsWeight.items(), key=lambda kv: kv[1], reverse=True)
 
-    for i in range(len(predictionsWeight)): 
-         predictionsWeight[i] = {predictionsWeight[i][0]:predictionsWeight[i][1]}
+    for i in range(len(predictionsWeight)):
+        predictionsWeight[i] = {
+            predictionsWeight[i][0]: predictionsWeight[i][1]}
 
-    db.groupCategories.insert({'group':collection, 'kindOfStorage':kindOfStorage,'total': totalAmountToAnalize,'predictionsWeight':predictionsWeight}, w=0)       
+    db.groupCategories.insert({'group': collection, 'kindOfStorage': kindOfStorage,
+                               'total': totalAmountToAnalize, 'predictionsWeight': predictionsWeight}, w=0)
     end = time.time()
-    eachImageTime = (end - start)/totalAmountToAnalize 
+    eachImageTime = (end - start)/totalAmountToAnalize
     print("Tiempo total (segundos): ", end - start)
     print("Tiempo por cada imagen (segundos): ", eachImageTime)
     print("Tiempo por cada 1k imagenes (segundos): ", eachImageTime*1000)
