@@ -10,3 +10,4 @@ frontend/js/conf.js
 *.pyc
 frontend/js/conf.js
 frontend/storage/*
+.vscode/settings.json
