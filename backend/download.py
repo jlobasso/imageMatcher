@@ -58,16 +58,18 @@ def downloadImage(collection, kindOfStorage, sessionId):
             continue
 
         imageHash = imageToHash(newPath+'/'+ximg['imageName'])
-        db[collection].update_one({ "imageId" : ximg['imageId']  },{ "$set": { "downloaded" : True, "imageHash":imageHash } })
+        db[collection].update_one({ "_id" : ximg['_id']  },{ "$set": { "downloaded" : True, "imageHash":imageHash } })
         db[collDownload].update_one({ "collection" : collection },{ "$set": { "correctDownload" : correctDownload } })
             
     endTimeDownload = time.time()
     
     # cantidad = db[collection].find({ "downloaded" : True } ).count()
     if correctDownload > 0:
+
         startTimeCategorize = time.time()
         categorize(collection, kindOfStorage)
         endTimeCategorize = time.time()
+
         timeCategorize = round(endTimeCategorize - startTimeCategorize,2)
         timeDownload = round(endTimeDownload - startTimeDownload,2)
 

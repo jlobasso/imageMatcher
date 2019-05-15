@@ -53,7 +53,7 @@ def categorize(collection, kindOfStorage):
 
         decoded = decode_predictions(features, top=1)
 
-        db[collection].update({"imageId": test_img_path['imageId']}, {
+        db[collection].update_one({"_id": test_img_path['_id']}, {
                               "$set": {"categorized": True, "category": decoded[0][0][1]}})
 
         if str(decoded[0][0][1]) not in predictions:
@@ -72,7 +72,7 @@ def categorize(collection, kindOfStorage):
         predictionsWeight[i] = {
             predictionsWeight[i][0]: predictionsWeight[i][1]}
 
-    db.groupCategories.insert({'group': collection, 'kindOfStorage': kindOfStorage,
+    db.groupCategories.insert_one({'group': collection, 'kindOfStorage': kindOfStorage,
                                'total': totalAmountToAnalize, 'predictionsWeight': predictionsWeight}, w=0)
     end = time.time()
     eachImageTime = (end - start)/totalAmountToAnalize
