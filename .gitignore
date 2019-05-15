@@ -11,3 +11,4 @@ frontend/js/conf.js
 frontend/js/conf.js
 frontend/storage/*
 /.vscode/*
+frontend/status/match.png
