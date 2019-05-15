@@ -48,8 +48,9 @@ def matchFastStrict(sessionId, minMatchCount,
             return {'matches': [],
                     'imagenes1': 0,
                     'imagenes2': 0,
-                    'status': """No hay imagenes de 
-                            la categoria """+categoriesA['_id']}
+                    'status': (""" No hay imagenes de la categoria """ +
+                               categoriesA['_id'])
+                    }
 
         # recorremos cada imagen de cada categoria A
         for idxA in range(len(categoriesA['images'])):
@@ -85,8 +86,9 @@ def matchFastStrict(sessionId, minMatchCount,
                     return {'matches': [],
                             'imagenes1': 0,
                             'imagenes2': 0,
-                            'status': """No hay imagenes de 
-                                    la categoria """+categoriesB['_id']}
+                            'status': """No hay imagenes de la categoria """ +
+                            categoriesB['_id']
+                            }
 
                 # recorremos cada imagen de cada categoria B
                 for idxB in range(len(categoriesB['images'])):
