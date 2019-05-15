@@ -80,8 +80,12 @@ echo -e "\n# virtualenv and virtualenvwrapper" >> ~/.bashrc
 echo "export WORKON_HOME=$HOME/.virtualenvs" >> ~/.bashrc
 echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.bashrc
 puede llegar a ser  echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python" >> ~/.bashrc
+
+buscar con find / -name virtualenvwrapper.sh y copiar la ruta
+
 echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc
-puede llegar a serecho "source $HOME/local/bin/virtualenvwrapper.sh" >> ~/.bashrc
+puede llegar a ser echo "source $HOME/local/bin/virtualenvwrapper.sh" >> ~/.bashrc
+o echo "source $HOME/.local/bin/virtualenvwrapper.sh" >> ~/.bashrc
 
 
 #creamos el virtualenv cv
