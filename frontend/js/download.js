@@ -4,28 +4,30 @@ let cantDownloaded = 0
 
 downloadButton.addEventListener("click", () => download())
 
-var getDownloadStatus = (end = false) => {
+var getDownloadStatus = (end, storageName) => {
 
     if (!end) {
-        fetch(conf.urlBackend + 'download-status?sessionId=' + conf.sessionId)
+        fetch(`${conf.urlBackend}download-status?sessionId=${conf.sessionId}&collection=${storageName}`)
             .then((response) => response.json())
             .then((status) => {
-                if(!status.count){
+                if (!('count' in status) || !status.count) {
                     downloadStatus.innerHTML = ""
-                }else{
-                    downloadStatus.innerHTML = `Completado: ${parseInt(status.correctDownload) + parseInt(status.errorDownload)} de ${status.count} 
+                } else {
+                    downloadStatus.innerHTML = `Completado: ${parseInt(status.correctDownload) +
+                        parseInt(status.errorDownload)} de ${status.count} 
                     Con error en la descarga ${status.errorDownload}`
-                } 
+                }
 
             }
 
             )
     }
     else {
-        fetch(conf.urlBackend + 'download-status?sessionId=' + conf.sessionId)
+        fetch(`${conf.urlBackend}download-status?sessionId=${conf.sessionId}&collection=${storageName}`)
             .then((response) => response.json())
             .then((status) => {
-                downloadStatus.innerHTML = `Completado: ${parseInt(status.correctDownload) + parseInt(status.errorInsert || 0)} de ${status.count} 
+                downloadStatus.innerHTML = `Completado: ${parseInt(status.correctDownload) +
+                    parseInt(status.errorInsert || 0)} de ${status.count} 
                 Con error en la descarga ${status.errorDownload} 
                 Tiempo total de descarga: ${status.timeDownload} Seg.
                 Tiempo total de categorización: ${status.timeCategorize} Seg. 
@@ -80,7 +82,7 @@ const download = async () => {
     }
 
     var downloadStatusInterval = setInterval(() => {
-        getDownloadStatus()
+        getDownloadStatus(false, kindOfStorage+'-'+storageName)
     }, 1000);
 
     var xhr = new XMLHttpRequest();
@@ -91,7 +93,7 @@ const download = async () => {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             setTimeout(() => {
                 clearInterval(downloadStatusInterval);
-                getDownloadStatus(true);
+                getDownloadStatus(true, kindOfStorage+'-'+storageName);
             }, 2000)
 
         }

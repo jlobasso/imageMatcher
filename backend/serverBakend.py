@@ -59,6 +59,7 @@ class Download(Resource):
         data = json.loads(request.data)
         from download import insertImage
         insertImage(data)
+        return { 'chupala': True }, 200, { 'Content-Type':'application/json' }
 
 class MatchFast(Resource):
     def get(self):        
