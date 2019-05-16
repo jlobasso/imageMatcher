@@ -47,7 +47,11 @@ def categorize(collection, kindOfStorage):
     for test_img_path in images:
         # .encode('ascii', 'ignore').decode('ascii')
         imageName = test_img_path['imageName']
-        pImg = process_image(newPath+"/"+imageName)
+
+        try:
+            pImg = process_image(newPath+"/"+imageName)
+        except:
+            continue
 
         features = model.predict(pImg)
 
@@ -73,7 +77,7 @@ def categorize(collection, kindOfStorage):
             predictionsWeight[i][0]: predictionsWeight[i][1]}
 
     db.groupCategories.insert_one({'group': collection, 'kindOfStorage': kindOfStorage,
-                               'total': totalAmountToAnalize, 'predictionsWeight': predictionsWeight}, w=0)
+                               'total': totalAmountToAnalize, 'predictionsWeight': predictionsWeight})
     end = time.time()
     eachImageTime = (end - start)/totalAmountToAnalize
     print("Tiempo total (segundos): ", end - start)
