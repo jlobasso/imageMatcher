@@ -3,6 +3,9 @@ import os
 from function.start import *
 from categorize.categorize import *
 from imageToHash import *
+import base64
+from random import randint
+import hashlib
 
 config = configparser.ConfigParser()
 config.read('conf.ini')
@@ -10,32 +13,33 @@ config.read('conf.ini')
 conn = MongoClient()
 db = conn.imageMatcher
 
+
 class NumpyEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, np.ndarray):
             return obj.tolist()
         return json.JSONEncoder.default(self, obj)
 
+
 def downloadImage(collection, kindOfStorage, sessionId):
     startTimeDownload = time.time()
     collDownload = 'downloadStatus'
-    images = db[collection].find({ 'downloaded': False })
+    images = db[collection].find({'downloaded': False})
     count = images.count()
     errorDownload = 0
     correctDownload = 0
     urlImageError = []
     db[collDownload].insert_one({'sessionId': sessionId,
-                                'collection' : collection,
-                                'count' : count,
-                                'correctDownload' : 0,
-                                'errorDownload' : 0,
-                                'timeCategorize' : 0,
-                                'timeDownload' : 0,
-                                'processing' : True 
+                                'collection': collection,
+                                'count': count,
+                                'correctDownload': 0,
+                                'errorDownload': 0,
+                                'timeCategorize': 0,
+                                'timeDownload': 0,
+                                'processing': True
                                 })
 
-
-    newPath = config['paths']['storage-full-path']+collection
+    newPath = config['paths']['storage-full-path']+collection+"/"
 
     if not os.path.exists(newPath):
         os.mkdir(newPath)
@@ -43,13 +47,24 @@ def downloadImage(collection, kindOfStorage, sessionId):
     for ximg in images:
 
         try:
-            req = urllib.request.Request(ximg['url'])
-            req.add_header('User-Agent', 'Mozilla/5.0 (compatible; MSIE 10.0; Macintosh; Intel Mac OS X 10_7_3; Trident/6.0)')
-            archivoDescargar = urllib.request.urlopen(req, timeout=3)
-            ficheroGuardar = open(newPath+'/'+ximg['imageName'],"wb")
-            ficheroGuardar.write(archivoDescargar.read())
-            ficheroGuardar.close()
-            correctDownload = correctDownload + 1
+            if (ximg['url'].find('http') != -1):
+                req = urllib.request.Request(ximg['url'])
+                req.add_header(
+                    'User-Agent', 'Mozilla/5.0 (compatible; MSIE 10.0; Macintosh; Intel Mac OS X 10_7_3; Trident/6.0)')
+                archivoDescargar = urllib.request.urlopen(req, timeout=3)
+                ficheroGuardar = open(newPath+ximg['imageName'], "wb")
+                ficheroGuardar.write(archivoDescargar.read())
+                ficheroGuardar.close()
+                correctDownload = correctDownload + 1
+            if (ximg['url'].find('data:image') != -1):
+
+                url = ximg['url'].split(",")
+                extension = url[0].split("/")[1].split(";")[0]
+                image_binary=base64.b64decode(url[1])
+
+                with open(newPath+ximg['imageName'], "wb") as fh:
+                   fh.write(image_binary)
+                correctDownload = correctDownload + 1
         except urllib.request.URLError:
             # print("No se pudo descargar la imagen desde "+ximg['url'])
             errorDownload = errorDownload + 1 
@@ -96,10 +111,19 @@ def insertImage(data):
 
     for storagePosition in range(0, len(storageData)):   
         for imagePosition in range(0, len(storageData[storagePosition]['images'])):
-    
 
-            imageName = storageData[storagePosition]['images'][imagePosition]['url'].split("/")
-            imageName = imageName[len(imageName)-1]
+            # imageName = storageData[storagePosition]['images'][imagePosition]['url'].split("/")
+            # imageName = prevImageName[len(imageName)-1]
+    
+            rand = str(randint(0, 10000000000000000000000000000000))
+            newName = hashlib.sha256(rand.encode()).hexdigest()
+            
+            possibleFormats = ['jpg','jpeg','png','gif','webp']  
+            us= storageData[storagePosition]['images'][imagePosition]['url'].split('.')
+            possExt = us[len(us)-1]
+            extension = (possExt in possibleFormats) is True and possExt or "jpg"
+
+            imageName = newName+"."+extension
 
             exist = db[collection].find({"imageId":storageData[storagePosition]['images'][imagePosition]['imageId'], "sellerId":storageData[storagePosition]['sellerId']}).count()
             
