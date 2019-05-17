@@ -55,10 +55,15 @@ def categorize(collection, kindOfStorage):
 
         features = model.predict(pImg)
 
-        decoded = decode_predictions(features, top=1)
+        decoded = decode_predictions(features, top=5)
+
+        readableCategories = []   
+
+        for cat in decoded[0]:
+            readableCategories.append({'category':cat[1], 'accuracy': str(cat[2]), 'idCategory': cat[0]})
 
         db[collection].update_one({"_id": test_img_path['_id']}, {
-                              "$set": {"categorized": True, "category": decoded[0][0][1]}})
+                              "$set": {"categorized": True, "category": decoded[0][0][1], "categories":readableCategories}})
 
         if str(decoded[0][0][1]) not in predictions:
             predictions.append(str(decoded[0][0][1]))
