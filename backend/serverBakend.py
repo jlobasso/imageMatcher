@@ -21,7 +21,7 @@ class ProcessFastStrict(Resource):
         print("//*-*-*-*-*-*-*// MATCH PROCESS FAST STRICT //*-*-*-*-*-*-*//") 
         
         data = json.loads(request.data)
-        from fastBatchStrict import matchFastStrict
+        from matches.fastBatchStrict import matchFastStrict
         result = matchFastStrict(data['sessionId'], data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'], data['categories'])
         return result, 200, {'Content-Type':'application/json'}
 
@@ -31,7 +31,7 @@ class ProcessFastWhole(Resource):
         print("//*-*-*-*-*-*-*// MATCH PROCESS FAST WHOLE //*-*-*-*-*-*-*//") 
         
         data = json.loads(request.data)
-        from fastBatchWhole import matchFastWhole
+        from matches.fastBatchWhole import matchFastWhole
         result = matchFastWhole(data['sessionId'], data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'], data['categories'])
         return result, 200, {'Content-Type':'application/json'}
 
@@ -41,7 +41,7 @@ class ProcessSiftStrict(Resource):
         print("//*-*-*-*-*-*-*// MATCH PROCESS SIFT STRICT //*-*-*-*-*-*-*//") 
         
         data = json.loads(request.data)
-        from siftBatchStrict import matchSiftStrict
+        from matches.siftBatchStrict import matchSiftStrict
         result = matchSiftStrict(data['sessionId'], data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'], data['categories'])
         return result, 200, {'Content-Type':'application/json'}
 
@@ -51,7 +51,7 @@ class ProcessSiftWhole(Resource):
         print("//*-*-*-*-*-*-*// MATCH PROCESS SIFT WHOLE //*-*-*-*-*-*-*//") 
         
         data = json.loads(request.data)
-        from siftBatchWhole import matchSiftWhole 
+        from matches.siftBatchWhole import matchSiftWhole 
         result = matchSiftWhole(data['sessionId'], data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'], data['categories'])
         return result, 200, {'Content-Type':'application/json'}
         
@@ -59,14 +59,14 @@ class ProcessSiftWhole(Resource):
 class MatchFast(Resource):
     def get(self):        
         print("//*-*-*-*-*-*-*// MATCH FAST //*-*-*-*-*-*-*//")
-        from matchFast import uniqueMatchFast
+        from matches.matchFast import uniqueMatchFast
         return uniqueMatchFast(request.args)
 
 
 class MatchSift(Resource):
     def get(self):        
         print("//*-*-*-*-*-*-*// MATCH SIFT //*-*-*-*-*-*-*//")
-        from matchSift import uniqueMatchSift
+        from matches.matchSift import uniqueMatchSift
         return uniqueMatchSift(request.args)
 
 
