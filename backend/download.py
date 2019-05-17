@@ -136,6 +136,7 @@ def insertImage(data):
                 rec['link'] = ('NOT_LINK' if storageData[storagePosition]['link']=='' else storageData[storagePosition]['link']) 
                 rec['sellerId'] = ('NOT_SELLER' if storageData[storagePosition]['sellerId']=='' else storageData[storagePosition]['sellerId']) 
                 rec['downloaded'] = False
+                rec['attempts'] = 0
                 rec['compare'] = True
                 rec['categorized'] = False
 
