@@ -39,7 +39,7 @@ class ProcessSiftStrict(Resource):
         
         data = json.loads(request.data)
         from siftBatchStrict import matchSiftStrict
-        result = matchSiftStrict(data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'], data['categories'])
+        result = matchSiftStrict(data['sessionId'], data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'], data['categories'])
         return result, 200, {'Content-Type':'application/json'}
 
 class ProcessSiftWhole(Resource):

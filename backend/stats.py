@@ -8,7 +8,7 @@ def matchStatus(args):
     conn = MongoClient()
     db = conn.imageMatcher
 
-    response = [doc for doc in db.matchStatus.find({"sessionId":args['sessionId']},{"_id":0})][0]
+    response = db.matchStatus.find_one({"sessionId":args['sessionId']},{"_id":0})
     
     return response
 

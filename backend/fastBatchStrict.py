@@ -111,8 +111,6 @@ def matchFastStrict(sessionId, minMatchCount,
 
                     db.matchStatus.update(
                         {"sessionId": sessionId}, status, upsert=True)
-                    # F.write(json.dumps(status))
-                    # F.close()
 
                     imageB = cv2.imread(
                         pathB+categoriesB['images'][idxB]['imageName'], 0)

@@ -57,16 +57,17 @@ def downloadImage(collection, kindOfStorage, sessionId):
                 ficheroGuardar.close()
                 correctDownload = correctDownload + 1
             if (ximg['url'].find('data:image') != -1):
-
                 url = ximg['url'].split(",")
                 extension = url[0].split("/")[1].split(";")[0]
                 image_binary=base64.b64decode(url[1])
 
                 with open(newPath+ximg['imageName'], "wb") as fh:
                    fh.write(image_binary)
+
                 correctDownload = correctDownload + 1
+
         except urllib.request.URLError:
-            # print("No se pudo descargar la imagen desde "+ximg['url'])
+
             errorDownload = errorDownload + 1 
             urlImageError.append(ximg['url'])
             db[collDownload].update_one({ "collection" : collection },{ "$set": { "errorDownload" : errorDownload} })
@@ -78,7 +79,6 @@ def downloadImage(collection, kindOfStorage, sessionId):
             
     endTimeDownload = time.time()
     
-    # cantidad = db[collection].find({ "downloaded" : True } ).count()
     if correctDownload > 0:
 
         startTimeCategorize = time.time()
@@ -102,8 +102,6 @@ def insertImage(data):
     storageName = data['storageName']
     sessionId = data['sessionId']
 
-    # print("Cantidad de imagenes a insertar en la base de datos: "+str(len(storageData)))
-
     conn = MongoClient()
     db = conn.imageMatcher
     collection = kindOfStorage+"-"+storageName
@@ -112,9 +110,6 @@ def insertImage(data):
     for storagePosition in range(0, len(storageData)):   
         for imagePosition in range(0, len(storageData[storagePosition]['images'])):
 
-            # imageName = storageData[storagePosition]['images'][imagePosition]['url'].split("/")
-            # imageName = prevImageName[len(imageName)-1]
-    
             rand = str(randint(0, 10000000000000000000000000000000))
             newName = hashlib.sha256(rand.encode()).hexdigest()
             
@@ -128,8 +123,6 @@ def insertImage(data):
             exist = db[collection].find({"imageId":storageData[storagePosition]['images'][imagePosition]['imageId'], "sellerId":storageData[storagePosition]['sellerId']}).count()
             
             prevImage = db[collection].find_one({"imageName":imageName},{"imageId":1, '_id':0})
-
-            # db[collection].find_one({"imageName":imageName},{"imageId":1, '_id':0})['imageId'] == 'NOT_IMG_ID'
 
             if not exist or (prevImage and prevImage['imageId'] == 'NOT_IMG_ID'):
                 rec = {} 
