@@ -87,22 +87,7 @@ def matchSiftStrict(sessionId, minMatchCount,
                     # print(idxB)
                     kInageComputed = kInageComputed + 1
 
-                    status = {
-                        "sessionId": str(sessionId),
-                        "method": "siftBatchStrict",
-                        "absoluteComputed": str(kInageComputed),
-                        "running": {
-                            "current": str(idxA+1),
-                            "of": str(lengthA)
-                        },
-                        "comparing": {
-                            "current": str(idxB+1),
-                            "of": str(lengthB)
-                        }
-                    }
-                    
-                    db.matchStatus.update(
-                        {"sessionId": sessionId}, status, upsert=True)
+                    setMatchStatus(sessionId, kInageComputed, idxA, lengthA, idxB, lengthB)
 
                     imageB = cv2.imread(
                         pathB+categoriesB['images'][idxB]['imageName'], 0)
