@@ -14,6 +14,7 @@ collections = db.downloadStatus.distinct("collection")
 for collection in collections:
     
     notDownloadedFiles = db[collection].find({'downloaded':False, 'attempts': {'$lt': 4}})
+    
     print("Archivos pendientes de descarga: ", notDownloadedFiles.count())
     newPath = config['paths']['storage-full-path']+collection+"/"
 
@@ -39,6 +40,8 @@ for collection in collections:
                 db[collection].find({'downloaded':True})
 
         except urllib.request.URLError:
+
+            print(collection)
 
             db[collection].find({'imageName':notDownloadedFile['imageName'], '$inc': { 'attempts': 1 }})
             
