@@ -7,7 +7,7 @@ config.read('conf.ini')
 conn = MongoClient()
 db = conn.imageMatcher
    
-def matchFastWhole(minMatchCount, sensibility, minPercentMatch, storageA, storageB, categories):
+def matchFastWhole(sessionId, minMatchCount, sensibility, minPercentMatch, storageA, storageB, categories):
     
     timeA = datetime.datetime.now()
 
@@ -33,9 +33,10 @@ def matchFastWhole(minMatchCount, sensibility, minPercentMatch, storageA, storag
     if lenB == 0:
         return {'matches': [], 'imagenes1': 0, 'imagenes2': 0, "status": "No hay imagenes en "+pathB}    
  
+    idxA = 0
+
     for imgA in imagesA:
-        # print('Storage A')
-        # print(imgA['imageName'].encode("ascii", "ignore").decode("ascii"))
+
         bestMatches = []        
         imageA = cv2.imread(pathA+imgA['imageName'], 0)
 
@@ -48,27 +49,15 @@ def matchFastWhole(minMatchCount, sensibility, minPercentMatch, storageA, storag
         else:
             imagesB = db[storageB].find({ 'category': {'$in': categories}})
 
-        for imgB in imagesB:
-            # print('Storage B')
-            # print(imgB['imageName'].encode("ascii", "ignore").decode("ascii"))
-            kInageComputed = kInageComputed + 1
-            
-            # print("recorriendo "+str(x+1)+" de "+str(len(images))+ " comparando con "+str(y+1)+" de "+str(len2))
-            F = open(config['paths']['status-path']+"status.json","w+")
+        idxB = 0
+        idxA = idxA + 1
 
-            status = {
-                        "absoluteComputed": str(kInageComputed),
-                        "running":{
-                                    "current":str(1), 
-                                    "of":str(lenA)
-                                    },
-                        "comparing":{
-                                    "current":str(1), 
-                                    "of":str(lenB)
-                                    }                     
-                    }            
-            F.write(json.dumps(status))
-            F.close()
+        for imgB in imagesB:
+
+            kInageComputed = kInageComputed + 1
+            idxB = idxB + 1
+            
+            setMatchStatus(sessionId, kInageComputed, idxA, lenA, idxB, lenB)
 
             imageB = cv2.imread(pathB+imgB['imageName'], 0)
 

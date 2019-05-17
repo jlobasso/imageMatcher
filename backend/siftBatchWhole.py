@@ -7,7 +7,7 @@ config.read('conf.ini')
 conn = MongoClient()
 db = conn.imageMatcher
    
-def matchSiftWhole(minMatchCount, sensibility, minPercentMatch, storageA, storageB, categories):
+def matchSiftWhole(sessionId, minMatchCount, sensibility, minPercentMatch, storageA, storageB, categories):
     timeA = datetime.datetime.now()
     
     imagesA = db[storageA].find({ 'category': {'$in': categories}})
@@ -34,6 +34,8 @@ def matchSiftWhole(minMatchCount, sensibility, minPercentMatch, storageA, storag
     if lenB == 0:
         return {'matches': [], 'imagenes1': 0, 'imagenes2': 0, "status": "No hay imagenes en "+pathB}    
  
+    idxA = 0
+
     for imgA in imagesA:
         # print(imgA['imageName'].encode("ascii", "ignore").decode("ascii"))
         bestMatches = []        
@@ -42,31 +44,17 @@ def matchSiftWhole(minMatchCount, sensibility, minPercentMatch, storageA, storag
 
         # recorre las imagenes originales del repo local
         imagesB = db[storageB].find({ 'category': {'$in': categories}})
+
+        idxB = 0
+        idxA = idxA + 1
+
         for imgB in imagesB:
             # print(imgB['imageName'].encode("ascii", "ignore").decode("ascii"))
             kInageComputed = kInageComputed + 1
+            idxB = idxB + 1
             
-            F = open(config['paths']['status-path']+"status.json","w+")
-
-            status = {
-                        "absoluteComputed": str(kInageComputed),
-                        "running":{
-                                    "current":str(1), 
-                                    "of":str(lenA)
-                                    },
-                        "comparing":{
-                                    "current":str(1), 
-                                    "of":str(lenB)
-                                    }                     
-                    }            
-            F.write(json.dumps(status))
-            F.close()
-
-     
-
-
-
-
+            setMatchStatus(sessionId, kInageComputed, idxA, lenA, idxB, lenB)
+            
             imageB = cv2.imread(pathB+imgB['imageName'], 0)                              
             kp2, des2 = sift.detectAndCompute(imageB, None)
 

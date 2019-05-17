@@ -10,9 +10,11 @@ app = Flask(__name__)
 api = Api(app)
 CORS(app)
 
+
 class Health(Resource):
     def get(self):
         return "Tranki, anda ;)", 200, {'Content-Type':'application/json'}
+
 
 class ProcessFastStrict(Resource):
     def post(self):        
@@ -23,13 +25,14 @@ class ProcessFastStrict(Resource):
         result = matchFastStrict(data['sessionId'], data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'], data['categories'])
         return result, 200, {'Content-Type':'application/json'}
 
+
 class ProcessFastWhole(Resource):
     def post(self):        
         print("//*-*-*-*-*-*-*// MATCH PROCESS FAST WHOLE //*-*-*-*-*-*-*//") 
         
         data = json.loads(request.data)
         from fastBatchWhole import matchFastWhole
-        result = matchFastWhole(data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'], data['categories'])
+        result = matchFastWhole(data['sessionId'], data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'], data['categories'])
         return result, 200, {'Content-Type':'application/json'}
 
 
@@ -42,24 +45,16 @@ class ProcessSiftStrict(Resource):
         result = matchSiftStrict(data['sessionId'], data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'], data['categories'])
         return result, 200, {'Content-Type':'application/json'}
 
+
 class ProcessSiftWhole(Resource):
     def post(self):        
         print("//*-*-*-*-*-*-*// MATCH PROCESS SIFT WHOLE //*-*-*-*-*-*-*//") 
         
         data = json.loads(request.data)
         from siftBatchWhole import matchSiftWhole 
-        result = matchSiftWhole(data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'], data['categories'])
+        result = matchSiftWhole(data['sessionId'], data['min_match_count'], data['sensibility'], data['min_percent_match'], data['storageA'], data['storageB'], data['categories'])
         return result, 200, {'Content-Type':'application/json'}
-                
         
-class Download(Resource):
-    def post(self):
-        print("//*-*-*-*-*-*-*// DOWNLOAD //*-*-*-*-*-*-*//") 
-        
-        data = json.loads(request.data)
-        from download import insertImage
-        insertImage(data)
-        return { 'chupala': True }, 200, { 'Content-Type':'application/json' }
 
 class MatchFast(Resource):
     def get(self):        
@@ -74,19 +69,33 @@ class MatchSift(Resource):
         from matchSift import uniqueMatchSift
         return uniqueMatchSift(request.args)
 
+
+class Download(Resource):
+    def post(self):
+        print("//*-*-*-*-*-*-*// DOWNLOAD //*-*-*-*-*-*-*//") 
+        
+        data = json.loads(request.data)
+        from download import insertImage
+        insertImage(data)
+        return { 'chupala': True }, 200, { 'Content-Type':'application/json' }
+
+
+class MatchStatus(Resource):
+    def get(self):
+        from status.stats import matchStatus
+        return matchStatus(request.args), 200, {'Content-Type':'application/json'}
+
+
 class Groups(Resource):
     def get(self):
         return getGroups(), 200, {'Content-Type':'application/json'}
 
-class MatchStatus(Resource):
-    def get(self):
-        from stats import matchStatus
-        return matchStatus(request.args), 200, {'Content-Type':'application/json'}
 
 class DownloadStatus(Resource):
     def get(self):
-        from stats import downloadStatus
+        from status.stats import downloadStatus
         return downloadStatus(request.args), 200, {'Content-Type':'application/json'}
+
 
 class Test(Resource):
     def get(self):
