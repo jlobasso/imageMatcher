@@ -81,6 +81,8 @@ const download = async () => {
         storageData: images
     }
 
+    // console.log(storeData)
+
     var downloadStatusInterval = setInterval(() => {
         getDownloadStatus(false, kindOfStorage+'-'+storageName)
     }, 1000);
