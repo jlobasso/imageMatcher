@@ -1,6 +1,6 @@
 const submit = document.getElementById("submit")
 const statusInfo = document.getElementById("status");
-const mainContainer = document.getElementById("main-container")
+const mainContainer = document.getElementById("match")
 const statusContainer = document.getElementById("status-container")
 const sessionId = conf.sessionId
 var cantImagesToCompare = 0;
