@@ -160,7 +160,7 @@ drawResults = (data) => {
         urlMmatch += `&min_percent_match=${minPercentMatch}`
 
         var matchLink = document.createElement("a")
-        matchLink.innerHTML = "CHECK"
+        matchLink.innerHTML = '<button type="button" class="btn btn-primary" data-wait="Aguarde...">CHECK MATCH</button>'   
         matchLink.href = "match.html?" + urlMmatch
         matchLink.target = "_blank"
         match.appendChild(matchLink)

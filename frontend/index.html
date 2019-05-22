@@ -23,45 +23,11 @@
     <div class="container">
       <div><img src="images/favicon-256.png" width="100" alt="" class="image"></div>
       <ul class="nav nav-tabs"> 
-          <li class="active"><a data-toggle="tab" href="#download">DOWNLOAD</a></li>
-          <li><a data-toggle="tab" href="#match">MATCH</a></li>
+        <li class="active"><a data-toggle="tab" href="#match">MATCH</a></li>
+        <li><a data-toggle="tab" href="#download-slp">DOWNLOAD</a></li>
       </ul>
-      <div class="tab-content">      
-        <div id="download" class="tab-pane fade in active storage"> 
-          <h1 class="titulos">DOWNLOAD</h1>
-          <div class="row">
-              <div class="col-3">
-                <fieldset id="kindOfStorage">
-                  <label class="radio-inline"><input type="radio" id="suspected-group" value="suspected" checked name="kindOfStorage">Repo Sospechoso</label>
-                  <label class="radio-inline"><input type="radio" id="original-group" value="originals" name="kindOfStorage">Repo Original</label>                   
-                </fieldset>
-              </div>  
-              <div class="col-9">
-                <label for="storage-name">Nombre de Storage</label>
-                <input id="storage-name" type="text" class="form-control" maxlength="500" value="">
-              </div>
-          </div>
-          <br>
-          <div class="row">
-              <label for="data">JSON con datos para la descarga de imagenes a verificar</label>
-              <textarea id="data" name="json" data-name="json" required="" rows="10" cols="40" class="form-control">
-                [
-                
-                ]
-              </textarea>
-          </div>  
-          <br>
-          <div class="row">
-            <div class="col-2">
-              <input type="submit" class="btn btn-primary btn-md" id="download" value="DOWNLOAD" data-wait="Download...">
-            </div>  
-            <div class="col-10">
-              <div id="download-status" class=""></div>
-            </div>    
-          </div>
-        </div>  
-
-        <div id="match" class="tab-pane">
+      <div class="tab-content">  
+        <div id="match" class="tab-pane active">
           <br>        
           <h1 class="titulos">MATCH</h1>
           <div class="row">
@@ -103,39 +69,75 @@
           <div class="row">              
             <div class="col-4">
               <label for="category">Categorias</label>
-              <select multiple size="5" class="form-control" id="category">
+              <select multiple size="5" class="select-multiple form-control" id="category">
                 <option value="0">Seleccione...</option>
               </select>
             </div>
             <div class="col-4">            
-                <div>
-                  <label for="categoryStrict">Concordancia de categoria</label>
-                  <select class="form-control" id="categoryStrict">
-                    <option value="strict" selected="true">Matchea categoría con categoría</option>
-                    <option value="whole">Matchea categoría todas con todas</option>
-                  </select>
-                </div>
-                <br>
-                <br>
-                <div>
-                  <button type="submit" class="btn btn-primary" id="submit" data-wait="Aguarde...">ENVIAR</button>
-                </div>
+              <div>
+                <label for="categoryStrict">Concordancia de categoria</label>
+                <select class="form-control" id="categoryStrict">
+                  <option value="strict" selected="true">Matchea categoría con categoría</option>
+                  <option value="whole">Matchea categoría todas con todas</option>
+                </select>
               </div>
+              <br>
+              <br>
+              <div>
+                <button type="submit" class="btn btn-primary" id="submit" data-wait="Aguarde...">ENVIAR</button>
+              </div>
+            </div>
             <div class="col-4">
               <div id="totalImages">Total imagenes: 0</div>
               <div id="totalCategoriesSelected">Total seleccionado: 0</div>
               <div id="totalMatchesSelected">Total matcheos a realizar total: 0</div>
               <div id="totalMatchesSelectedCategoryStrict">Total matcheos a realizar restringiendo categoria: 0</div>
-            
+              <br>
+              <div id="status-container" class="alert alert-info">
+                <strong><div id="status" class="">Procesando imágenes.</div></strong>
+              </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-9" id="status-container" >
-              <div id="status" class="text-block">Procesando imágenes.</div>
-            </div>
+          <br>
+          <div class="alert alert-info">
+            <h1 id="resumen-resultado" class="heading"></h1>
           </div>
-          <h1 id="resumen-resultado" class="heading"></h1>
+          <br>
+          
         </div>
+
+        
+        <div id="download-slp" class="tab-pane fade in storage"> 
+          <h1 class="titulos">DOWNLOAD</h1>
+          <div class="row">
+            <div class="col-3">
+              <fieldset id="kindOfStorage">
+                <label class="radio-inline"><input type="radio" id="suspected-group" value="suspected" checked name="kindOfStorage">Repo Sospechoso</label>
+                <label class="radio-inline"><input type="radio" id="original-group" value="originals" name="kindOfStorage">Repo Original</label>                   
+              </fieldset>
+            </div>  
+            <div class="col-9">
+              <label for="storage-name">Nombre de Storage</label>
+              <input id="storage-name" type="text" class="form-control" maxlength="500">
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <label for="data">JSON con datos para la descarga de imagenes a verificar</label>
+            <textarea id="data" name="json" data-name="json" required="" rows="10" cols="40" class="form-control">
+
+            </textarea>
+          </div>  
+          <br>
+          <div class="row">
+            <div class="col-2">
+              <input type="submit" class="btn btn-primary btn-md" id="download" value="DOWNLOAD" data-wait="Download...">
+            </div>  
+            <div class="col-10 alert alert-info">
+              <strong><div id="download-status" class=""></div></strong>
+            </div>      
+          </div>
+        </div>    
       </div> 
     </div> 
     <!-- Optional JavaScript -->
