@@ -18,7 +18,9 @@ class Health(Resource):
 
 class ProcessFastStrict(Resource):
     def post(self):        
-        print("//*-*-*-*-*-*-*// MATCH PROCESS FAST STRICT //*-*-*-*-*-*-*//") 
+        print("//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*//")
+        print("//*-*-*-*-*-*-*// MATCH PROCESS FAST STRICT //*-*-*-*-*-*-*//")
+        print("//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*//") 
         
         data = json.loads(request.data)
         from matches.fastBatchStrict import matchFastStrict
@@ -28,7 +30,9 @@ class ProcessFastStrict(Resource):
 
 class ProcessFastWhole(Resource):
     def post(self):        
+        print("//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*//")
         print("//*-*-*-*-*-*-*// MATCH PROCESS FAST WHOLE //*-*-*-*-*-*-*//") 
+        print("//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*//")
         
         data = json.loads(request.data)
         from matches.fastBatchWhole import matchFastWhole
@@ -38,7 +42,9 @@ class ProcessFastWhole(Resource):
 
 class ProcessSiftStrict(Resource):
     def post(self):        
+        print("//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*//")
         print("//*-*-*-*-*-*-*// MATCH PROCESS SIFT STRICT //*-*-*-*-*-*-*//") 
+        print("//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*//")
         
         data = json.loads(request.data)
         from matches.siftBatchStrict import matchSiftStrict
@@ -47,8 +53,10 @@ class ProcessSiftStrict(Resource):
 
 
 class ProcessSiftWhole(Resource):
-    def post(self):        
+    def post(self):   
+        print("//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*//")    
         print("//*-*-*-*-*-*-*// MATCH PROCESS SIFT WHOLE //*-*-*-*-*-*-*//") 
+        print("//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*//")
         
         data = json.loads(request.data)
         from matches.siftBatchWhole import matchSiftWhole 
@@ -58,26 +66,40 @@ class ProcessSiftWhole(Resource):
 
 class MatchFast(Resource):
     def get(self):        
+        print("//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*//")
         print("//*-*-*-*-*-*-*// MATCH FAST //*-*-*-*-*-*-*//")
+        print("//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*//")
         from matches.matchFast import uniqueMatchFast
         return uniqueMatchFast(request.args)
 
 
 class MatchSift(Resource):
     def get(self):        
+        print("//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*//")
         print("//*-*-*-*-*-*-*// MATCH SIFT //*-*-*-*-*-*-*//")
+        print("//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*//")
         from matches.matchSift import uniqueMatchSift
         return uniqueMatchSift(request.args)
 
 
 class Download(Resource):
     def post(self):
+        print("//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*//")
         print("//*-*-*-*-*-*-*// DOWNLOAD //*-*-*-*-*-*-*//") 
+        print("//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*//")
         
         data = json.loads(request.data)
         from download import insertImage
         insertImage(data)
-        return { 'chupala': True }, 200, { 'Content-Type':'application/json' }
+        return { 'Se descargaron y categorizaron las imagenes exitosamente': True }, 200, { 'Content-Type':'application/json' }
+
+class showImageCategories(Resource): 
+    def get(self):        
+        print("//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*//")
+        print("//*-*-*-*-*-*-*// SHOW IMAGES COTEGORIES //*-*-*-*-*-*-*//")
+        print("//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*//")         
+        from showImageCategories import showImageCategories
+        return showImageCategories(request.args), 200, {'Content-Type':'application/json'}
 
 
 class MatchStatus(Resource):
@@ -99,7 +121,9 @@ class DownloadStatus(Resource):
 
 class Test(Resource):
     def get(self):
+        print("//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*//")
         print("//*-*-*-*-*-*-*// TEST //*-*-*-*-*-*-*//")
+        print("//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*//")
         from test import testFunc
         return testFunc()
 
@@ -117,6 +141,8 @@ api.add_resource(ProcessSiftWhole, '/process-sift-whole')
 
 api.add_resource(MatchFast, '/match-fast') 
 api.add_resource(MatchSift, '/match-sift')
+
+api.add_resource(showImageCategories, '/show-images-categories')
 
 api.add_resource(Download, '/download')
 

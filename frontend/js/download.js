@@ -43,12 +43,27 @@ const download = async () => {
 
     downloadStatus.innerHTML = "";
 
-    kindOfStorage = document.querySelector('#kindOfStorage input[name="kindOfStorage"]:checked').value;
+    const kindOfStorage = document.querySelector('#kindOfStorage input[name="kindOfStorage"]:checked').value;
 
-    const storageName = document.querySelectorAll(`.storage #storage-name`)[0].value
-    const storageData = JSON.parse(document.querySelectorAll(`.storage #data`)[0].value)
-
+    const jsonDecision = document.querySelector('#json-decision input[name="json-decision"]:checked').value;
+    const storageName = document.querySelectorAll('.storage #storage-name')[0].value
+    var storageData = [];
+    
     var images = [];
+    if (jsonDecision === 'have-json'){
+        
+        storageData = JSON.parse(document.querySelectorAll('.storage #data')[0].value)
+                
+    }else{
+
+        const site = document.getElementById("sites").value
+        const query = document.getElementById("search-word").value
+
+        let response = await fetch(`${conf.urlWebScraper}get-images?page=${site}&q=${query}`);
+        storageData = await response.json();
+        
+    }
+
     storageData.forEach(a => {
 
         if ('images' in a && a.images.length > 0) {
@@ -80,8 +95,6 @@ const download = async () => {
         storageName: storageName,
         storageData: images
     }
-
-    // console.log(storeData)
 
     var downloadStatusInterval = setInterval(() => {
         getDownloadStatus(false, kindOfStorage+'-'+storageName)

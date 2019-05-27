@@ -1,7 +1,9 @@
 const storageA = document.getElementById("storageA")
 const storageB = document.getElementById("storageB")
+const storageX = document.getElementById("storage-x")
 const categories = document.getElementById("category")
 const totalImagesC = document.getElementById("totalImages")
+const categoriesOfImages = document.getElementById("category-storage-x")
 const totalCategoriesSelectedC = document.getElementById("totalCategoriesSelected")
 const totalMatchesSelected = document.getElementById("totalMatchesSelected")
 const totalMatchesSelectedCategoryStrict = document.getElementById("totalMatchesSelectedCategoryStrict")
@@ -25,16 +27,23 @@ var updateGroupsSelects = async () => {
 
     storageA.innerHTML = "";
     storageB.innerHTML = "";
+    storageX.innerHTML = "";
 
     const optA0 = document.createElement("option");
     optA0.value = 0;
     optA0.textContent = "Seleccione...";
+
     const optB0 = document.createElement("option");
     optB0.value = 0;
     optB0.textContent = "Seleccione...";
 
+    const optX0 = document.createElement("option");
+    optX0.value = 0;
+    optX0.textContent = "Seleccione...";
+
     storageA.appendChild(optA0);
     storageB.appendChild(optB0);
+    storageX.appendChild(optX0);
 
     groups.forEach((g, i) => {
 
@@ -49,8 +58,14 @@ var updateGroupsSelects = async () => {
         optB.textContent = g.group;
         // if(!i) optB.setAttribute('selected', true);
 
+        const optX = document.createElement("option");
+        optX.value = g.group;
+        optX.textContent = g.group;
+        // if(!i) optB.setAttribute('selected', true);
+
         storageA.appendChild(optA);
         storageB.appendChild(optB);
+        storageX.appendChild(optX);
     })
 
 }
@@ -228,3 +243,30 @@ const updateSelectIntersectedCategories = (intersectedCategories) => {
     })
 
 }
+
+
+
+///STORAGE-X///
+storageX.addEventListener('change', () => {
+    const stgX = storageX.options[storageX.selectedIndex].value;
+
+    if (!stgX) return;
+    categoriesX = [];
+    consolidatedGroups.forEach((e, i) => {
+        if (e.group === stgX) {            
+            e.predictionsWeight.forEach(p => {
+                categoriesX.push(Object.keys(p)[0]);
+            });
+        }
+    })
+
+    categoriesOfImages.innerHTML = "";
+    categoriesOfImages.size = categoriesX.length;
+
+    categoriesX.forEach(g => {
+        const opt = document.createElement("option");
+        opt.value = g;
+        opt.textContent = g
+        categoriesOfImages.appendChild(opt);
+    })
+})
