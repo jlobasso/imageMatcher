@@ -21,8 +21,8 @@ mostrarCategorias.addEventListener("click", async () => {
 
             console.log(result)
 
-            resumenResultado.innerHTML = `${Object(result.imageName)} 
-                                            categories:  ${result.categories}`
+            resumenResultado.innerHTML = `imageName:  ${Object(result.imageName)} <br> 
+                                            categories:  ${Object.keys(result.categories)}`
 
         }
     )
